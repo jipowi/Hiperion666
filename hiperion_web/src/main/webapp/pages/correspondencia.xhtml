@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="formPricipal">
+			<p:outputPanel id="messagesAseguradora">
+				<p:messages></p:messages>
+			</p:outputPanel>
+			<p:panel>
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="2">
+						<h:graphicImage name="help.png" library="img" />
+						<p:outputLabel value="#{emision['mail.tipoCorreo']}" />
+					</h:panelGrid>
+					<p:spacer height="15px;" />
+
+					<h:panelGrid columns="2">
+						<h:outputLabel value="#{emision['mail.destinatarios']}" styleClass="negrita" />
+						<p:selectOneRadio id="destinatarioId" layout="grid" columns="1" value="#{correspondenciaBean.destinatario}">
+							<f:selectItem itemLabel="Solicitar Informacion a Cliente" itemValue="1" />
+							<f:selectItem itemLabel="Cotizacion Cliente" itemValue="2" />
+							<f:selectItem itemLabel="Polizas Cliente" itemValue="3" />
+							<f:selectItem itemLabel="Cotizacion Aseguradora" itemValue="4" />
+							<f:selectItem itemLabel="Emision Aseguradora" itemValue="5" />
+							<p:ajax event="change" listener="#{correspondenciaBacking.seleccionarDestinatario()}" update="@form, formPricipal:idDestinatarioAseguradora" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<p:spacer height="15px;" />
+					<h:panelGrid columns="2">
+						<h:graphicImage name="help.png" library="img" />
+						<p:outputLabel value="#{emision['mail.informacion']}" />
+					</h:panelGrid>
+					<h:panelGrid id="idDestinatarioAseguradora" columns="2" rendered="#{correspondenciaBacking.destinatarioAseguradora}">
+						<p:outputLabel value="#{emision['aseguradora.aseguradora']}" styleClass="negrita" />
+						<p:selectOneMenu id="idAseguradora" value="#{aseguradoraBean.codAseguradora}" effect="drop">
+							<f:selectItem itemLabel="Seleccione Aseguradora" noSelectionOption="true" />
+							<f:selectItems value="#{aseguradoraBacking.aseguradorasItems}" itemValue="" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<p:spacer height="30px;" />
+					<div align="center">
+						<p:commandLink title="#{emision['mail.enviar']}" update="@form" actionListener="#{correspondenciaBacking.enviarMailII}">
+							<h:graphicImage name="mail.png" library="img" />
+						</p:commandLink>
+					</div>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

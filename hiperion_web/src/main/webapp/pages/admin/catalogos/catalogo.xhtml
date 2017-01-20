@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<ui:decorate template="/templates/seguridadTemplate.xhtml">
+			<ui:define name="body">
+				<p:growl id="messages" showDetail="true" />
+				<h:form>
+					<!-- Boton Crear Catalogo -->
+					<p:commandButton id="crearCatalogoBtn" value="#{administrador['admin.catalogo.boton.nuevo']}" update=":crearCatalogoFormId"
+						oncomplete="crearCatalogoDlg.show()" title="Nuevo" icon="icon-new">
+					</p:commandButton>
+				</h:form>
+
+				<h:form id="catalogosFormId">
+					<p:panel id="catalogosPanelId">
+						<p:dataTable id="catalogosTableId" var="catalogo" value="#{catalogoBacking.catalogos}" editable="true" paginator="true" rows="10">
+							<f:facet name="header">Lista de Catalogos</f:facet>
+							<p:column headerText="#{administrador['admin.catalogo.codigo']}" style="width:24%">
+								<h:outputText value="#{catalogo.idCatalogo}" />
+							</p:column>
+							<p:column id="desripcionId" headerText="#{administrador['admin.catalogo.descripcion']}" style="width:24%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{catalogo.descripcionCatalogo}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{catalogo.descripcionCatalogo}" style="width:24%" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column style="width:6%">
+								<p:rowEditor />
+							</p:column>
+							<p:ajax event="rowEdit" listener="#{catalogoBacking.onEdit}" update=":messages" />
+							<p:ajax event="rowEditCancel" listener="#{catalogoBacking.onCancel}" update=":messages" />
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+
+				<!-- Dialog que permite crear un nuevo catalogo -->
+				<h:form id="crearCatalogoFormId">
+					<p:dialog id="crearCatalogoDlgId" header="#{administrador['admin.catalogo.dlg.crearCatalogo']}" widgetVar="crearCatalogoDlg" resizable="false"
+						showEffect="fade" hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="3" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{administrador['admin.catalogo.dlg.outputText.catalogo']}" styleClass="negrita" />
+							<p:inputText value="#{catalogoBean.descripcion}" />
+							<f:facet name="footer">
+								<table align="center">
+									<tr>
+										<td>
+											<p:commandButton id="crearCatalogoBtnId" update=":catalogosFormId, :messages" oncomplete="crearCatalogoDlg.hide();"
+												actionListener="#{catalogoBacking.guardarCatalogo}" icon="icon-save" value="#{administrador['admin.catalogo.dlg.button.guardar']}" title="Guardar" />
+										</td>
+										<td>
+											<p:commandButton id="cancelarCatalogoBtnId" oncomplete="crearCatalogoDlg.hide();" icon="icon-cancel" title="Cancelar"
+												value="#{administrador['admin.catalogo.dlg.button.cancelar']}" />
+										</td>
+									</tr>
+								</table>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>
+</html>

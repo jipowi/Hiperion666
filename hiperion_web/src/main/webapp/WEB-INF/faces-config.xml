@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	<application>
+		<resource-bundle>
+			<base-name>utilitario</base-name>
+			<var>utilitario</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>emision</base-name>
+			<var>emision</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>administrador</base-name>
+			<var>administrador</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>siniestros</base-name>
+			<var>siniestros</var>
+		</resource-bundle>
+	</application>
+	<navigation-rule>
+		<from-view-id>/pages/login.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/pages/hiperion.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/pages/hiperion.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>salir</from-outcome>
+			<to-view-id>/pages/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+</faces-config>

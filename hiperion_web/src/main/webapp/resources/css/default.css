@@ -1,0 +1,60 @@
+body {
+	background-color: #FFF;
+	font-size: 10px;
+	font-family: Verdana, Arial, "Verdana CE", "Arial CE",
+		"Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+	color: #000;
+	margin: 10px;
+}
+
+h1 {
+	font-family: Arial, "Arial CE", "Lucida Grande CE", lucida,
+		"Helvetica CE", sans-serif;
+	border-bottom: 1px solid #AFAFAF;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	color: #D20005;
+}
+
+a:link,a:visited {
+	color: #045491;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:link:hover,a:visited:hover {
+	color: #045491;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.negrita {
+	font-weight: bold;
+}
+
+.ui-button .icon-login {
+	background-image: url("../resources/img/icon/login.png");
+}
+
+.ui-state-default .icon-new {
+	background-image: url("../resources/img/icon/new.png");
+}
+
+.ui-state-default .icon-save {
+	background-image: url("../resources/img/icon/save.png");
+}
+
+.ui-state-default .icon-cancel {
+	background-image: url("../resources/img/icon/cancel.png");
+}
+
+.ui-state-default .icon-add {
+	background-image: url("../resources/img/icon/add.png");
+}
+
+.ui-state-default .icon-client {
+	background-image: url("../resources/img/icon/client.png");
+}
+

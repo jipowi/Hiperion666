@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<h:outputStylesheet name="cliente.css" library="css" />
+		<h:form id="formPricipal">
+			<p:panel>
+				<p:messages id="messagesCliente" showDetail="true" autoUpdate="true" closable="true" />
+				<f:facet name="header">
+					<h:outputText value="ADMINISTRACIÓN CLIENTES" />
+				</f:facet>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<!-- PANEL DE BUSQUEDA -->
+						<p:panel>
+							<f:facet name="header">
+								<h:outputText value="#{emision['cliente.buscar']}" />
+							</f:facet>
+							<h:panelGrid columns="2">
+								<h:panelGrid columns="3">
+									<h:outputText value="#{emision['cliente.identificacion']}: " />
+									<p:selectBooleanCheckbox value="#{clienteBean.activarCedula}">
+										<p:ajax update="pnlCedula" />
+									</p:selectBooleanCheckbox>
+
+									<p:panel id="pnlCedula" visible="#{clienteBean.activarCedula}">
+										<p:inputText value="#{clienteBean.identificacion}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="10">
+											<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!clienteBean.activarCedula}" />
+										</p:inputText>
+									</p:panel>
+
+									<h:outputText value="#{emision['lbl.ruc']}: " />
+									<p:selectBooleanCheckbox value="#{clienteBean.activarRuc}">
+										<p:ajax update="pnlRuc" />
+									</p:selectBooleanCheckbox>
+
+									<p:panel id="pnlRuc" visible="#{clienteBean.activarRuc}">
+										<p:inputText value="#{clienteBean.ruc}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="13">
+											<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!clienteBean.activarRuc}" />
+										</p:inputText>
+									</p:panel>
+
+									<h:outputText value="Apellido: " />
+									<p:selectBooleanCheckbox value="#{clienteBean.activarApellido}">
+										<p:ajax update="pnlApellido" />
+									</p:selectBooleanCheckbox>
+
+									<p:panel id="pnlApellido" visible="#{clienteBean.activarApellido}">
+										<p:inputText value="#{clienteBean.apePaterno}" validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+											<f:validateRegex pattern="#{emision['msg.formato.texto']}" disabled="#{!clienteBean.activarApellido}" />
+										</p:inputText>
+									</p:panel>
+
+									<h:outputText value="Nombres: " />
+									<p:selectBooleanCheckbox value="#{clienteBean.activarNombre}">
+										<p:ajax update="pnlNombres" />
+									</p:selectBooleanCheckbox>
+
+									<p:panel id="pnlNombres" visible="#{clienteBean.activarNombre}">
+										<p:inputText value="#{clienteBean.nombre}" validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+											<f:validateRegex pattern="#{emision['msg.formato.texto']}" disabled="#{!clienteBean.activarNombre}" />
+										</p:inputText>
+									</p:panel>
+
+									<h:outputText value="#{emision['cliente.tabla.razonSocial']}: " />
+									<p:selectBooleanCheckbox value="#{clienteBean.activarRazonSocial}">
+										<p:ajax update="pn1RazonSocial" />
+									</p:selectBooleanCheckbox>
+
+									<p:panel id="pn1RazonSocial" visible="#{clienteBean.activarRazonSocial}">
+										<p:inputText value="#{clienteBean.razonSocial}" validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+											<f:validateRegex pattern="#{emision['msg.formato.texto']}" disabled="#{!clienteBean.activarRazonSocial}" />
+										</p:inputText>
+									</p:panel>
+								</h:panelGrid>
+								<p:commandLink title="Buscar clientes" action="#{clienteBacking.buscarClientes}" update="tablaClientes">
+									<h:graphicImage name="search.png" library="img/icon" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<h:panelGrid columns="1">
+							<h:graphicImage name="client.jpg" library="img" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:spacer height="20px;" />
+				<div align="center">
+					<p:commandButton id="crearClienteBtn" value="Crear Cliente" actionListener="#{clienteBacking.obtenerCodigoCliente}"
+						update=":clienteFormId:agregarClienteDlgId" oncomplete="PF('crearClienteDlg').show();" title="Nuevo" icon="icon-client">
+						<p:ajax update=":clienteFormId " />
+					</p:commandButton>
+					<p:spacer width="5px;" />
+					<p:commandButton id="botonEditar" value="Editar Cliente" actionListener="#{clienteBacking.editarCliente}"
+						update=":clienteFormId:agregarClienteDlgId" oncomplete="PF('crearClienteDlg').show();" title="Nuevo" icon="icon-client">
+						<p:ajax update=":clienteFormId" />
+					</p:commandButton>
+				</div>
+				<!-- TABLA DE BUSQUEDA -->
+				<p:spacer height="20px;" />
+				<div align="center">
+					<h:panelGrid columns="1" id="tablaClientes">
+						<p:dataTable value="#{clienteBacking.clientesObtenidos}" var="cliente" widgetVar="50" editable="true" style="width: 700px;">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['cliente.tabla.identificacion']}" />
+								</f:facet>
+								<h:outputText value="#{cliente.identificacionPersona}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['cliente.tabla.nombre']}" />
+								</f:facet>
+								<h:outputText value="#{cliente.nombrePersona} #{cliente.apellidoPaterno} #{cliente.apellidoMaterno}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['cliente.tabla.razonSocial']}" />
+								</f:facet>
+								<h:outputText value="#{cliente.razonSocial}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['lbl.direccion']}" />
+								</f:facet>
+								<p:dataList value="#{cliente.direccions}" var="direccion">									
+							        #{direccion.callePrincipal}, #{direccion.numeracion}, #{direccion.calleSecundaria}
+							    </p:dataList>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['lbl.contactos']}" />
+								</f:facet>
+								<p:dataList value="#{cliente.contactos}" var="contacto">									
+							        #{contacto.descripcionContacto}
+							    </p:dataList>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</div>
+			</p:panel>
+
+		</h:form>
+
+		<!-- DIALOG - Datos del Cliente -->
+		<h:form id="clienteFormId">
+			<p:dialog id="agregarClienteDlgId" widgetVar="crearClienteDlg" styleClass="DialogCliente" modal="true" position="center" showEffect="explote"
+				hideEffect="bounce" resizable="false" closable="true" width="650" height="450">
+
+				<div id="crearClienteDivBodyId">
+					<!-- CLIENTE -->
+					<p:messages id="msgs" showDetail="false" autoUpdate="true" closable="true" />
+					<h:panelGrid columns="2" cellpadding="2" cellspacing="2">
+						<p:outputLabel for="tipoPersonaSelectId" value="#{administrador['cliente.dlg.agregar.tipoPersona']}" styleClass="negrita" />
+						<p:selectOneMenu id="tipoPersonaSelectId" value="#{clienteBean.tipoPersona}" required="true"
+							requiredMessage="#{administrador['cliente.dlg.agregar.msg.tipoPersona']}" effect="drop">
+							<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+							<f:selectItems value="#{clienteBacking.tipoPersonaItems}" />
+							<p:ajax event="change" listener="#{clienteBacking.selectTipoPersona(clienteBean.tipoPersona)}"
+								update="tipoIdentificacionId, infPerNatPanelId, infPerJurPanelId" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="tipoIdentificacionId" value="#{administrador['cliente.dlg.agregar.tipoIdentificacion']}" styleClass="negrita" />
+						<p:selectOneMenu id="tipoIdentificacionId" value="#{clienteBean.tipoIdentificacion}" required="true"
+							requiredMessage="#{administrador['cliente.dlg.agregar.msg.tipoIdentificacion']}" effect="drop"
+							disabled="#{clienteBacking.activarPanelPersonaJuridica}">
+							<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+							<f:selectItems value="#{clienteBacking.tipoIdentificacionItems}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="idIdentificacion" value="#{administrador['cliente.dlg.agregar.identificacion']}" styleClass="negrita" />
+						<p:inputText id="idIdentificacion" value="#{clienteBean.identificacion}" required="true"
+							requiredMessage="#{administrador['cliente.dlg.agregar.msg.identificacion']}" />
+					</h:panelGrid>
+
+					<!-- Informacion Persona Natural -->
+					<p:panel id="infPerNatPanelId" visible="#{clienteBacking.activarPanelPersonaNatural}" styleClass="DialogCliente-personaNatural">
+						<f:facet name="header">
+							<p:outputLabel value="PERSONA NATURAL" />
+						</f:facet>
+						<h:panelGrid columns="2" cellpadding="2" cellspacing="2">
+							<p:outputLabel for="nombreId" value="#{administrador['cliente.dlg.agregar.nombres']}" styleClass="negrita" />
+							<p:inputText id="nombreId" value="#{clienteBean.nombre}" required="#{clienteBacking.activarPanelPersonaNatural}"
+								requiredMessage="#{administrador['cliente.dlg.agregar.msg.nombres']}" styleClass="DialogoCliente-nombre"
+								validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+								<f:validateRegex pattern="#{emision['msg.formato.texto']}" />
+							</p:inputText>
+
+							<p:outputLabel for="apePaterno" value="#{administrador['cliente.dlg.agregar.appPaterno']}" styleClass="negrita" />
+							<p:inputText id="apePaterno" value="#{clienteBean.apePaterno}" required="#{clienteBacking.activarPanelPersonaNatural}"
+								requiredMessage="#{administrador['cliente.dlg.agregar.msg.appPaterno']}" styleClass="DialogoCliente-apePaterno"
+								validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+								<f:validateRegex pattern="#{emision['msg.formato.texto']}" />
+							</p:inputText>
+
+							<p:outputLabel for="apeMaterno" value="#{administrador['cliente.dlg.agregar.appMaterno']}" styleClass="negrita" />
+							<p:inputText id="apeMaterno" value="#{clienteBean.apeMaterno}" required="#{clienteBacking.activarPanelPersonaNatural}"
+								requiredMessage="#{administrador['cliente.dlg.agregar.msg.appMaterno']}" styleClass="DialogoCliente-apeMaterno"
+								validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+								<f:validateRegex pattern="#{emision['msg.formato.texto']}" />
+							</p:inputText>
+
+							<p:outputLabel for="actProfecionId" value="#{administrador['cliente.dlg.agregar.actProfesion']}" styleClass="negrita" />
+							<p:inputText id="actProfecionId" value="#{clienteBean.actividadProfecion}" styleClass="DialogoCliente-actProfesion"
+								style="text-transform:uppercase;" />
+
+							<p:outputLabel for="fechaNacimientoId" value="#{administrador['cliente.dlg.agregar.fechaNacimiento']}" styleClass="negrita" />
+							<p:calendar id="fechaNacimientoId" value="#{clienteBean.fechaNacimiento}" locale="de" navigator="true" pattern="MM/dd/yyyy" mask="true" />
+						</h:panelGrid>
+
+					</p:panel>
+					<!-- Informacion Persona Juridica -->
+					<p:panel id="infPerJurPanelId" visible="#{clienteBacking.activarPanelPersonaJuridica}" styleClass="DialogCliente-personaJuridica">
+						<f:facet name="header">
+							<p:outputLabel value="PERSONA JURÍDICA" />
+						</f:facet>
+						<h:panelGrid columns="2" cellpadding="2" cellspacing="2">
+							<p:outputLabel for="nombreJId" value="#{administrador['cliente.dlg.agregar.nombres']}" styleClass="negrita" />
+							<p:inputText id="nombreJId" value="#{clienteBean.nombreJuridico}" required="#{clienteBacking.activarPanelPersonaJuridica}"
+								requiredMessage="#{administrador['cliente.dlg.agregar.msg.nombres']}" styleClass="DialogoCliente-nombre"
+								validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+								<f:validateRegex pattern="#{emision['msg.formato.texto']}" />
+							</p:inputText>
+
+							<p:outputLabel for="apePaternoJ" value="#{administrador['cliente.dlg.agregar.appPaterno']}" styleClass="negrita" />
+							<p:inputText id="apePaternoJ" value="#{clienteBean.apePaternoJuridico}" required="#{clienteBacking.activarPanelPersonaJuridica}"
+								requiredMessage="#{administrador['cliente.dlg.agregar.msg.appPaterno']}" styleClass="DialogoCliente-apePaterno"
+								validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+								<f:validateRegex pattern="#{emision['msg.formato.texto']}" />
+							</p:inputText>
+
+							<p:outputLabel for="apeMaternoJ" value="#{administrador['cliente.dlg.agregar.appMaterno']}" styleClass="negrita" />
+							<p:inputText id="apeMaternoJ" value="#{clienteBean.apeMaternoJuridico}" styleClass="DialogoCliente-apeMaterno"
+								validatorMessage="#{emision['msg.texto.error']}" style="text-transform:uppercase;">
+								<f:validateRegex pattern="#{emision['msg.formato.texto']}" />
+							</p:inputText>
+
+							<p:outputLabel for="razonSocialId" value="#{administrador['cliente.dlg.agregar.razonSocial']}" styleClass="negrita" />
+							<p:inputText id="razonSocialId" value="#{clienteBean.razonSocial}" required="#{clienteBacking.activarPanelPersonaJuridica}"
+								requiredMessage="#{administrador['cliente.dlg.agregar.msg.razonSocial']}" styleClass="DialogCliente-razonSocial"
+								style="text-transform:uppercase;" />
+
+
+							<p:outputLabel for="giroNegocioId" value="#{administrador['cliente.dlg.agregar.giroNegocio']}" styleClass="negrita" />
+							<p:inputText id="giroNegocioId" value="#{clienteBean.giroNegocio}" required="#{clienteBacking.activarPanelPersonaJuridica}"
+								requiredMessage="emi" styleClass="DialogCliente-giroNegocio" style="text-transform:uppercase;" />
+						</h:panelGrid>
+					</p:panel>
+
+					<p:spacer height="10px;" />
+					<h:panelGrid columns="2" cellpadding="2" cellspacing="2">
+						<p:outputLabel value="Por favor ingresar todos los contactos " />
+						<h:graphicImage name="icono-contacto.jpg" library="img" style="width: 90px;" />
+					</h:panelGrid>
+					<h:panelGrid id="idContactos" columns="4" cellpadding="2" cellspacing="2">
+						<p:outputLabel for="tipoContactoId" value="#{administrador['cliente.dlg.contacto.tipoContacto']}" styleClass="negrita" />
+						<p:selectOneMenu id="tipoContactoId" value="#{contactoBean.tipoContacto}" effect="fade">
+							<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+							<f:selectItems value="#{contactoBacking.tipoContactosItems}" />
+							<p:ajax listener="#{contactoBacking.validarContacto()}" update="idContactos, idCelular, idTelefono, idMail, idSkype" />
+						</p:selectOneMenu>
+						<p:inputText id="idCelular" value="#{contactoBean.descripcionContacto}" placeholder="#{contactoBean.tipoContacto}"
+							rendered="#{contactoBacking.activarCelular}" validatorMessage="#{emision['msg.formato.celular.error']}">
+							<f:validateRegex pattern="#{emision['msg.formato.celular']}" />
+						</p:inputText>
+
+						<p:inputText id="idTelefono" value="#{contactoBean.descripcionContacto}" placeholder="#{contactoBean.tipoContacto}"
+							rendered="#{contactoBacking.activarTelefono}" />
+						<p:inputText id="idMail" value="#{contactoBean.descripcionContacto}" placeholder="#{contactoBean.tipoContacto}"
+							rendered="#{contactoBacking.activarMail}" validatorMessage="#{emision['msg.correo.error']}">
+							<f:validateRegex pattern="#{emision['msg.formato.correo']}" />
+						</p:inputText>
+						<p:inputText id="idSkype" value="#{contactoBean.descripcionContacto}" placeholder="#{contactoBean.tipoContacto}"
+							rendered="#{contactoBacking.activarSkype}" />
+
+						<p:commandButton value="Agregar Contacto" action="#{contactoBacking.agregarContacto}" icon="icon-add" update="contactosTableId" />
+					</h:panelGrid>
+
+					<p:spacer height="10px;" />
+
+					<!-- Lista de Contactos para el Cliente -->
+					<p:dataTable id="contactosTableId" var="contacto" value="#{contactoBean.contactosDTO}" editable="true">
+						<f:facet name="header">
+							<p:outputLabel value="lista de Contactos" />
+						</f:facet>
+						<p:ajax event="rowEdit" listener="#{contactoBacking.onEditContacto}" />
+						<p:ajax event="rowEditCancel" listener="#{contactoBacking.onCancel}" update="contactosTableId"/>
+
+						<p:column headerText="#{administrador['cliente.dlg.contactos.table.tipoContacto']}" style="width:auto">
+							<h:outputText value="#{contacto.tipoContacto}" />
+						</p:column>
+
+						<p:column headerText="#{administrador['cliente.dlg.contactos.table.descripcionContacto']}" style="width:auto">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{contacto.descripcionContacto}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{contacto.descripcionContacto}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Options" style="width:50px">
+							<p:rowEditor />
+						</p:column>
+					</p:dataTable>
+					<!-- DIRECCION -->
+					<h:panelGrid columns="2" cellpadding="2" cellspacing="2">
+						<p:outputLabel value="Por favor ingresar Las direcciones correspondientes " />
+						<h:graphicImage name="mundo.png" library="img" />
+					</h:panelGrid>
+					<p:spacer height="10px;" />
+
+					<p:panel>
+						<f:facet name="header">
+							<p:outputLabel value="DIRECCIONES" />
+						</f:facet>
+						<h:panelGrid columns="1" cellpadding="2" cellspacing="2">
+							<h:panelGrid id="detalleDireccionId" columns="2" cellpadding="2" cellspacing="2">
+								<p:outputLabel value="#{administrador['cliente.dlg.contacto.tipoContacto']}" styleClass="negrita" />
+								<p:selectOneMenu id="tipoDireccionId" value="#{direccionBean.codTipoDireccion}" effect="drop">
+									<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+									<f:selectItems value="#{direccionBacking.tipoDireccionItems}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="provinciaId" value="#{administrador['cliente.dlg.direccion.provicnia']}" styleClass="negrita" />
+								<p:selectOneMenu id="provinciaId" value="#{direccionBean.provinciaDTO}" converter="provinciaConverter" effect="fade" var="p" filter="true"
+									style="width:210px;">
+									<f:selectItems value="#{direccionBacking.provinciasDTO}" var="provincia" itemLabel="#{provincia.nombre}" itemValue="#{provincia}" />
+									<p:column>
+										<h:outputText value="#{p.nombre}" />
+									</p:column>
+								</p:selectOneMenu>
+
+								<p:outputLabel for="callePrincipalId" value="#{administrador['cliente.dlg.direccion.callePrincilapal']}" styleClass="negrita" />
+								<p:inputText id="callePrincipalId" value="#{direccionBean.callePrincipal}" style="width:200px;text-transform:uppercase;" />
+
+								<p:outputLabel for="numeracionId" value="#{administrador['cliente.dlg.direccion.numeracion']}" styleClass="negrita" />
+								<p:inputText id="numeracionId" value="#{direccionBean.numeracion}" style="width:200px;" />
+
+								<p:outputLabel for="calleSecundariaId" value="#{administrador['cliente.dlg.direccion.calleSecundaria']}" styleClass="negrita" />
+								<p:inputText id="calleSecundariaId" value="#{direccionBean.calleSecundaria}" style="width:200px; text-transform:uppercase;" />
+							</h:panelGrid>
+							<h:panelGrid columns="1" cellpadding="2" cellspacing="2">
+								<p:outputLabel for="referenciaId" value="#{administrador['cliente.dlg.direccion.referencia']}" styleClass="negrita" />
+								<p:inputTextarea id="referenciaId" rows="3" cols="45" value="#{direccionBean.referencia}" style="text-transform:uppercase;" />
+							</h:panelGrid>
+							<p:spacer height="5px;" />
+							<div align="center">
+								<p:commandButton id="agregarDireccionId" value="Agregar" actionListener="#{clienteBacking.agregarDireccion}" icon="icon-add"
+									update="direccionesTableId" />
+							</div>
+						</h:panelGrid>
+						<p:spacer height="15px;" />
+						<!-- Tabla - Lista de Direcciones Ingresadas -->
+						<p:dataTable id="direccionesTableId" var="direccion" value="#{clienteBacking.direccionesDTO}" editable="true">
+							<f:facet name="header">
+								<p:outputLabel value="#{administrador['cliente.dlg.direcciones.table.title']}" />
+							</f:facet>
+
+							<p:ajax event="rowEdit" listener="#{clienteBacking.onRowEdit}" />
+							<p:ajax event="rowEditCancel" listener="#{clienteBacking.onRowCancel}" />
+
+							<p:column headerText="#{administrador['cliente.dlg.direcciones.table.tipoDireccion']}" style="width:auto">
+								<h:outputText value="#{direccion.tipoDireccion}" />
+							</p:column>
+							<p:column headerText="#{administrador['cliente.dlg.direcciones.table.provicnia']}" style="width:auto">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{direccion.provinciaDTO.nombre}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu id="provinciaId" value="#{direccion.provinciaDTO}" converter="provinciaConverter" effect="fade" var="p" filter="true"
+											style="width:210px;">
+											<f:selectItems value="#{direccionBacking.provinciasDTO}" var="provincia" itemLabel="#{provincia.nombre}" itemValue="#{provincia}" />
+											<p:column>
+												<h:outputText value="#{p.nombre}" />
+											</p:column>
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{administrador['cliente.dlg.direcciones.table.callePrincilapal']}" style="width:auto">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{direccion.callePrincipal}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="callePrincipalId" value="#{direccion.callePrincipal}" style="width:auto;" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{administrador['cliente.dlg.direcciones.table.numeracion']}" style="width:auto">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{direccion.numeracion}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="numeracionId" value="#{direccion.numeracion}" style="width:auto" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{administrador['cliente.dlg.direcciones.table.calleSecundaria']}" style="width:auto">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{direccion.calleSecundaria}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="calleSecundariaId" value="#{direccion.calleSecundaria}" style="width:auto" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{administrador['cliente.dlg.direcciones.table.referencia']}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{direccion.referencia}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{direccion.referencia}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="Options" style="width:50px">
+								<p:rowEditor />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</div>
+				<!-- Footer del Formulario -->
+				<f:facet name="footer">
+					<div id="crearClienteDivFooterId">
+						<p:commandButton id="guardarClienteBtnId" value="#{utilitario['hiperion.btn.guardar']}" actionListener="#{clienteBacking.guardarCliente}"
+							oncomplete="PF('crearClienteDlg').hide();" icon="icon-save" />
+					</div>
+				</f:facet>
+			</p:dialog>
+
+			<p:spacer height="20px;" />
+			<!-- CARGAR ARCHIVO EXCEL -->
+			<p:panel>
+				<f:facet name="header">
+					<h:outputText value="Carga masiva de clientes" />
+				</f:facet>
+				<p:growl id="messages" showDetail="true" />
+
+				<p:fileUpload value="#{clienteBacking.file}" fileUploadListener="#{clienteBacking.cargaArchivoExcel}" mode="advanced" update="messages"
+					multiple="true" sizeLimit="900000000" allowTypes="/(\.|\/)(xls)$/" uploadLabel="Cargar" cancelLabel="Cancelar" label="Buscar archivo"
+					required="true">
+				</p:fileUpload>
+			</p:panel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

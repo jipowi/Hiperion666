@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>#{utilitario['hiperion.titulo.pages.login']}</title>
+	<h:outputStylesheet name="loginStyle.css" library="css" />
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputScript name="login.js" library="js" />
+</h:head>
+<h:body>
+	<div id="wrapDiv">
+		<div id="logoDiv">
+			<h:graphicImage name="avila.jpg" library="img" />
+		</div>
+		<div id="loginDiv">
+			<p:growl id="msgs" showDetail="true" life="3000" />
+			<h:form id="loginForm">
+				<p:panel id="loginPanel" header="Login" widgetVar="loginDlg">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="usuario" value="Usuario: " styleClass="negrita" />
+						<p:inputText value="#{usuarioBean.nombreUsuario}" id="usuario" required="true" label="usuario" />
+
+						<h:outputLabel for="clave" value="Password:" styleClass="negrita" />
+						<p:password value="#{usuarioBean.password}" id="clave" required="true" label="clave" />
+
+						<f:facet name="footer">
+							<p:commandButton widgetVar="loginButtonW" id="loginButton" value="Login" update=":msgs" actionListener="#{usuarioBacking.login}" icon="icon-login"
+								onclick="checkSubmit()" oncomplete="handleLoginRequest(xhr, status, args)" />
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+		</div>
+	</div>
+</h:body>
+</html>

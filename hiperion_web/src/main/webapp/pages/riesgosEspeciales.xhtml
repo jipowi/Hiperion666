@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<ui:decorate template="/templates/polizaTemplate.xhtml">
+			<ui:define name="content">
+				<ui:decorate template="/templates/ramoTemplate.xhtml">
+					<ui:define name="ramoHeader">
+						<div align="center">
+							<p:outputLabel value="#{emision['riesgos.tituloPantalla']}" styleClass="negrita" />
+							<p:separator id="customSeparator" style="width:auto;height:1px" />
+							<p:spacer height="5px;" />
+							<h:panelGroup style="display:block; text-align:center">
+								<h:graphicImage name="riesgosEspeciales.jpg" library="img/ramos/riesgosEspeciales" width="728px" height="90px" />
+							</h:panelGroup>
+							<p:spacer height="15px;" />
+						</div>
+					</ui:define>
+					<ui:define name="ramoContent">
+						<p:outputPanel>
+							<p:messages id="messageTodoRiesgosEspeciales" showDetail="true" autoUpdate="true" closable="true" />
+						</p:outputPanel>
+						<p:panel id="panelCliente">
+							<h:form id="formCliente">
+
+								<!-- ESTADO POLIZA -->
+								<table align="center">
+									<tr>
+										<td align="center"><h:graphicImage name="Circle_Grey.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Blue.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Green.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Yellow.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Orange.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Red.png" library="img" /></td>
+									</tr>
+									<tr>
+										<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.addGrupo}"
+												disabled="#{accidentesPersonalesBacking.activarCotizar}" /></td>
+										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente" disabled="#{accidentesPersonalesBacking.activarPresentar}" /></td>
+										<td><p:commandButton id="idTres" value="Aceptar" title="Aceptado Oferta" disabled="#{accidentesPersonalesBacking.activarAceptar}" /></td>
+										<td><p:commandButton id="idCuatro" value="Emitir" title="Solicitar Emisión" disabled="#{accidentesPersonalesBacking.activarEmitir}" /></td>
+										<td><p:commandButton id="idCinco" value="Entregar" title="Entregar Emisión" disabled="#{accidentesPersonalesBacking.activarEntregar}" /></td>
+										<td><p:commandButton id="idSeis" value="Documentar" title="Recibir Documentos"
+												disabled="#{accidentesPersonalesBacking.activarDocumentar}" /></td>
+									</tr>
+								</table>
+								<p:spacer height="30px;" />
+								<!-- CLIENTE -->
+
+								<h:panelGrid columns="1">
+									<p:panel>
+										<f:facet name="header">
+											<h:outputText value="#{emision['cliente.buscar']}" />
+										</f:facet>
+										<h:panelGrid columns="2">
+											<h:panelGrid columns="2">
+												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
+												<p:inputText value="#{ramoRiesgosEspecialesBean.identificacion}" />
+											</h:panelGrid>
+											<p:commandLink title="Buscar clientes" action="#{riesgosEspecialesBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora">
+												<h:graphicImage name="search.png" library="img/icon" />
+											</p:commandLink>
+										</h:panelGrid>
+									</p:panel>
+									<!-- DATOS DEL CLIENTE -->
+									<p:panel id="idDatosCliente" visible="#{riesgosEspecialesBacking.activarDatosCliente}">
+										<f:facet name="header">
+											<h:outputText value="#{emision['cliente.titulo.datos']}" />
+										</f:facet>
+										<h:panelGrid columns="1">
+											<h:panelGrid columns="2" cellpadding="3">
+												<p:outputLabel value="#{emision['poliza.atributo.ejecutivo']}:" styleClass="negrita" />
+												<p:outputLabel value="#{riesgosEspecialesBacking.usuario.nombreUsuario}" style="color:green;" />
+
+												<p:outputLabel value="#{emision['cliente.nombre']}:" styleClass="negrita" />
+												<p:outputLabel value="#{ramoRiesgosEspecialesBean.nombreCliente}" />
+
+												<p:outputLabel value="#{emision['cliente.tabla.identificacion']}:" styleClass="negrita" />
+												<p:outputLabel value="#{ramoRiesgosEspecialesBean.identificacion}" />
+											</h:panelGrid>
+										</h:panelGrid>
+									</p:panel>
+									<!-- DATOS ASEGURADORA -->
+									<p:panel id="idDatosAseguradora" visible="#{riesgosEspecialesBacking.activarDatosAseguradora}">
+										<f:facet name="header">
+											<h:outputText value="#{emision['aseguradora.titulo.aseguradora']}" />
+										</f:facet>
+										<h:panelGrid columns="2" cellpadding="3">
+											<p:outputLabel value="#{emision['aseguradora.aseguradora']}" styleClass="negrita" />
+											<p:selectOneMenu value="#{ramoRiesgosEspecialesBean.aseguradora}" effect="drop">
+												<f:selectItem itemLabel="Seleccione Aseguradora" noSelectionOption="true" />
+												<f:selectItems value="#{riesgosEspecialesBacking.aseguradorasItems}" />
+												<p:ajax listener="#{riesgosEspecialesBacking.buscarContactoAseguradora}" update="contacto" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+
+										<h:panelGrid columns="2" id="contacto" cellpadding="3">
+											<p:outputLabel value="#{emision['lbl.contactoAseguradora']}:" styleClass="negrita" />
+											<p:selectOneMenu value="#{ramoRiesgosEspecialesBean.contactoAseguradora}" effect="drop">
+												<f:selectItem itemLabel="Seleccione Contacto de la Aseguradora" noSelectionOption="true" />
+												<f:selectItems value="#{riesgosEspecialesBacking.contactosItems}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+
+										<div align="center">
+											<p:commandButton id="agregarAseguradora" icon="icon-add" value="#{emision['boton.agregar']}"
+												actionListener="#{riesgosEspecialesBacking.addAseguradora}" title="Agregar" update="tablaAseguradoras" />
+										</div>
+										<p:spacer height="30px;" />
+										<p:dataTable id="tablaAseguradoras" value="#{riesgosEspecialesBacking.aseguradorasDTO}" var="obj" editable="true">
+											<p:ajax event="rowEditCancel" listener="#{riesgosEspecialesBacking.onCancel}" update="@this" />
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['aseguradora.tabla.nombre']}" />
+												</f:facet>
+												<h:outputText value="#{obj.nombreAseguradora}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['aseguradora.tabla.RUC']}" />
+												</f:facet>
+												<h:outputText value="#{obj.ruc}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['aseguradora.tabla.telefono']}" />
+												</f:facet>
+												<h:outputText value="#{obj.telefono}" />
+											</p:column>
+											<p:column headerText="Options" style="width:50px">
+												<p:rowEditor />
+											</p:column>
+										</p:dataTable>
+									</p:panel>
+								</h:panelGrid>
+
+							</h:form>
+						</p:panel>
+						<p:tabView effect="blind" effectDuration="normal">
+							<p:tab title="#{emision['riesgos.tab.principal']}">
+								<p:outputPanel>
+									<p:messages id="messageTodoRiesgosEspeciales" showDetail="true" autoUpdate="true" closable="true" />
+								</p:outputPanel>
+								<h:form id="formPrincipal">
+									<div align="center">
+										<h:panelGrid columns="1" id="ramoRiesgosEspeciales">
+											<p:spacer height="15px;" />
+											<p:panel>
+												<h:panelGrid columns="2" cellpadding="3">
+													<p:outputLabel value="#{emision['riesgos.tasa']}" styleClass="negrita" />
+													<p:inputText value="#{ramoRiesgosEspecialesBean.tasa}" />
+
+													<p:outputLabel value="#{emision['riesgos.deducible']}" styleClass="negrita" />
+													<p:inputText value="#{ramoRiesgosEspecialesBean.deducible}" />
+
+													<p:outputLabel value="#{emision['riesgos.condicionesImportantes']}" styleClass="negrita" />
+													<p:inputTextarea value="#{ramoRiesgosEspecialesBean.condicionesImp}" cols="50" rows="2" style="text-transform:uppercase;" />
+												</h:panelGrid>
+												<h:panelGrid columns="1" cellpadding="3">
+													<p:fileUpload fileLimit="1" />
+													<p:outputLabel value="#{emision['riesgos.filePolizaVigente']}" styleClass="negrita" />
+													<p:fileUpload fileLimit="1" />
+
+												</h:panelGrid>
+											</p:panel>
+											<!-- Footer del Formulario -->
+											<f:facet name="footer">
+												<div align="center">
+													<p:commandButton id="guardarBtnId" actionListener="#{riesgosEspecialesBacking.guardarRamo()}" icon="icon-save"
+														value="#{emision['boton.guardar']}" title="Guardar" update="formPrincipal, ramoRiesgosEspeciales" />
+													<p:commandButton id="cancelarBtnId" icon="icon-cancel" value="#{emision['boton.cancelar']}" process="@this" title="Cancelar" />
+
+													<!-- DESCARGAR DOCUMENTOS -->
+													<h:panelGrid columns="2">
+														<p:commandLink title="Descargar syllabus" actionListener="#{riesgosEspecialesBacking.descargarRiesgosEspecialesPDF()}">
+															<h:graphicImage name="pdf.png" library="img" />
+														</p:commandLink>
+													</h:panelGrid>
+												</div>
+											</f:facet>
+										</h:panelGrid>
+									</div>
+								</h:form>
+								Prueba
+
+							</p:tab>
+							<p:tab title="#{emision['riesgos.tab.objetoAsegurado']}">
+								<div align="center">
+									<h:form id="form1">
+										<h:panelGrid columns="1">
+											<f:facet name="header">
+												<p:outputLabel value="#{emision['riesgos.objeto.tituloPantalla']}" styleClass="negrita" />
+											</f:facet>
+											<p:separator id="customSeparator" style="width:auto;height:1px" />
+											<p:growl id="messages" showDetail="true" />
+											<p:panelGrid columns="2">
+												<h:outputLabel value="#{emision['riesgos.objeto.descripcion']}" styleClass="negrita" />
+												<p:inputText value="#{ramoRiesgosEspecialesBean.descripcion}" style="text-transform:uppercase;" />
+
+												<h:outputLabel value="#{emision['riesgos.objeto.detalle']}" styleClass="negrita" />
+												<p:inputText value="#{ramoRiesgosEspecialesBean.detalle}" style="text-transform:uppercase;" />
+											</p:panelGrid>
+											<f:facet name="footer">
+												<div align="center">
+													<p:commandButton id="agregarObjeto" update="form1, messages" icon="icon-add" value="#{emision['boton.agregar']}"
+														actionListener="#{ramoRiesgosEspecialesBean.addAction}" title="Agregar" />
+												</div>
+											</f:facet>
+										</h:panelGrid>
+										<p:spacer height="30px;" />
+										<p:dataTable value="#{ramoRiesgosEspecialesBean.orderlist}" var="obj" widgetVar="50" style="width: 50%;" editable="true">
+											<p:ajax event="rowEdit" listener="#{ramoRiesgosEspecialesBean.onEdit}" />
+											<p:ajax event="rowEditCancel" listener="#{ramoRiesgosEspecialesBean.onCancel}" />
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['riesgos.objeto.descripcion']}" />
+												</f:facet>
+												<p:cellEditor>
+													<f:facet name="output">
+														<h:outputText value="#{obj.descripcion}" />
+													</f:facet>
+													<f:facet name="input">
+														<p:inputText value="#{obj.descripcion}" style="width:100%" />
+													</f:facet>
+												</p:cellEditor>
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['riesgos.objeto.detalle']}" />
+												</f:facet>
+												<p:cellEditor>
+													<f:facet name="output">
+														<h:outputText value="#{obj.detalle}" />
+													</f:facet>
+													<f:facet name="input">
+														<p:inputText value="#{obj.detalle}" style="width:100%" />
+													</f:facet>
+												</p:cellEditor>
+											</p:column>
+											<p:column headerText="Options" style="width:50px">
+												<p:rowEditor />
+											</p:column>
+										</p:dataTable>
+									</h:form>
+								</div>
+							</p:tab>
+							<!-- COBERTURAS -->
+							<p:tab title="#{emision['riesgos.tab.coberturas']}">
+								<h:form id="coberturaForm">
+									<p:dataTable value="#{riesgosEspecialesBacking.coberturasDTO}" var="cobertura" paginator="true" rows="4">
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<h:outputText value="#{cobertura.cobertura}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['lbl.seleccion']}" />
+											</f:facet>
+											<div align="center">
+												<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
+											</div>
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:tab>
+							<!-- COBERTURAS ADICIONALES -->
+							<p:tab title="#{emision['riesgos.tab.coberturasAdicionales']}">
+								<h:form id="coberturaAddForm">
+									<p:dataTable value="#{riesgosEspecialesBacking.coberturasAddDTO}" var="cobertura" paginator="true" rows="4">
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<h:outputText value="#{cobertura.cobertura}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['lbl.seleccion']}" />
+											</f:facet>
+											<div align="center">
+												<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
+											</div>
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:tab>
+							<!-- CLAUSULAS ADICIONALES -->
+							<p:tab title="#{emision['riesgos.tab.clausulasAdicionales']}">
+								<h:form id="clausulaAddForm">
+									<p:dataTable value="#{riesgosEspecialesBacking.clausulasAdicionalesDTO}" var="clausula" paginator="true" rows="4">
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
+											</f:facet>
+											<h:outputText value="#{clausula.clausula}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['lbl.seleccion']}" />
+											</f:facet>
+											<div align="center">
+												<p:selectBooleanCheckbox value="#{clausula.seleccion}" />
+											</div>
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:tab>
+							<!-- CONDICIONES ESPECIALES -->
+							<p:tab title="#{emision['riesgos.tab.condicionesEspeciales']}">
+								<h:form id="condicionEspForm">
+									<p:dataTable value="#{riesgosEspecialesBacking.condicionesEspecialesDTO}" var="condicion" paginator="true" rows="4">
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cep']}" />
+											</f:facet>
+											<h:outputText value="#{condicion.condicionEspecial}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['lbl.seleccion']}" />
+											</f:facet>
+											<div align="center">
+												<p:selectBooleanCheckbox value="#{condicion.condicionEspecial}" />
+											</div>
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:tab>
+							<!-- CONDICIONES PARTICULARES -->
+							<p:tab title="#{emision['riesgos.tab.condicionesParticulares']}">
+								<h:form id="condicionPartForm">
+									<p:dataTable value="#{riesgosEspecialesBacking.condicionesParticularesDTO}" var="condicion" paginator="true" rows="4">
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cep']}" />
+											</f:facet>
+											<h:outputText value="#{condicion.condicionParticular}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['lbl.seleccion']}" />
+											</f:facet>
+											<div align="center">
+												<p:selectBooleanCheckbox value="#{condicion.condicionParticular}" />
+											</div>
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:tab>
+						</p:tabView>
+					</ui:define>
+				</ui:decorate>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>
+</html>

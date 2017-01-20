@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="formPricipal">
+			<p:outputPanel id="messagesPermisos">
+				<p:messages></p:messages>
+			</p:outputPanel>
+			<p:panel>
+				<div align="center">
+					<h:panelGrid columns="1">
+						<h:graphicImage name="lock.png" library="img" />
+					</h:panelGrid>
+				</div>
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="2">
+						<h:graphicImage name="help.png" library="img" />
+						<p:outputLabel value="#{emision['inf.seguridad']}" />
+					</h:panelGrid>
+					<p:panel>
+						<f:facet name="header">
+							<h:outputText value="#{emision['titulo.seguridad.buscarCliente']}" />
+						</f:facet>
+						<!--  <h:panelGrid columns="3">
+							<p:outputLabel value="#{emision['lbl.seguridad.cedula']}" styleClass="negrita" />
+							<p:inputText value="#{sessionBacking.cedula}" />
+							<p:commandLink title="Buscar usuario" action="#{aseguradoraBacking.consultarAseguradoras()}">
+								<h:graphicImage name="search.png" library="img/icon" />
+							</p:commandLink>
+						</h:panelGrid>-->
+					</p:panel>
+					<p:spacer height="30px;" />
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

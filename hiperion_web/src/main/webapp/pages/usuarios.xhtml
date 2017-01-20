@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="formPrincipal">
+			<p:panel>
+				<div align="center">
+					<p:outputLabel value="#{emision['usuario.titulo']}" styleClass="negrita" />
+					<p:separator id="customSeparator" style="width:auto;height:1px" />
+					<p:spacer height="15px;" />
+				</div>
+				<p:messages id="messagesCliente" showDetail="true" autoUpdate="true" closable="true" />
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="2" id="tablaClientes">
+						<p:outputLabel value="#{emision['usuario.nickname']}:" styleClass="negrita" />
+						<p:inputText id="usuario" value="#{usuarioBean.nickname}" required="true"/>
+
+						<p:outputLabel value="#{emision['usuario.nombres']}:" styleClass="negrita" />
+						<p:inputText value="#{usuarioBean.nombreApellido}" />
+
+						<p:outputLabel  value="#{emision['usuario.identificacion']}:" styleClass="negrita" />
+						<p:inputText id="idIdentificacion" value="#{usuarioBean.identificacion}" validatorMessage="#{emision['msg.cedula.error']}">
+						 <f:validateRegex pattern="#{emision['msg.formato.cedula']}" />
+						</p:inputText>
+						<p:outputLabel value="#{emision['usuario.correo']}:" styleClass="negrita" />
+						<p:inputText id="idCorreo" value="#{usuarioBean.correo}" validatorMessage="#{emision['msg.correo.error']}" >
+						<f:validateRegex pattern="#{emision['msg.formato.correo']}" />
+						</p:inputText>
+
+						<p:outputLabel value="#{emision['usuario.clave']}:" styleClass="negrita" />
+						<p:inputText value="#{usuarioBean.clave}" />
+
+						<p:outputLabel value="#{emision['usuario.rol']}" styleClass="negrita" />
+						<p:selectOneMenu id="idRol" value="#{usuarioBean.rol}" effect="drop">
+							<f:selectItem itemLabel="Seleccione Rol" noSelectionOption="true" />
+							<f:selectItems value="#{usuarioBacking.rolesItems}" itemValue="" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<h:graphicImage name="userLock.png" library="img" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<h:graphicImage name="help.png" library="img" />
+
+					<p:outputLabel value="#{emision['usuario.info.menu']}" styleClass="negrita" />
+
+					<p:commandLink title="Agregar menus">
+						<h:graphicImage name="menu.png" library="img" onclick="menus.show();" />
+					</p:commandLink>
+				</h:panelGrid>
+
+			</p:panel>
+			<p:spacer height="15px;" />
+			<div align="center">
+				<p:commandButton id="guardarBtnId" actionListener="#{usuarioBacking.guardarUsuario}" icon="icon-save" value="#{emision['boton.guardar']}"
+					title="Guardar" update="formPrincipal" />
+				<p:commandButton id="cancelarBtnId" icon="icon-cancel" value="#{emision['boton.cancelar']}" process="@this" title="Cancelar" />
+			</div>
+		</h:form>
+
+		<!-- MENUS -->
+		<h:form id="formMenus">
+			<p:dialog id="idMenu" header="Menu" widgetVar="menus" modal="true" width="600" height="500" position="center" showEffect="fade"
+				hideEffect="explode" resizable="false" closable="true" appendToBody="false">
+
+				<p:dataTable id="tablaMenus" value="#{usuarioBacking.menuDTOList}" var="menu">
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="#{emision['usuario.menu']}" />
+						</f:facet>
+						<h:outputText value="#{menu.nombreMenu}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="#{emision['usuario.seleccion']}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{menu.selected}" />
+					</p:column>
+				</p:dataTable>
+				<p:spacer height="30px;" />
+				<div align="center">
+					<p:commandButton id="aceptarBtnId" action="#{usuarioBacking.agregarMenus}" icon="icon-save" value="#{emision['boton.aceptar']}"
+						oncomplete="menus.hide()" title="Guardar" />
+				</div>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

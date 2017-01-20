@@ -1,0 +1,542 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<ui:decorate template="/templates/polizaTemplate.xhtml">
+			<ui:define name="content">
+				<ui:decorate template="/templates/ramoTemplate.xhtml">
+					<ui:define name="ramoHeader">
+						<div align="center">
+							<p:outputLabel value="#{emision['ap.tituloPantalla']}" styleClass="negrita" />
+							<p:separator id="customSeparator" style="width:auto;height:1px" />
+							<p:spacer height="5px;" />
+							<h:panelGroup style="display:block; text-align:center">
+								<h:graphicImage name="accidentesPersonales.jpg" library="img/ramos/accidentes_personales" width="728px" height="90px" />
+							</h:panelGroup>
+							<p:spacer height="15px;" />
+						</div>
+					</ui:define>
+					<ui:define name="ramoContent">
+
+						<p:outputPanel id="messageAcc">
+							<p:messages id="messagesAcc" showDetail="true" autoUpdate="true" closable="true" />
+						</p:outputPanel>
+
+						<!-- CLIENTE -->
+						<p:panel id="panelCliente">
+							<h:form>
+								<!-- ESTADO POLIZA -->
+								<table align="center">
+									<tr>
+										<td align="center"><h:graphicImage name="Circle_Grey.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Blue.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Green.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Yellow.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Orange.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Red.png" library="img" /></td>
+									</tr>
+									<tr>
+										<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.addGrupo}"
+												disabled="#{accidentesPersonalesBacking.activarCotizar}" /></td>
+										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente" disabled="#{accidentesPersonalesBacking.activarPresentar}" /></td>
+										<td><p:commandButton id="idTres" value="Aceptar" title="Aceptado Oferta" disabled="#{accidentesPersonalesBacking.activarAceptar}" /></td>
+										<td><p:commandButton id="idCuatro" value="Emitir" title="Solicitar Emisión" disabled="#{accidentesPersonalesBacking.activarEmitir}" /></td>
+										<td><p:commandButton id="idCinco" value="Entregar" title="Entregar Emisión" disabled="#{accidentesPersonalesBacking.activarEntregar}" /></td>
+										<td><p:commandButton id="idSeis" value="Documentar" title="Recibir Documentos"
+												disabled="#{accidentesPersonalesBacking.activarDocumentar}" /></td>
+									</tr>
+								</table>
+								<p:spacer height="30px;" />
+								<h:panelGrid columns="1">
+									<p:panel>
+										<f:facet name="header">
+											<h:outputText value="#{emision['cliente.buscar']}" />
+										</f:facet>
+										<h:panelGrid columns="2">
+											<h:panelGrid columns="2">
+												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
+												<p:inputText value="#{ramoAccidentesPersonalesBean.identificacion}" />
+											</h:panelGrid>
+											<p:commandLink title="Buscar clientes" action="#{accidentesPersonalesBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora">
+												<h:graphicImage name="search.png" library="img/icon" />
+											</p:commandLink>
+										</h:panelGrid>
+									</p:panel>
+									<!-- DATOS DEL CLIENTE -->
+									<p:panel id="idDatosCliente" visible="#{accidentesPersonalesBacking.activarDatosCliente}">
+										<f:facet name="header">
+											<h:outputText value="#{emision['cliente.titulo.datos']}" />
+										</f:facet>
+										<h:panelGrid columns="1">
+											<h:panelGrid columns="2" cellpadding="3">
+												<p:outputLabel value="#{emision['poliza.atributo.ejecutivo']}:" styleClass="negrita" />
+												<p:outputLabel value="#{accidentesPersonalesBacking.usuario.nombreUsuario}" style="color:green;" />
+
+												<p:outputLabel value="#{emision['cliente.nombre']}:" styleClass="negrita" />
+												<p:outputLabel value="#{ramoAccidentesPersonalesBean.nombreCliente}" />
+
+												<p:outputLabel value="#{emision['cliente.tabla.identificacion']}:" styleClass="negrita" />
+												<p:outputLabel value="#{ramoAccidentesPersonalesBean.identificacion}" />
+											</h:panelGrid>
+										</h:panelGrid>
+									</p:panel>
+									<!-- DATOS ASEGURADORA -->
+									<p:panel id="idDatosAseguradora" visible="#{accidentesPersonalesBacking.activarDatosAseguradora}">
+										<f:facet name="header">
+											<h:outputText value="#{emision['aseguradora.titulo.aseguradora']}" />
+										</f:facet>
+										<h:panelGrid columns="2" cellpadding="3">
+											<p:outputLabel value="#{emision['aseguradora.aseguradora']}" styleClass="negrita" />
+											<p:selectOneMenu value="#{ramoAccidentesPersonalesBean.aseguradora}" effect="drop">
+												<f:selectItem itemLabel="Seleccione Aseguradora" noSelectionOption="true" />
+												<f:selectItems value="#{accidentesPersonalesBacking.aseguradorasItems}" />
+												<p:ajax listener="#{accidentesPersonalesBacking.buscarContactoAseguradora}" update="contacto" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+
+										<h:panelGrid columns="2" id="contacto" cellpadding="3">
+											<p:outputLabel value="#{emision['lbl.contactoAseguradora']}:" styleClass="negrita" />
+											<p:selectOneMenu value="#{ramoAccidentesPersonalesBean.contactoAseguradora}" effect="drop">
+												<f:selectItem itemLabel="Seleccione Contacto de la Aseguradora" noSelectionOption="true" />
+												<f:selectItems value="#{accidentesPersonalesBacking.contactosItems}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+
+										<div align="center">
+											<p:commandButton id="agregarAseguradora" icon="icon-add" value="#{emision['boton.agregar']}"
+												actionListener="#{accidentesPersonalesBacking.addAseguradora}" title="Agregar" update="tablaAseguradoras" />
+										</div>
+										<p:spacer height="30px;" />
+										<p:dataTable id="tablaAseguradoras" value="#{accidentesPersonalesBacking.aseguradorasDTO}" var="obj" editable="true">
+											<p:ajax event="rowEditCancel" listener="#{accidentesPersonalesBacking.onCancel}" update="@this" />
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['aseguradora.tabla.nombre']}" />
+												</f:facet>
+												<h:outputText value="#{obj.nombreAseguradora}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['aseguradora.tabla.RUC']}" />
+												</f:facet>
+												<h:outputText value="#{obj.ruc}" />
+											</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{emision['aseguradora.tabla.telefono']}" />
+												</f:facet>
+												<h:outputText value="#{obj.telefono}" />
+											</p:column>
+											<p:column headerText="Options" style="width:50px">
+												<p:rowEditor />
+											</p:column>
+										</p:dataTable>
+									</p:panel>
+								</h:panelGrid>
+								<p:spacer height="15px;" />
+								<!-- INFORMACION GRUPOS -->
+								<p:panel>
+									<f:facet name="header">
+										<h:outputText value="INFORMACION GRUPOS" />
+									</f:facet>
+									<h:panelGrid columns="1" id="idInfoGrupo">
+										<h:panelGrid columns="2">
+											<p:outputLabel value="#{emision['ap.grupo.numeroGrupo']}:" styleClass="negrita" />
+											<p:inputText value="#{accidentesPersonalesBacking.numGrupo}" />
+
+											<p:outputLabel value="#{emision['ap.grupo.nombreGrupo']}:" styleClass="negrita" />
+											<p:inputText value="#{accidentesPersonalesBacking.nomGrupo}" />
+
+											<p:outputLabel value="#{emision['ap.grupo.numeroPersonas']}:" styleClass="negrita" />
+											<p:inputText value="#{accidentesPersonalesBacking.numPersonas}" />
+
+											<p:outputLabel value="#{emision['ap.grupo.actividad']}:" styleClass="negrita" />
+											<p:inputText value="#{accidentesPersonalesBacking.actividad}" />
+
+											<p:outputLabel value="#{emision['ap.grupo.valorGrupo']}:" styleClass="negrita" />
+											<p:inputText value="#{accidentesPersonalesBacking.valorGrupo}" />
+										</h:panelGrid>
+										<div align="center">
+											<p:commandButton id="agregarGrupo" icon="icon-add" value="#{emision['boton.agregar']}" action="#{accidentesPersonalesBacking.addGrupo}"
+												title="Agregar" update="tablaGrupos, idInfoGrupo" />
+										</div>
+									</h:panelGrid>
+
+									<p:spacer height="30px;" />
+									<p:dataTable id="tablaGrupos" value="#{accidentesPersonalesBacking.gruposDTO}" var="obj" widgetVar="50" style="width: 60%;" editable="true">
+										<p:ajax event="rowEdit" listener="#{accidentesPersonalesBacking.editarGrupo}" />
+										<p:ajax event="rowEditCancel" listener="#{accidentesPersonalesBacking.eliminarGrupo}" />
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['ap.grupo.numeroGrupo']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.numGrupo}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{obj.numGrupo}" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['ap.grupo.nombreGrupo']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.nomGrupo}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{obj.nomGrupo}" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['ap.grupo.numeroPersonas']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.numPersonas}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{obj.numPersonas}" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['ap.grupo.actividad']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.actividad}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{obj.actividad}" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['ap.grupo.valorGrupo']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.valorGrupo}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{obj.valorGrupo}" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column headerText="Options" style="width:50px">
+											<p:rowEditor />
+										</p:column>
+									</p:dataTable>
+								</p:panel>
+								<p:spacer height="30px;" />
+								<!-- INFORMACION POLIZA - ACCIDENTES PERSONALES -->
+								<p:panel>
+									<f:facet name="header">
+										<h:outputText value="#{emision['titulo.infoRamo']}" />
+									</f:facet>
+									<h:panelGrid columns="4" cellpadding="5">
+										<p:outputLabel value="#{emision['ap.primaNetaPorPersona']}" styleClass="negrita" />
+										<p:inputText value="#{ramoAccidentesPersonalesBean.primaNetaPersona}" />
+										<p:outputLabel value="#{emision['ap.primaTotal']}" styleClass="negrita" />
+										<p:inputText value="#{ramoAccidentesPersonalesBean.primaTotalPersona}" />
+										<p:outputLabel value="#{emision['ap.facturacion']}" styleClass="negrita" />
+										<p:selectOneMenu id="console" value="#{ramoAccidentesPersonalesBean.facturacion}" style="width:125px">
+											<f:selectItem itemLabel="MENSUAL" itemValue="1" />
+											<f:selectItem itemLabel="BIMENSUAL" itemValue="2" />
+											<f:selectItem itemLabel="TRIMESTRAL" itemValue="3" />
+											<f:selectItem itemLabel="SEMESTRAL" itemValue="4" />
+											<f:selectItem itemLabel="ANUAL" itemValue="5" />
+										</p:selectOneMenu>
+									</h:panelGrid>
+									<h:panelGrid columns="1">
+										<p:outputLabel value="#{emision['ap.polizaVigente']}" styleClass="negrita" />
+										<p:fileUpload fileLimit="1" />
+									</h:panelGrid>
+
+									<h:panelGrid columns="2">
+										<h:outputLabel value="#{emision['emision.deducibles']}" />
+										<h:graphicImage name="deducibles.jpg" library="img" />
+									</h:panelGrid>
+
+									<h:panelGrid columns="2">
+										<p:outputLabel value="#{emision['ap.deducible']}" styleClass="negrita" />
+										<p:inputText value="#{ramoAccidentesPersonalesBean.deducible}" />
+									</h:panelGrid>
+								</p:panel>
+
+								<p:spacer height="30px;" />
+								<!-- COBERTURAS -->
+								<h:panelGrid columns="2">
+									<p:outputLabel value="#{emision['lbl.seleccionarCoberturas']}" styleClass="negrita" />
+									<p:commandLink title="#{emision['lbl.seleccionarCoberturas']}" oncomplete="PF('coberturas').show();" update=":idCobertura">
+										<h:graphicImage name="check.png" library="img" />
+									</p:commandLink>
+								</h:panelGrid>
+								<!-- CONDICIONES ESPECIALES -->
+								<h:panelGrid columns="2">
+									<p:outputLabel value="#{emision['lbl.seleccionarCondicionesEsp']}" styleClass="negrita" />
+									<p:commandLink title="#{emision['lbl.seleccionarCondicionesEsp']}" oncomplete="PF('condiciones').show();"
+										actionListener="#{accidentesPersonalesBacking.obtenerCondicionesEspeciales()}" update=":idCondicionesEspeciales">
+										<h:graphicImage name="check.png" library="img" />
+									</p:commandLink>
+								</h:panelGrid>
+								<!-- CLAUSULAS ADICIONALES -->
+								<h:panelGrid columns="2">
+									<p:outputLabel value="#{emision['lbl.seleccionarClausulasAdd']}" styleClass="negrita" />
+									<p:commandLink title="#{emision['lbl.seleccionarClausulasAdd']}" oncomplete="PF('clausulasAdd').show();"
+										actionListener="#{accidentesPersonalesBacking.obtenerClausulasAdicionales()}" update=":idClausulasAdd">
+										<h:graphicImage name="check.png" library="img" />
+									</p:commandLink>
+								</h:panelGrid>
+								<!-- PAGO POLIZA -->
+								<div align="center">
+									<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update=":idPagoPoliza">
+										<h:graphicImage name="pago.jpg" library="img" />
+									</p:commandLink>
+								</div>
+							</h:form>
+						</p:panel>
+
+						<!-- COBERTURAS -->
+						<p:dialog id="idCobertura" header="#{emision['anexo.titulo.tab.cob']}" widgetVar="coberturas" modal="true" position="center" showEffect="fade"
+							hideEffect="explode" resizable="false" closable="true" width="500" height="300">
+							<h:form id="coberturaForm">
+								<p:messages id="messagesCoberturas" showDetail="true" autoUpdate="true" closable="true" />
+								<p:dataTable id="tablaCoberturas" value="#{accidentesPersonalesBacking.coberturasDTO}" var="cobertura" paginator="true" rows="4"
+									editable="true">
+									<p:ajax event="rowEdit" listener="#{accidentesPersonalesBacking.onEditCobertura}" />
+									<p:column>
+										<f:facet name="header">
+											<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+										</f:facet>
+										<h:outputText value="#{cobertura.cobertura}" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputLabel value="#{emision['lbl.seleccion']}" />
+										</f:facet>
+										<p:cellEditor>
+											<f:facet name="output">
+												<div align="center">
+													<p:selectBooleanCheckbox value="#{cobertura.seleccion}" disabled="true" />
+												</div>
+											</f:facet>
+											<f:facet name="input">
+												<div align="center">
+													<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
+												</div>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column headerText="Options" style="width:50px">
+										<p:rowEditor />
+									</p:column>
+								</p:dataTable>
+								<p:spacer height="15px;" />
+								<div align="center">
+									<p:commandButton id="guardarCoberturas" process="@this" actionListener="#{accidentesPersonalesBacking.setearCoberturas()}" icon="icon-save"
+										value="#{emision['boton.guardar']}" title="Guardar" oncomplete="PF('coberturas').hide();" />
+								</div>
+							</h:form>
+						</p:dialog>
+
+						<!-- CONDICIONES ESPECIALES -->
+						<p:dialog id="idCondicionesEspeciales" header="#{emision['anexo.titulo.tab.cep']}" widgetVar="condiciones" modal="true" position="center"
+							showEffect="fade" hideEffect="explode" resizable="false" closable="true" width="500" height="300">
+							<h:form id="condicionEspForm">
+								<p:messages id="messagesCondiciones" showDetail="true" autoUpdate="true" closable="true" />
+								<p:dataTable value="#{accidentesPersonalesBacking.condicionesEspecialesDTO}" var="condicion" paginator="true" editable="true">
+									<p:ajax event="rowEdit" listener="#{accidentesPersonalesBacking.onEditCondicionesEsp}" />
+									<p:column>
+										<f:facet name="header">
+											<h:outputLabel value="#{emision['anexo.titulo.cep']}" />
+										</f:facet>
+										<h:outputText value="#{condicion.condicionEspecial}" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputLabel value="#{emision['lbl.seleccion']}" />
+										</f:facet>
+										<p:cellEditor>
+											<f:facet name="output">
+												<div align="center">
+													<p:selectBooleanCheckbox value="#{condicion.seleccion}" disabled="true" />
+												</div>
+											</f:facet>
+											<f:facet name="input">
+												<div align="center">
+													<p:selectBooleanCheckbox value="#{condicion.seleccion}" />
+												</div>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column headerText="Options" style="width:50px">
+										<p:rowEditor />
+									</p:column>
+								</p:dataTable>
+								<p:spacer height="15px;" />
+								<div align="center">
+									<p:commandButton id="guardarCondiciones" process="@this" actionListener="#{accidentesPersonalesBacking.setearCondiciones()}" icon="icon-save"
+										value="#{emision['boton.guardar']}" title="Guardar" oncomplete="PF('condiciones').hide()" />
+								</div>
+							</h:form>
+						</p:dialog>
+
+						<!-- CLAUSULAS ADICIONALES -->
+						<p:dialog id="idClausulasAdd" header="#{emision['ap.tab.clausulasAdicionales']}" widgetVar="clausulasAdd" modal="true" position="center"
+							showEffect="fade" hideEffect="explode" resizable="false" closable="true" width="500" height="300">
+							<h:form id="clausulaAddEspForm">
+								<p:messages id="messagesClausulas" showDetail="true" autoUpdate="true" closable="true" />
+								<p:dataTable id="tablaClausulas" value="#{accidentesPersonalesBacking.clausulasAdicionalesDTO}" var="clausula" paginator="true"
+									editable="true">
+									<p:ajax event="rowEdit" listener="#{accidentesPersonalesBacking.onEditClausulasAdd}" />
+									<p:column>
+										<f:facet name="header">
+											<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
+										</f:facet>
+										<h:outputText value="#{clausula.clausula}" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputLabel value="#{emision['lbl.seleccion']}" />
+										</f:facet>
+										<p:cellEditor>
+											<f:facet name="output">
+												<div align="center">
+													<p:selectBooleanCheckbox value="#{clausula.seleccion}" disabled="true" />
+												</div>
+											</f:facet>
+											<f:facet name="input">
+												<div align="center">
+													<p:selectBooleanCheckbox value="#{clausula.seleccion}" />
+												</div>
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+									<p:column headerText="Options" style="width:50px">
+										<p:rowEditor />
+									</p:column>
+								</p:dataTable>
+								<p:spacer height="15px;" />
+								<div align="center">
+									<p:commandButton id="guardarClausulas" process="@this" actionListener="#{accidentesPersonalesBacking.setearClausulasAdd()}" icon="icon-save"
+										value="#{emision['boton.guardar']}" title="Guardar" oncomplete="PF('clausulasAdd').hide()" />
+								</div>
+							</h:form>
+						</p:dialog>
+
+						<!-- PAGO POLIZA -->
+						<p:dialog id="idPagoPoliza" header="Pago Poliza" widgetVar="pagoPoliza" modal="true" position="center" showEffect="fade" hideEffect="explode"
+							resizable="false" closable="true" width="700" height="400">
+							<h:form id="formPago">
+								<div align="center">
+									<p:panel id="panelPago">
+										<h:panelGrid columns="2" cellpadding="3">
+											<p:outputLabel value="#{emision['poliza.financiacion.atributo.formaPago']}" styleClass="negrita" />
+											<p:selectOneMenu id="formaPagoId" value="#{polizaBean.idFormaPago}" required="true" effect="drop">
+												<f:selectItem itemLabel="Seleccionar" noSelectionOption="true" />
+												<f:selectItems value="#{accidentesPersonalesBacking.formasPagoItems}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+
+										<h:panelGrid columns="6" cellpadding="3">
+											<p:outputLabel value="#{emision['poliza.atributo.numeroPoliza']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.numeroPoliza}" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.numeroAnexo']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.numeroAnexo}" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.factura']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.numeroFactura}" />
+										</h:panelGrid>
+										<h:panelGrid columns="4" cellpadding="3">
+											<p:outputLabel value="#{emision['poliza.atributo.vigenciaDesde']}" styleClass="negrita" />
+											<p:calendar value="#{polizaBean.vigenciaDesde}" pattern="dd/MM/yyyy HH:mm" locale="es" navigator="true" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.vigenciaHasta']}" styleClass="negrita" />
+											<p:calendar value="#{polizaBean.vigenciaHasta}" pattern="dd/MM/yyyy HH:mm" locale="es" navigator="true" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.diasCobertura']}" styleClass="negrita" />
+											<p:inputText id="diasCoberturaId" value="#{polizaBean.diasCobertura}" disabled="true" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.suma']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.sumaAsegurada}" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.prima']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.primaNeta}" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.derechosEmision']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.derechoEmision}" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.superIntBancosSeguros']}" styleClass="negrita" />
+											<p:inputText id="idSuperBancos" value="#{polizaBean.superBanSeguros}" disabled="true" />
+
+											<p:outputLabel value="#{emision['poliza.atributo.seguroCampesino']}" styleClass="negrita" />
+											<p:inputText id="idSeguro" value="#{polizaBean.seguroCampesino}" disabled="true" />
+
+											<p:outputLabel value="#{emision['poliza.financiacion.atributo.financiacion']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.financiacion}" />
+
+											<p:outputLabel value="#{emision['poliza.financiacion.atributo.subtotal']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.subtotal}" disabled="true" />
+
+											<p:outputLabel value="#{emision['poliza.financiacion.atributo.adicionalSegCampesino']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.adicionalSegCampesino}" />
+
+											<p:outputLabel value="#{emision['poliza.financiacion.atributo.iva']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.iva}" disabled="true" />
+
+											<p:outputLabel value="#{emision['poliza.financiacion.atributo.total']}" styleClass="negrita" />
+											<p:inputText value="#{polizaBean.total}" disabled="true" />
+										</h:panelGrid>
+										<p:spacer height="25px;" />
+										<p:commandLink title="Calcular valores de pago" update="panelPago" actionListener="#{accidentesPersonalesBacking.calcularValoresPago()}">
+											<h:graphicImage name="boton_calcular.png" library="img" />
+										</p:commandLink>
+									</p:panel>
+
+									<p:spacer height="15px;" />
+									<div align="center">
+										<p:commandButton process="@this" icon="icon-save" value="#{emision['boton.aceptar']}" title="Aceptar" oncomplete="PF('pagoPoliza').hide()" />
+									</div>
+								</div>
+							</h:form>
+						</p:dialog>
+					</ui:define>
+				</ui:decorate>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	<ui:define name="buttons">
+		<h:form>
+			<h:panelGrid columns="1">
+				<h:commandLink action="hiperion.xhtml">
+					<h:graphicImage name="home.png" library="img" />
+				</h:commandLink>
+				<p:commandLink title="Guardar Informacion poliza" process="@this" actionListener="#{accidentesPersonalesBacking.guardarRamo()}">
+					<h:graphicImage name="save.png" library="img" />
+				</p:commandLink>
+				<p:commandLink onclick="help.show()">
+					<h:graphicImage name="helpII.png" library="img" />
+				</p:commandLink>
+			</h:panelGrid>
+			<p:dialog header="Ramo Agropecuario" widgetVar="help" showEffect="explode" hideEffect="bounce" height="100">
+				<h:panelGrid columns="1">
+					<h:outputText value="Seguro agricola" />
+					<h:outputText value="Para soporte en cualqueira de las funcionalidades" />
+					<h:outputText value="Por favor comuniquese con Franklin Pozo, Administradr del Sitema Hiperion" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

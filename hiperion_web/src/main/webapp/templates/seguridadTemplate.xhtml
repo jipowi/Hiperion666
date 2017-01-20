@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<div id="containerDivId">
+		<div id="header" class="template_top">
+			<h:form>
+				<p:menubar style="height: 30px;">
+					<p:submenu label="#{administrador['admin.menu.catalogos']}" icon="ui-icon-document">
+						<p:submenu label="#{administrador['admin.menu.nuevo']}" icon="ui-icon-contact">
+							<p:menuitem value="#{administrador['admin.menu.catalogo']}" action="/pages/admin/catalogos/catalogo.xhtml" />
+							<p:menuitem value="#{administrador['admin.menu.detalleCatalogo']}" action="/pages/admin/catalogos/detalleCatalogo.xhtml" />
+						</p:submenu>
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+		</div>
+		<div id="body">
+			<ui:insert name="body">Content</ui:insert>
+		</div>
+	</div>
+</h:body>
+</html>

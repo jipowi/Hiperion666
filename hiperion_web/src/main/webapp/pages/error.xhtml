@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="/templates/pages/pageLayout1.xhtml"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://java.sun.com/jsf/composite/components">
+	<ui:param name="form" value="#{loginController.form}" />
+	<ui:param name="idForm" value="frmCrearCupon" />
+	<ui:param name="controller" value="#{loginController}" />
+	<ui:param name="westLength" value="245" />
+	<ui:param name="eastLength" value="530" />
+	<ui:define name="contentButtons">
+		<!-- Panel de botones -->
+		<h:panelGroup id="toolBar">
+			<ul>
+				<li><h:outputLink styleClass="inicio" title="Inicio"
+						value="#{accessItemController.context}/login/main.jsf">
+						<h:outputText value="#{msg['menu.codigo.panel.principal']}" />
+					</h:outputLink></li>
+
+			</ul>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="contentCenter">
+		<!-- Contenido central de cupon -->
+		<h:panelGroup id="panelCentral">
+			<rich:panel style="height:98%" header="Error en la aplicaci&#243;n">
+				<a4j:outputPanel id="opError">
+					<h:outputText value="#{loginDataManager.exception.printStackTrace()}" />
+				</a4j:outputPanel>
+			</rich:panel>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

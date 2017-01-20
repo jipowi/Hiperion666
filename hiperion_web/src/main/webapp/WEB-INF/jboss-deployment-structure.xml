@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+	<deployment>
+		<dependencies>
+			<module name="org.jdom" export="true" />
+			<module name="org.apache.commons.collections" export="true" />
+			<module name="org.apache.commons.logging" export="true" />
+			<module name="org.apache.commons.digester" export="true" />
+			<module name="org.apache.commons.beanutils" export="true" />
+			<module name="ec.com.kruger" export="true" />
+			<module name="net.sf.jasperreports" export="true" />
+		</dependencies>
+	</deployment>
+
+</jboss-deployment-structure>

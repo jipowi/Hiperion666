@@ -1,0 +1,28 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	font: 62.5% "Trebuchet MS", Arial, sans-serif;
+}
+
+#wrapDiv {
+	width: 800px;
+	border: 1px solid #000000;
+	margin: 50px auto;
+	border-radius: 10px;
+}
+
+#logoDiv {
+	width: 550px;
+	height: 0 auto;
+	margin: 10px auto;
+}
+
+#loginDiv {
+	width: 350px;
+	height: 0 auto;
+	margin: 45px auto;
+}
+
+.ui-state-default .icon-create {
+	background-image: url("../resources/img/icon/icon-create.png");
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="formPricipal">
+			<p:panel>
+				<p:messages id="msgs" showDetail="false" autoUpdate="true" closable="true" />
+				<h:panelGrid columns="6" cellpadding="2" cellspacing="3">
+					<p:outputLabel value="#{administrador['cliente.dlg.agregar.tipoPersona']}" styleClass="negrita" />
+					<p:selectOneMenu value="#{formSiniestroVehiculosBean.tipoPersona}">
+						<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+						<f:selectItems value="#{formSiniestroVehiculosBacking.tipoPersonaItems}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{administrador['cliente.dlg.agregar.tipoIdentificacion']}" styleClass="negrita" />
+					<p:selectOneMenu value="#{formSiniestroVehiculosBean.tipoIdentificacion}">
+						<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+						<f:selectItems value="#{formSiniestroVehiculosBacking.tipoIdentificacionItems}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{administrador['cliente.dlg.agregar.identificacion']}:" styleClass="negrita" />
+					<p:inputText value="#{formSiniestroVehiculosBean.identificacion}">
+						<p:ajax event="blur" listener="#{formSiniestroVehiculosBacking.buscarCliente}" update="pnlInformacion,tablaPoliza" />
+					</p:inputText>
+				</h:panelGrid>
+				<h:panelGrid id="pnlInformacion" columns="2" cellpadding="2" cellspacing="2">
+					<p:outputLabel value="#{administrador['cliente.dlg.agregar.nombres']}" styleClass="negrita" />
+					<p:inputText placeholder="Primero y segundo nombre" value="#{formSiniestroVehiculosBacking.clienteObtenido.nombrePersona}" disabled="true" />
+
+					<p:outputLabel value="#{administrador['cliente.dlg.agregar.appPaterno']}" styleClass="negrita" />
+					<p:inputText placeholder="Primer Apellido" value="#{formSiniestroVehiculosBacking.clienteObtenido.apellidoPaterno}" disabled="true" />
+
+					<p:outputLabel value="#{administrador['cliente.dlg.agregar.appMaterno']}" styleClass="negrita" />
+					<p:inputText placeholder="Segundo Apellido" value="#{formSiniestroVehiculosBacking.clienteObtenido.apellidoMaterno}" disabled="true" />
+				</h:panelGrid>
+
+				<p:spacer height="20px;" />
+				<h:panelGrid columns="1" id="tablaPoliza">
+					<p:dataTable value="#{formSiniestroVehiculosBacking.polizas}" var="poliza" widgetVar="50" editable="true" style="width: 700px;">
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['cliente.poliza.ramo']}" />
+							</f:facet>
+							<h:outputText value="#{poliza.ramo}" />
+						</p:column>
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['cliente.poliza.vigenciaDesde']}" />
+							</f:facet>
+							<h:outputText value="#{poliza.vigenciaDesde}" />
+						</p:column>
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['cliente.poliza.vigenciaHasta']}" />
+							</f:facet>
+							<h:outputText value="#{poliza.vigenciaHasta}" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

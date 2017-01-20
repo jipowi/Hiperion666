@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>#{utilitario['hiperion.titulo.pages.menuPrincipal']}</title>
+	<h:outputStylesheet name="layout.css" library="css" />
+	<h:outputStylesheet name="default.css" library="css" />
+</h:head>
+<h:body>
+	<div align="center">
+		<h:panelGrid columns="1">
+			<object type="application/x-shockwave-flash" data="../resources/img/banner_avila.swf" style="width: 900px; height: 110px;">
+				<param name="movie" value="banner_avila.swf" />
+				ERROR (no puede mostrarse el objeto)
+			</object>
+		</h:panelGrid>
+	</div>
+	<div align="center">
+		<h:panelGrid columns="4">
+			<p:outputLabel value="#{usuarioBacking.usuarioBean.sessionUser.nombreUsuario} " styleClass="negrita" />
+			<p:spacer width="900px;" height="1px;" />
+			<a href="#{facesContext.externalContext.request.contextPath}/index.jsp">Cerrar Sesion</a>
+			<h:graphicImage name="login_in.png" library="img" />
+		</h:panelGrid>
+	</div>
+	<p:spacer height="15px;" />
+	<div id="container">
+		<div id="top" class="ui-widget-header ui-corner-all">
+			<ui:insert name="top">
+				<p:outputLabel value="#{usuarioBacking.usuarioBean.sessionUser.nombreUsuario} " styleClass="negrita" />  #{emision['panel.modo.principal']}</ui:insert>
+		</div>
+		<p:spacer height="15px;" />
+		<div align="center">
+			<h:panelGrid columns="3">
+				<h:panelGrid columns="1">
+					<div id="left" >
+						<h:form>
+							<p:panelMenu model="#{usuarioBacking.menumodel}">
+
+							</p:panelMenu>
+						</h:form>
+					</div>
+				</h:panelGrid>
+				<h:panelGrid columns="1" style="width:600px;">
+					<div id="content" class="left_content">
+						<ui:insert name="content">Content</ui:insert>
+					</div>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<div id="buttons" class="right_content">
+						<ui:insert name="buttons"> </ui:insert>
+					</div>
+				</h:panelGrid>
+				
+			</h:panelGrid>
+		</div>
+	</div>
+	<!-- Pie de Pagina del Template -->
+	<div id="bottom">
+		<ui:insert name="bottom">Avila y Asociados productores de seguros  Av. America y Andagoya E12-56</ui:insert>
+	</div>
+</h:body>
+</html>

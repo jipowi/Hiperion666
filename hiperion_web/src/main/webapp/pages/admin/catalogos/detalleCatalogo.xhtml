@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<ui:decorate template="/templates/seguridadTemplate.xhtml">
+			<ui:define name="body">
+				<p:growl id="messages" showDetail="true" />
+				<!-- ComboBox de todos los Catalogos existentes  -->
+				<h:form id="catalogosFormId">
+					<p:panel>
+						<h:panelGrid columns="2">
+							<h:outputText value="#{administrador['admin.detalleCatalogo.cb.catalogos']}" styleClass="negrita" />
+							<p:selectOneMenu id="catalogoComboBoxId" value="#{detalleCatalogoBean.codigoCatalogo}" required="true" effect="drop">
+								<f:selectItem itemLabel="Seleccionar" noSelectionOption="true" />
+								<f:selectItems value="#{detalleCatalogoBacking.catalogosItems}" />
+								<p:ajax event="change" listener="#{detalleCatalogoBacking.selectCatalogo}" update=":detCatalogosFormId" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+
+				<!-- Tabla de Informacion del Detalle de los Catalogos -->
+				<h:form id="detCatalogosFormId">
+					<p:panel id="detCatalogosPanelId" rendered="#{detalleCatalogoBacking.activarDetCatalogoPanel}">
+						<p:commandButton id="crearDetCatalogoBtnId" value="#{administrador['admin.catalogo.boton.nuevo']}" update=":crearDetCatalogoFormId"
+							oncomplete="crearDetCatalogoDlg.show()" icon="icon-new">
+							<f:setPropertyActionListener value="#{catalogo}" target="#{catalogoBean.selectCatalogo}" />
+						</p:commandButton>
+						<p:dataTable id="detCatalogosTableId" var="detCatalogo" value="#{detalleCatalogoBacking.detallesCatalogo}" editable="true" paginator="true" rows="10">
+							<f:facet name="header">Detalle del Catalogo #{detalleCatalogoBean.descripcionCatalogo}</f:facet>
+							<p:column headerText="#{administrador['admin.catalogo.codigo']}" style="width:24%">
+								<h:outputText value="#{detCatalogo.codDetalleCatalogo}" />
+							</p:column>
+							<p:column id="desripcionId" headerText="#{administrador['admin.catalogo.descripcion']}" style="width:24%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{detCatalogo.descDetCatalogo}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{detCatalogo.descDetCatalogo}" style="width:24%" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column style="width:6%">
+								<p:rowEditor />
+							</p:column>
+
+							<p:ajax event="rowEdit" listener="#{detalleCatalogoBacking.onEdit}" update=":messages" />
+							<p:ajax event="rowEditCancel" listener="#{detalleCatalogoBacking.onCancel}" update=":messages" />
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+
+				<!-- Popup que permite crear un nuevo Detalle de un Catalogo Seleccionado -->
+				<h:form id="crearDetCatalogoFormId">
+					<p:dialog id="crearDetCatalogoDlgId" header="#{administrador['admin.catalogo.dlg.crearCatalogo']}" widgetVar="crearDetCatalogoDlg" resizable="false"
+						showEffect="fade" hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{administrador['admin.detalleCatalogo.dlg.outputText.descripcion']}" styleClass="negrita" />
+							<p:inputText value="#{detalleCatalogoBean.descripcionCatalogo}" />
+							<f:facet name="footer">
+								<table align="center">
+									<tr>
+										<td>
+											<p:commandButton id="crearDetCatalogoBtnId" update=":detCatalogosFormId, :messages" oncomplete="crearDetCatalogoDlg.hide();"
+												actionListener="#{detalleCatalogoBacking.guardarDetalleCatalogo}" icon="icon-save"
+												value="#{administrador['admin.detalleCatalogo.dlg.button.guardar']}" title="Guardar" />
+										</td>
+										<td>
+											<p:commandButton id="cancelarDetCatalogoBtnId" oncomplete="crearDetCatalogoDlg.hide();" icon="icon-cancel" title="Cancelar"
+												value="#{administrador['admin.detalleCatalogo.dlg.button.cancelar']}" />
+										</td>
+									</tr>
+								</table>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>
+</html>

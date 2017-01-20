@@ -1,0 +1,11 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:param name="form" value="#{loginController.form}" />
+	<ui:param name="idForm" value="loginDataManager" />
+	<ui:define name="contentButtons">
+	</ui:define>
+	<ui:define name="contentCenter">
+		<center><b>USTED NO ESTA AUTORIZADO PARA VER ESTA PAGINA</b></center>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="formPricipal">
+			<p:outputPanel id="messagesGestorDocumental">
+				<p:messages></p:messages>
+			</p:outputPanel>
+			<p:panel>
+				<!-- PANEL DE BUSQUEDAA -->
+				<h:panelGrid columns="1">
+					<p:panel>
+						<f:facet name="header">
+							<h:outputText value="#{emision['lbl.gestor.buscarCliente']}" />
+						</f:facet>
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="2">
+
+								<p:outputLabel value="#{emision['lbl.gestor.nombreCliente']]}" styleClass="negrita" />
+								<p:inputText value="#{gestorDocumentalBacking.cedula}" />
+
+								<p:outputLabel value="#{emision['lbl.gestor.cedulaCliente']}" styleClass="negrita" />
+								<p:inputText value="#{gestorDocumentalBacking.cedula}" />
+							</h:panelGrid>
+							<p:commandLink title="#{emision['lbl.gestor.buscarCliente']}" action="#{aseguradoraBacking.consultarAseguradoras()}"
+								update="@form, formPricipal:idAseguradoras, formPricipal:tablaAseguradoras">
+								<h:graphicImage name="search.png" library="img/icon" />
+							</p:commandLink>
+						</h:panelGrid>
+					</p:panel>
+				</h:panelGrid>
+
+				<div align="center">
+					<h:panelGrid columns="1">
+						<h:graphicImage name="bannerSeguros.png" library="img/icon" />
+					</h:panelGrid>
+				</div>
+
+				<p:spacer height="30px;" />
+
+				<!-- NUEVA ASEGURADORA -->
+				<div align="center">
+					<h:panelGrid id="idAseguradoras" columns="1" rendered="#{aseguradoraBean.activarNewAseguradora}">
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="3">
+								<p:outputLabel value="#{emision['aseguradora.aseguradora']}" styleClass="negrita" />
+								<p:selectOneMenu value="#{aseguradoraBean.codAseguradora}" effect="drop">
+									<f:selectItem itemLabel="Seleccione Aseguradora" noSelectionOption="true" />
+									<f:selectItems value="#{aseguradoraBacking.aseguradorasItems}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="#{emision['aseguradora.ruc']}" styleClass="negrita" />
+								<p:inputText value="#{aseguradoraBean.ruc}" />
+
+								<p:outputLabel value="#{emision['aseguradora.direccion']}" styleClass="negrita" />
+								<p:inputText value="#{aseguradoraBean.direccion}" />
+
+								<p:outputLabel value="#{emision['aseguradora.telefono']}" styleClass="negrita" />
+								<p:inputText value="#{aseguradoraBean.telefono}" />
+
+								<p:outputLabel value="#{emision['aseguradora.contacto.mail']}" styleClass="negrita" />
+								<p:inputText value="#{aseguradoraBean.mailAseguradora}" />
+
+								<p:commandLink title="Agregar contactos" onclick="contactos.show();">
+									<h:graphicImage name="contactos.png" library="img/icon" />
+								</p:commandLink>
+								<p:commandLink title="Agregar ramos" onclick="ramos.show();">
+									<h:graphicImage name="seguros.png" library="img/icon" />
+								</p:commandLink>
+							</h:panelGrid>
+							<p:spacer height="30px;" />
+							<div align="center">
+								<p:commandButton id="guardarBtnId" actionListener="#{aseguradoraBacking.guardarAseguradora}" icon="icon-save"
+									value="#{emision['boton.guardar']}" title="Guardar" />
+								<p:commandButton id="cancelarBtnId" icon="icon-cancel" value="#{emision['boton.cancelar']}" process="@this" title="Cancelar" />
+							</div>
+						</p:panel>
+					</h:panelGrid>
+				</div>
+				<p:spacer height="30px;" />
+
+				<!-- TABLA ASEGURADORAS -->
+				<div align="center">
+					<h:panelGrid columns="1" id="tablaAseguradoras" rendered="#{aseguradoraBean.activarTabla}">
+						<p:commandLink title="Crear nueva aseguradora" update="@form" actionListener="#{aseguradoraBacking.crearAseguradora()}">
+							<h:graphicImage name="aseguradora_new.png" library="img/icon" />
+						</p:commandLink>
+						<p:dataTable value="#{aseguradoraBean.aseguradorasList}" var="aseguradora" widgetVar="50" editable="true">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['aseguradora.tabla.nombre']}" />
+								</f:facet>
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{aseguradora.nombreAseguradora}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{aseguradora.nombreAseguradora}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['aseguradora.tabla.RUC']}" />
+								</f:facet>
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{aseguradora.ruc}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{aseguradora.ruc}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{emision['aseguradora.tabla.telefono']}" />
+								</f:facet>
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{aseguradora.telefono}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{aseguradora.telefono}" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</div>
+			</p:panel>
+		</h:form>
+
+		<!-- CONTACTOS -->
+		<p:dialog header="Contactos" widgetVar="contactos" modal="true" position="center" showEffect="fade" hideEffect="explode" resizable="false"
+			closable="true">
+			<h:form id="formContactos">
+				<div align="center">
+					<p:growl id="messages" showDetail="true" />
+					<h:panelGrid columns="1">
+						<p:panelGrid columns="2">
+							<h:outputLabel value="#{emision['aseguradora.contacto.nombre']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.nombre}" />
+
+							<h:outputLabel value="#{emision['aseguradora.contacto.apellidoPaterno']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.apellidoPaterno}" />
+
+							<h:outputLabel value="#{emision['aseguradora.contacto.apellidoMaterno']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.apellidoMaterno}" />
+
+							<h:outputLabel value="#{emision['aseguradora.contacto.identificacion']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.identificacion}" />
+
+							<h:outputLabel value="#{emision['aseguradora.contacto.cargo']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.cargo}" />
+
+							<h:outputLabel value="#{emision['aseguradora.contacto.mail']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.email}" />
+
+							<h:outputLabel value="#{emision['aseguradora.contacto.telefono']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.telefonoContacto}" />
+						</p:panelGrid>
+						<f:facet name="footer">
+							<div align="center">
+								<p:commandButton id="agregarContacto" update="formContactos, messages" icon="icon-add" value="#{emision['boton.agregar']}"
+									actionListener="#{aseguradoraBean.addContacto}" title="Agregar contactos" />
+							</div>
+						</f:facet>
+					</h:panelGrid>
+					<p:spacer height="30px;" />
+					<p:dataTable id="tabla" value="#{aseguradoraBean.contactoList}" var="obj" widgetVar="50" style="width: 60%;" editable="true">
+						<p:ajax event="rowEdit" listener="#{aseguradoraBean.onEdit}" />
+						<p:ajax event="rowEditCancel" listener="#{aseguradoraBean.onCancel}" />
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.nombre']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.nombre}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.nombre}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.apellidoPaterno']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.apellidoPaterno}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.apellidoPaterno}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.apellidoMaterno']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.apellidoMaterno}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.apellidoMaterno}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.apellidoMaterno']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.apellidoMaterno}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.apellidoMaterno}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.identificacion']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.identificacion}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.identificacion}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.cargo']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.cargo}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.cargo}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.mail']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.email}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.email}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.contacto.telefono']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.telefonoContacto}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.telefonoContacto}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Options" style="width:50px">
+							<p:rowEditor />
+						</p:column>
+					</p:dataTable>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- RAMOS -->
+		<p:dialog header="Ramos" widgetVar="ramos" modal="true" position="center" showEffect="fade" hideEffect="explode" resizable="false" closable="true">
+			<h:form id="formRamos">
+				<div align="center">
+					<p:growl id="messagesRamos" showDetail="true" />
+					<h:panelGrid columns="1">
+						<p:panelGrid columns="2">
+							<h:outputLabel value="#{emision['aseguradora.ramo.ramo']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.nombreRamo}" />
+
+							<h:outputLabel value="#{emision['aseguradora.ramo.comision']}" styleClass="negrita" />
+							<p:inputText value="#{aseguradoraBean.comision}" />
+						</p:panelGrid>
+						<f:facet name="footer">
+							<div align="center">
+								<p:commandButton id="agregarRamo" update="formRamos, messagesRamos" icon="icon-add" value="#{emision['boton.agregar']}"
+									actionListener="#{aseguradoraBean.addRamo}" title="Agregar ramos" />
+							</div>
+						</f:facet>
+					</h:panelGrid>
+					<p:spacer height="30px;" />
+					<p:dataTable id="tabla" value="#{aseguradoraBean.ramoList}" var="obj" widgetVar="50" style="width: 60%;" editable="true">
+						<p:ajax event="rowEdit" listener="#{aseguradoraBean.editRamo}" />
+						<p:ajax event="rowEditCancel" listener="#{aseguradoraBean.cancelRamo}" />
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.ramo.ramo']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.nombreRamo}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.nombreRamo}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{emision['aseguradora.ramo.comision']}" />
+							</f:facet>
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{obj.comision}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{obj.comision}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Options" style="width:50px">
+							<p:rowEditor />
+						</p:column>
+					</p:dataTable>
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

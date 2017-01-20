@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/templates/menuPrincipalTemplate.xhtml">
+	<ui:define name="content">
+		<div align="center">
+			<p:outputLabel value="#{emision['titulo.reprote.polizas']}" styleClass="negrita" />
+			<p:separator id="customSeparator" style="width:auto;height:1px" />
+			<p:spacer height="5px;" />
+		</div>
+		<p:spacer height="15px;" />
+		<h:form id="formPricipal">
+			<p:messages id="messagesPolizasCliente" showDetail="true" autoUpdate="true" closable="true" />
+			<p:panel style="width:100%;">
+				<h:panelGrid columns="2" cellpadding="3">
+					<h:panelGrid columns="2" cellpadding="3">
+						<h:outputLabel value="#{emision['lbl.reporte.fechaDesde']}: " styleClass="negrita" />
+						<p:calendar value="#{reportePolizaBacking.fechaDesde}" pattern="MM/dd/yyyy" mask="true" locale="de" navigator="true" />
+
+						<h:outputLabel value="#{emision['lbl.reporte.fechaHasta']}: " styleClass="negrita" />
+						<p:calendar value="#{reportePolizaBacking.fechaHasta}" pattern="MM/dd/yyyy" mask="true" />
+
+						<h:outputLabel value="#{emision['lbl.reporte.estado']}: " styleClass="negrita" />
+						<p:selectOneRadio id="console" value="#{reportePolizaBacking.estado}">
+							<f:selectItem itemLabel="COTIZADO" itemValue="COTIZADO" />
+							<f:selectItem itemLabel="EMITIDO" itemValue="EMITIDO" />
+						</p:selectOneRadio>
+
+						<f:facet name="footer">
+							<p:commandButton id="idGenerarReporteBtn" value="Generar reporte" action="#{reportePolizaBacking.generarReporte}" icon="icon-save"
+								update="idPanelReporte,tablaPolizas" />
+						</f:facet>
+					</h:panelGrid>
+					<h:panelGroup style="display:block; text-align:center">
+						<h:graphicImage name="reportes.jpg" library="img" />
+					</h:panelGroup>
+				</h:panelGrid>
+
+				<div align="center">
+					<p:panel id="idPanelReporte" visible="#{reportePolizaBacking.activarGrafico}" style="width:70%;">
+						<h:panelGrid columns="1" id="tablaPolizas">
+							<p:dataTable value="#{reportePolizaBacking.polizas}" var="poliza" widgetVar="50" style="width: 40%;" editable="true">
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{emision['lbl.reporte.ramo']}" />
+									</f:facet>
+									<h:outputText value="#{poliza.ramo}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{emision['lbl.reporte.estado']}" />
+									</f:facet>
+									<h:outputText value="#{poliza.estadoPoliza}" />
+								</p:column>
+
+							</p:dataTable>
+						</h:panelGrid>
+						<p:spacer height="5px;" />
+						<p:barChart value="#{reportePolizaBacking.chartPolizas}" legendPosition="ne" title="Polizas generadas en la fecha" style="height:300px"
+							xaxisLabel="Estado" yaxisLabel="Número de polizas" />
+					</p:panel>
+				</div>
+
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

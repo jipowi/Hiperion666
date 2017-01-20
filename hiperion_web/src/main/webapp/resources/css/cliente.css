@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+
+.DialogCliente {
+	margin-bottom: 350px;
+}
+
+#crearClienteDivHeaderId {
+	width: 700px;
+}
+
+.DialogCliente-banner {
+	border-radius: 5%;
+	width: 700px;
+}
+
+.DialogCliente-ejecutivo {
+	margin-top: 0.3em;
+	background: #ddd;
+}
+
+.DialogCliente-ejecutivoNombre {
+	font-weight: bold;
+	margin-left: 400px;
+}
+
+.DialogCliente-ejecutivoCodigo {
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+#crearClienteDivFooterId,#contactosDivFooterId,#contactoDivFooterId {
+	text-align: center;
+}
+
+.DialogoCliente-nombre,.DialogoCliente-actProfesion {
+	width: 250px;
+}
+
+.DialogoCliente-apeMaterno,.DialogoCliente-apePaterno,.DialogCliente-email
+	{
+	width: 150px;
+}
+
+.DialogCliente-fechaNacimiento input {
+	width: 150px;
+}
+
+.DialogCliente-direccion,.DialogCliente-personaNatural,.DialogCliente-personaJuridica {
+	margin-top: 0.5em;
+}
+
+.DialogCliente-razonSocial {
+	width: 415px;
+}
+
+.DialogCliente-giroNegocio {
+	width: 250px;
+}
+
+.DialogoDirecciones-tableEdit {
+	width: 40px;
+}
+
+.ui-icon-pencil {
+	float: left;
+	width: 20px;
+}
+
+.ui-selectonemenu-filter-container {
+	width: 90% !important;
+}
+
+.contactosId {
+	background: red;
+}
