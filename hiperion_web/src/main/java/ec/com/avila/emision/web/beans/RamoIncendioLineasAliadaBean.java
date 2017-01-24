@@ -56,7 +56,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	private static final ArrayList<ObjetoAseguradoIlaDTO> objetoList = new ArrayList<ObjetoAseguradoIlaDTO>();
 
 	// Tabla Detalle Objeto Incendio
-	private String detalle;
+	
 	private BigDecimal valorDetalleObjetoAseguradoIncendio;
 
 	// Tabla Codiciones Especiales Incendio
@@ -524,20 +524,6 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 		this.ubicacionRiesgo = ubicacionRiesgo;
 	}
 
-	/**
-	 * @return the detalle
-	 */
-	public String getDetalle() {
-		return detalle;
-	}
-
-	/**
-	 * @param detalle
-	 *            the detalle to set
-	 */
-	public void setDetalle(String detalle) {
-		this.detalle = detalle;
-	}
 
 	/**
 	 * @return the valorDetalleObjetoAseguradoIncendio
@@ -630,12 +616,12 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 * @return
 	 */
 	public String addActionObjeto() {
-		ObjetoAseguradoIlaDTO orderitem = new ObjetoAseguradoIlaDTO(this.numeroItem, this.ubicacionRiesgo, this.detalle, this.valor);
+		ObjetoAseguradoIlaDTO orderitem = new ObjetoAseguradoIlaDTO(this.numeroItem, this.ubicacionRiesgo, this.detalleObjeto, this.valor);
 		objetoList.add(orderitem);
 
 		numeroItem = 0;
 		ubicacionRiesgo = "";
-		detalle = "";
+		detalleObjeto = "";
 		valor = new BigDecimal(0);
 
 		return null;

@@ -173,9 +173,9 @@
 											</f:facet>
 										</h:panelGrid>
 										<p:spacer height="30px;" />
-										<p:dataTable id="tablaDetalle" value="#{ramoIncendioLineasAliadaBean.objetolist}" var="obj" widgetVar="50" style="width: 50%" editable="true">
+										<p:dataTable id="tablaDetalle" value="#{ramoIncendioLineasAliadaBean.objetolist}" var="obj" widgetVar="50" editable="true">
 											<p:ajax event="rowEdit" listener="#{ramoIncendioLineasAliadaBean.onEditObjeto}" />
-											<p:ajax event="rowEditCancel" listener="#{ramoIncendioLineasAliadaBean.onCancelObjeto}" />
+											<p:ajax event="rowEditCancel" listener="#{ramoIncendioLineasAliadaBean.onCancelObjeto}" update="tablaDetalle" />
 											<p:column>
 												<f:facet name="header">
 													<h:outputText value="#{emision['emision.ramo.ila.objeto.item']}" />
@@ -211,7 +211,9 @@
 														<h:outputText value="#{obj.detalle}" />
 													</f:facet>
 													<f:facet name="input">
-														<p:inputText value="#{obj.detalle}" style="width:100%" />
+														<p:selectOneMenu id="detalleId" value="#{ramoIncendioLineasAliadaBean.detalleObjeto}" effect="drop">
+															<f:selectItems value="#{incendioLineasAliadasBacking.detalleObjetoAsegurado}" />
+														</p:selectOneMenu>
 													</f:facet>
 												</p:cellEditor>
 											</p:column>
@@ -232,11 +234,8 @@
 												<p:rowEditor />
 											</p:column>
 										</p:dataTable>
-										<p:spacer height="30px;" />
-										<p:commandButton id="guardarObjAseguradoBtnId" actionListener="#{incendioLineasAliadasBacking.guardarRamo()}" icon="icon-save"
-											value="#{emision['boton.guardar']}" update="messagesObj" title="Guardar" />
-										<p:commandButton id="cancelarBtnId" icon="icon-cancel" value="#{emision['boton.cancelar']}" title="Cancelar" />
 									</div>
+									<p:spacer height="15px;" />
 									<h:panelGrid columns="1" id="ramoIncendioLineasAliadas">
 										<h:panelGrid columns="2">
 											<p:outputLabel for="idValorItems" value="#{emision['emision.ramo.ila.label.valoritems']}" styleClass="negrita" />
