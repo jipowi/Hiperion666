@@ -766,44 +766,44 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	public Poliza setearDatosPoliza() {
 
 		Poliza poliza = new Poliza();
-		if(polizaBean.getEstadoPoliza().equals("EMITIDO")){
-		poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
-		poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
-		poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
-		poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
-		poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
-		poliza.setDiasCobertura(polizaBean.getDiasCobertura());
-		poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
-		poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
-		poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
-		poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
-		poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
-		poliza.setEstadoPoliza("COTIZADO");
+		if (polizaBean.getEstadoPoliza().equals("EMITIDO")) {
+			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
+			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
+			poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
+			poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
+			poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
+			poliza.setDiasCobertura(polizaBean.getDiasCobertura());
+			poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
+			poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
+			poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
+			poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
+			poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
+			poliza.setEstadoPoliza("COTIZADO");
 
-		PagoPoliza pagoPoliza = new PagoPoliza();
-		pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
-		pagoPoliza.setSubtotal(polizaBean.getSubtotal());
-		pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
-		pagoPoliza.setIva(polizaBean.getIva());
-		pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
-		pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
-		pagoPoliza.setEstado(EstadoEnum.A);
-		pagoPoliza.setFechaCreacion(new Date());
-		pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
+			PagoPoliza pagoPoliza = new PagoPoliza();
+			pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
+			pagoPoliza.setSubtotal(polizaBean.getSubtotal());
+			pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
+			pagoPoliza.setIva(polizaBean.getIva());
+			pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
+			pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
+			pagoPoliza.setEstado(EstadoEnum.A);
+			pagoPoliza.setFechaCreacion(new Date());
+			pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
 
-		List<Financiamiento> financiamientos = new ArrayList<>();
-		for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
-			Financiamiento financiamientoTemp = new Financiamiento();
-			financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
-			financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
-			financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
+			List<Financiamiento> financiamientos = new ArrayList<>();
+			for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
+				Financiamiento financiamientoTemp = new Financiamiento();
+				financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
+				financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
+				financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
 
-			financiamientos.add(financiamientoTemp);
-		}
+				financiamientos.add(financiamientoTemp);
+			}
 
-		pagoPoliza.setFinanciamientos(financiamientos);
+			pagoPoliza.setFinanciamientos(financiamientos);
 
-		poliza.setPagoPoliza(pagoPoliza);
+			poliza.setPagoPoliza(pagoPoliza);
 		}
 		poliza.setEstadoPoliza(polizaBean.getEstadoPoliza());
 		poliza.setCliente(polizaBean.getCliente());
@@ -1277,26 +1277,25 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 * @return the detalleObjetoAsegurado
 	 */
 	public List<SelectItem> getDetalleObjetoAsegurado() throws HiperionException {
-		this.detalleObjetoAsegurado=new ArrayList<SelectItem>();
+		this.detalleObjetoAsegurado = new ArrayList<SelectItem>();
 		Catalogo catalogo = catalogoService.consultarCatalogoById(HiperionMensajes.getInstancia().getLong(
 				"ec.gob.avila.hiperion.recursos.catalogoDetalleObjetoIncendio"));
-		List<DetalleCatalogo> sectores = catalogo.getDetalleCatalogos();
+		List<DetalleCatalogo> detalles = catalogo.getDetalleCatalogos();
 
-		for (DetalleCatalogo detalle : sectores) {
+		for (DetalleCatalogo detalle : detalles) {
 			SelectItem selectItem = new SelectItem(detalle.getCodDetalleCatalogo(), detalle.getDescDetCatalogo());
 			detalleObjetoAsegurado.add(selectItem);
 		}
-		
+
 		return detalleObjetoAsegurado;
 	}
 
 	/**
-	 * @param detalleObjetoAsegurado the detalleObjetoAsegurado to set
+	 * @param detalleObjetoAsegurado
+	 *            the detalleObjetoAsegurado to set
 	 */
 	public void setDetalleObjetoAsegurado(List<SelectItem> detalleObjetoAsegurado) {
 		this.detalleObjetoAsegurado = detalleObjetoAsegurado;
 	}
-	
-	
 
 }

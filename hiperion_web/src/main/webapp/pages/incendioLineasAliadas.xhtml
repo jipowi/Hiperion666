@@ -162,20 +162,18 @@
 													<f:selectItems value="#{incendioLineasAliadasBacking.detalleObjetoAsegurado}" />
 												</p:selectOneMenu>
 
-
-
 												<h:outputLabel value="#{emision['emision.ramo.ila.objeto.valor']}:" styleClass="negrita" />
 												<p:inputText value="#{ramoIncendioLineasAliadaBean.valor}" />
 											</h:panelGrid>
 											<f:facet name="footer">
 												<div align="center">
-													<p:commandButton id="agregarObjeto" update="messagesObj" icon="icon-add" value="#{emision['boton.agregar']}"
+													<p:commandButton id="agregarObjeto" update="messagesObj, tablaDetalle" icon="icon-add" value="#{emision['boton.agregar']}"
 														actionListener="#{ramoIncendioLineasAliadaBean.addActionObjeto}" title="Agregar" />
 												</div>
 											</f:facet>
 										</h:panelGrid>
 										<p:spacer height="30px;" />
-										<p:dataTable value="#{ramoIncendioLineasAliadaBean.objetolist}" var="obj" widgetVar="50" style="width: 50%" editable="true">
+										<p:dataTable id="tablaDetalle" value="#{ramoIncendioLineasAliadaBean.objetolist}" var="obj" widgetVar="50" style="width: 50%" editable="true">
 											<p:ajax event="rowEdit" listener="#{ramoIncendioLineasAliadaBean.onEditObjeto}" />
 											<p:ajax event="rowEditCancel" listener="#{ramoIncendioLineasAliadaBean.onCancelObjeto}" />
 											<p:column>
@@ -295,32 +293,25 @@
 
 											<h:panelGrid columns="2" bgcolor="#E6E6E6">
 												<h:outputLabel for="idTasaComprensiva" value="#{emision['emision.ramo.ila.tasaComprensiva']}" />
-												<p:inputText id="idTasaComprensiva" value="#{ramoIncendioLineasAliadaBean.tasaComprensiva}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaComprensiva.msn']}" />
+												<p:inputText id="idTasaComprensiva" value="#{ramoIncendioLineasAliadaBean.tasaComprensiva}" />
 
 												<h:outputLabel for="idTasaEscombros" value="#{emision['emision.ramo.ila.tasaRemocionEscombros']}" />
-												<p:inputText id="idTasaEscombros" value="#{ramoIncendioLineasAliadaBean.tasaRemocionEscombros}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaRemocionEscombros.msn']}" />
+												<p:inputText id="idTasaEscombros" value="#{ramoIncendioLineasAliadaBean.tasaRemocionEscombros}" />
 
 												<h:outputLabel for="idTasaDocumentos" value="#{emision['emision.ramo.ila.tasaDocumentosModelo']}" />
-												<p:inputText id="idTasaDocumentos" value="#{ramoIncendioLineasAliadaBean.tasaDocumentosModelos}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaDocumentosModelo.msn']}" />
+												<p:inputText id="idTasaDocumentos" value="#{ramoIncendioLineasAliadaBean.tasaDocumentosModelos}" />
 
 												<h:outputLabel for="idTasaHonorarios" value="#{emision['emision.ramo.ila.tasaHonorarios']}" />
-												<p:inputText id="idTasaHonorarios" value="#{ramoIncendioLineasAliadaBean.tasaHonorarios}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaHonorarios.msn']}" />
+												<p:inputText id="idTasaHonorarios" value="#{ramoIncendioLineasAliadaBean.tasaHonorarios}" />
 
 												<h:outputLabel for="idTasaElectrica" value="#{emision['emision.ramo.ila.tasaClausulaElectrica']}" />
-												<p:inputText id="idTasaElectrica" value="#{ramoIncendioLineasAliadaBean.tasaClausulaElectrica}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaClausulaElectrica.msn']}" />
+												<p:inputText id="idTasaElectrica" value="#{ramoIncendioLineasAliadaBean.tasaClausulaElectrica}" />
 
 												<h:outputLabel for="idTasaAutoexplosion" value="#{emision['emision.ramo.ila.tasaAutoexplosion']}" />
-												<p:inputText id="idTasaAutoexplosion" value="#{ramoIncendioLineasAliadaBean.tasaAutoexplosion}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaAutoexplosion.msn']}" />
+												<p:inputText id="idTasaAutoexplosion" value="#{ramoIncendioLineasAliadaBean.tasaAutoexplosion}" />
 
 												<h:outputLabel for="idTasaVidrios" value="#{emision['emision.ramo.ila.tasaVidriosCristales']}" />
-												<p:inputText id="idTasaVidrios" value="#{ramoIncendioLineasAliadaBean.tasaVidrios}" required="true"
-													requiredMessage="#{emision['emision.ramo.ila.tasaVidriosCristales.msn']}" />
+												<p:inputText id="idTasaVidrios" value="#{ramoIncendioLineasAliadaBean.tasaVidrios}" />
 											</h:panelGrid>
 										</p:tab>
 									</p:accordionPanel>
