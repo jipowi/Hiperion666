@@ -38,6 +38,7 @@ import ec.com.avila.hiperion.emision.entities.CondEspAccPer;
 import ec.com.avila.hiperion.emision.entities.DetalleAnexo;
 import ec.com.avila.hiperion.emision.entities.DetalleCatalogo;
 import ec.com.avila.hiperion.emision.entities.Financiamiento;
+import ec.com.avila.hiperion.emision.entities.GrupoAccPersonale;
 import ec.com.avila.hiperion.emision.entities.PagoPoliza;
 import ec.com.avila.hiperion.emision.entities.Poliza;
 import ec.com.avila.hiperion.emision.entities.Ramo;
@@ -120,12 +121,12 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 	private Boolean activarDatosCliente = false;
 	private Boolean activarDatosAseguradora = false;
-	private Boolean activarCotizar = false;
-	private Boolean activarPresentar = true;
-	private Boolean activarAceptar = true;
-	private Boolean activarEmitir = true;
-	private Boolean activarEntregar = true;
-	private Boolean activarDocumentar = true;
+	private Boolean activarCotizar = true;
+	private Boolean activarPresentar = false;
+	private Boolean activarAceptar = false;
+	private Boolean activarEmitir = false;
+	private Boolean activarEntregar = false;
+	private Boolean activarDocumentar = false;
 	private Boolean polizaActiva = false;
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 	private static List<GrupoAccPersonalesDTO> gruposDTO = new ArrayList<GrupoAccPersonalesDTO>();
@@ -431,7 +432,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 		Poliza poliza = new Poliza();
 
-		if (polizaBean.getEstadoPoliza().equals("EMITIDO")) {
+		if (activarEmitir) {
 			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
 			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
 			poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
@@ -595,6 +596,23 @@ public class AccidentesPersonalesBacking implements Serializable {
 				accidentesPersonales.setFechaCreacion(new Date());
 				accidentesPersonales.setEstado(EstadoEnum.A);
 
+				//Informacion Grupos
+				List<GrupoAccPersonale> grupos = new ArrayList<>();
+				for(GrupoAccPersonalesDTO grupo: gruposDTO){
+					GrupoAccPersonale grupoDB = new GrupoAccPersonale();
+					
+					grupoDB.setNombreGrupoAcc(grupo.getNomGrupo());
+					grupoDB.setNumeroPersonasAcc(grupo.getNumPersonas());
+					grupoDB.setActividadAcc(grupo.getActividad());
+					grupoDB.setDeducGrupoAcc(new BigDecimal(grupo.getValorGrupo()));
+					grupoDB.setIdUsuarioCreacion(usuario.getIdUsuario());
+					grupoDB.setFechaCreacion(new Date());
+					grupoDB.setEstado(EstadoEnum.A);
+					
+					grupos.add(grupoDB);
+				}
+				accidentesPersonales.setGrupoAccPersonales(grupos);
+				
 				ramoAccidentesPersonalesService.guardarRamoAccidentesPersonales(accidentesPersonales, poliza);
 
 				MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
