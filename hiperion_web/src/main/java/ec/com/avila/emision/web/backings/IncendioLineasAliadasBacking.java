@@ -142,6 +142,7 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	private List<SelectItem> aseguradorasItems;
 	private List<SelectItem> cuentaBancoItems;
 	private List<SelectItem> detalleObjetoAsegurado;
+	private Integer item;
 
 	private Boolean activarDatosCliente = false;
 	private Boolean activarDatosAseguradora = false;
@@ -602,7 +603,7 @@ public class IncendioLineasAliadasBacking implements Serializable {
 				List<ObjAsegIncendio> objetosList = new ArrayList<>();
 				for (ObjetoAseguradoIlaDTO objeto : ramoIncendioLineasAliadaBean.getObjetolist()) {
 					ObjAsegIncendio objAsegIncendio = new ObjAsegIncendio();
-					objAsegIncendio.setItemIncendio(objeto.getNumeroItem().toString());
+					objAsegIncendio.setItemIncendio(item.toString());
 					objAsegIncendio.setUbicacionIncendio(objeto.getUbicacionRiesgo());
 					objAsegIncendio.setDetalleIncendio(objeto.getDetalle());
 					objAsegIncendio.setValorObjAsegIncendio(objeto.getValor());
@@ -1296,6 +1297,21 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 */
 	public void setDetalleObjetoAsegurado(List<SelectItem> detalleObjetoAsegurado) {
 		this.detalleObjetoAsegurado = detalleObjetoAsegurado;
+	}
+
+	/**
+	 * @return the item
+	 */
+	public Integer getItem() {
+		return item;
+	}
+
+	/**
+	 * @param item
+	 *            the item to set
+	 */
+	public void setItem(Integer item) {
+		this.item = item;
 	}
 
 }

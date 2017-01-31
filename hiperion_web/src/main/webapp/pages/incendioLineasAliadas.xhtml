@@ -145,103 +145,95 @@
 									<f:facet name="header">
 										<h:outputText value="#{emision['titulo.infoRamo']}" />
 									</f:facet>
-									<div align="center">
 
-										<p:messages id="messagesObj" showDetail="true" autoUpdate="true" closable="true" />
-										<h:panelGrid columns="1">
-											<h:panelGrid columns="2" cellpadding="3">
-												<h:outputLabel value="#{emision['emision.ramo.ila.objeto.item']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoIncendioLineasAliadaBean.numeroItem}" />
 
-												<h:outputLabel value="#{emision['emision.ramo.ila.objeto.ubicacion']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoIncendioLineasAliadaBean.ubicacionRiesgo}" style="text-transform:uppercase;" />
-
-												<h:outputLabel value="#{emision['emision.ramo.ila.objeto.detalle']}:" styleClass="negrita" />
-												<p:selectOneMenu id="detalleId" value="#{ramoIncendioLineasAliadaBean.detalleObjeto}" effect="drop">
-													<f:selectItem itemLabel="Detalle Objeto" noSelectionOption="true" />
-													<f:selectItems value="#{incendioLineasAliadasBacking.detalleObjetoAsegurado}" />
-												</p:selectOneMenu>
-
-												<h:outputLabel value="#{emision['emision.ramo.ila.objeto.valor']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoIncendioLineasAliadaBean.valor}" />
-											</h:panelGrid>
-											<f:facet name="footer">
-												<div align="center">
-													<p:commandButton id="agregarObjeto" update="messagesObj, tablaDetalle" icon="icon-add" value="#{emision['boton.agregar']}"
-														actionListener="#{ramoIncendioLineasAliadaBean.addActionObjeto}" title="Agregar" />
-												</div>
-											</f:facet>
+									<p:messages id="messagesObj" showDetail="true" autoUpdate="true" closable="true" />
+									<h:panelGrid columns="1">
+										<h:panelGrid columns="2" cellpadding="3">
+											<h:outputLabel value="#{emision['emision.ramo.ila.objeto.item']}:" styleClass="negrita" />
+											<p:inputText value="#{incendioLineasAliadasBacking.item}" style="background-color: #79b7e7;" />
 										</h:panelGrid>
-										<p:spacer height="30px;" />
-										<p:dataTable id="tablaDetalle" value="#{ramoIncendioLineasAliadaBean.objetolist}" var="obj" widgetVar="50" editable="true">
-											<p:ajax event="rowEdit" listener="#{ramoIncendioLineasAliadaBean.onEditObjeto}" />
-											<p:ajax event="rowEditCancel" listener="#{ramoIncendioLineasAliadaBean.onCancelObjeto}" update="tablaDetalle" />
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['emision.ramo.ila.objeto.item']}" />
+										<p:spacer height="15px;" />
+										<h:panelGrid columns="2" cellpadding="3">
+											<h:outputLabel value="#{emision['emision.ramo.ila.objeto.ubicacion']}:" styleClass="negrita" />
+											<p:inputText value="#{ramoIncendioLineasAliadaBean.ubicacionRiesgo}" style="text-transform:uppercase;" />
+										</h:panelGrid>
+
+										<h:panelGrid columns="4" cellpadding="3">
+											<h:outputLabel value="#{emision['emision.ramo.ila.objeto.detalle']}:" styleClass="negrita" />
+											<p:selectOneMenu id="detalleId" value="#{ramoIncendioLineasAliadaBean.detalleObjeto}" effect="drop">
+												<f:selectItem itemLabel="Detalle Objeto" noSelectionOption="true" />
+												<f:selectItems value="#{incendioLineasAliadasBacking.detalleObjetoAsegurado}" />
+											</p:selectOneMenu>
+
+											<h:outputLabel value="#{emision['emision.ramo.ila.objeto.valor']}:" styleClass="negrita" />
+											<p:inputText value="#{ramoIncendioLineasAliadaBean.valor}" />
+										</h:panelGrid>
+										<f:facet name="footer">
+											<div align="center">
+												<p:commandButton id="agregarObjeto" update="messagesObj, tablaDetalle, ramoIncendioLineasAliadas" icon="icon-add"
+													value="#{emision['boton.agregar']}" actionListener="#{ramoIncendioLineasAliadaBean.addActionObjeto}" title="Agregar" />
+											</div>
+										</f:facet>
+									</h:panelGrid>
+									<p:spacer height="30px;" />
+									<p:dataTable id="tablaDetalle" value="#{ramoIncendioLineasAliadaBean.objetolist}" var="obj" widgetVar="50" editable="true">
+										<p:ajax event="rowEdit" listener="#{ramoIncendioLineasAliadaBean.onEditObjeto}" />
+										<p:ajax event="rowEditCancel" listener="#{ramoIncendioLineasAliadaBean.onCancelObjeto}" update="tablaDetalle" />
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['emision.ramo.ila.objeto.ubicacion']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.ubicacionRiesgo}" />
 												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.numeroItem}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.numeroItem}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['emision.ramo.ila.objeto.ubicacion']}" />
+												<f:facet name="input">
+													<p:inputText value="#{obj.ubicacionRiesgo}" style="width:100%" />
 												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.ubicacionRiesgo}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.ubicacionRiesgo}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['emision.ramo.ila.objeto.detalle']}" />
+											</p:cellEditor>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['emision.ramo.ila.objeto.detalle']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.detalle}" />
 												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.detalle}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:selectOneMenu id="detalleId" value="#{ramoIncendioLineasAliadaBean.detalleObjeto}" effect="drop">
-															<f:selectItems value="#{incendioLineasAliadasBacking.detalleObjetoAsegurado}" />
-														</p:selectOneMenu>
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['emision.ramo.ila.objeto.valor']}" />
+												<f:facet name="input">
+													<p:selectOneMenu id="detalleId" value="#{ramoIncendioLineasAliadaBean.detalleObjeto}" effect="drop">
+														<f:selectItems value="#{incendioLineasAliadasBacking.detalleObjetoAsegurado}" />
+													</p:selectOneMenu>
 												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.valor}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.valor}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column headerText="Options" style="width:50px">
-												<p:rowEditor />
-											</p:column>
-										</p:dataTable>
-									</div>
+											</p:cellEditor>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{emision['emision.ramo.ila.objeto.valor']}" />
+											</f:facet>
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{obj.valor}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{obj.valor}" style="width:100%" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+										<p:column headerText="Options" style="width:50px">
+											<p:rowEditor />
+										</p:column>
+									</p:dataTable>
+
 									<p:spacer height="15px;" />
 									<h:panelGrid columns="1" id="ramoIncendioLineasAliadas">
-										<h:panelGrid columns="2">
+										<h:panelGrid columns="2" cellpadding="3">
 											<p:outputLabel for="idValorItems" value="#{emision['emision.ramo.ila.label.valoritems']}" styleClass="negrita" />
 											<p:inputText id="idValorItems" value="#{ramoIncendioLineasAliadaBean.valorItems}" />
 										</h:panelGrid>
-
+										<p:spacer height="15px;" />
 										<p:outputLabel value="#{emision['emision.ramo.ila.label.consideracionesimp']}" styleClass="negrita" />
 										<p:inputTextarea cols="50" rows="2" value="#{ramoIncendioLineasAliadaBean.consideracionesImp}" style="text-transform:uppercase;" />
 										<p:outputLabel value="#{emision['emision.ramo.ila.label.filepolizavigente']}" styleClass="negrita" />

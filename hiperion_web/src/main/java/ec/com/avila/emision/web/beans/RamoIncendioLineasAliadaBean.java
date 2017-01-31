@@ -32,7 +32,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	// Tabla RAMO INCENDIO LINEAS ALIADAS
-	private BigDecimal valorItems;
+	private Double valorItems = 0.0;
 	private String consideracionesImp;
 	private String filePolizaVigente;
 	private String fileCondicionesGenerales;
@@ -48,15 +48,14 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	private BigDecimal valorCoberturasIncendio;
 
 	// Tabla Objeto asegurado Incendio
-	private Integer numeroItem;
 	private String ubicacionRiesgo;
 	private String detalleObjeto;
-	private BigDecimal valor;
+	private Double valor;
 
 	private static final ArrayList<ObjetoAseguradoIlaDTO> objetoList = new ArrayList<ObjetoAseguradoIlaDTO>();
 
 	// Tabla Detalle Objeto Incendio
-	
+
 	private BigDecimal valorDetalleObjetoAseguradoIncendio;
 
 	// Tabla Codiciones Especiales Incendio
@@ -103,8 +102,6 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	public void setNombreCliente(String nombreCliente) {
 		this.nombreCliente = nombreCliente;
 	}
-	
-	
 
 	/**
 	 * @return the contactoAseguradora
@@ -114,7 +111,8 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	}
 
 	/**
-	 * @param contactoAseguradora the contactoAseguradora to set
+	 * @param contactoAseguradora
+	 *            the contactoAseguradora to set
 	 */
 	public void setContactoAseguradora(String contactoAseguradora) {
 		this.contactoAseguradora = contactoAseguradora;
@@ -128,7 +126,8 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	}
 
 	/**
-	 * @param aseguradora the aseguradora to set
+	 * @param aseguradora
+	 *            the aseguradora to set
 	 */
 	public void setAseguradora(String aseguradora) {
 		this.aseguradora = aseguradora;
@@ -317,7 +316,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	/**
 	 * @return the valorItems
 	 */
-	public BigDecimal getValorItems() {
+	public Double getValorItems() {
 		return valorItems;
 	}
 
@@ -325,7 +324,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 * @param valorItems
 	 *            the valorItems to set
 	 */
-	public void setValorItems(BigDecimal valorItems) {
+	public void setValorItems(Double valorItems) {
 		this.valorItems = valorItems;
 	}
 
@@ -494,20 +493,6 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 		this.valorCoberturasIncendio = valorCoberturasIncendio;
 	}
 
-	/**
-	 * @return the numeroItem
-	 */
-	public Integer getNumeroItem() {
-		return numeroItem;
-	}
-
-	/**
-	 * @param numeroItem
-	 *            the numeroItem to set
-	 */
-	public void setNumeroItem(Integer numeroItem) {
-		this.numeroItem = numeroItem;
-	}
 
 	/**
 	 * @return the ubicacionRiesgo
@@ -523,7 +508,6 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	public void setUbicacionRiesgo(String ubicacionRiesgo) {
 		this.ubicacionRiesgo = ubicacionRiesgo;
 	}
-
 
 	/**
 	 * @return the valorDetalleObjetoAseguradoIncendio
@@ -580,7 +564,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	/**
 	 * @return the valor
 	 */
-	public BigDecimal getValor() {
+	public Double getValor() {
 		return valor;
 	}
 
@@ -588,7 +572,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 * @param valor
 	 *            the valor to set
 	 */
-	public void setValor(BigDecimal valor) {
+	public void setValor(Double valor) {
 		this.valor = valor;
 	}
 
@@ -615,16 +599,17 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 * 
 	 * @return
 	 */
-	public String addActionObjeto() {
-		ObjetoAseguradoIlaDTO orderitem = new ObjetoAseguradoIlaDTO(this.numeroItem, this.ubicacionRiesgo, this.detalleObjeto, this.valor);
+	public void addActionObjeto() {
+		ObjetoAseguradoIlaDTO orderitem = new ObjetoAseguradoIlaDTO(this.ubicacionRiesgo, this.detalleObjeto, this.valor);
 		objetoList.add(orderitem);
 
-		numeroItem = 0;
 		ubicacionRiesgo = "";
 		detalleObjeto = "";
-		valor = new BigDecimal(0);
+		valor = 0.0;
+		for (ObjetoAseguradoIlaDTO objeto : objetoList) {
+			valorItems += objeto.getValor();
+		}
 
-		return null;
 	}
 
 	/**
@@ -637,7 +622,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 * @param event
 	 */
 	public void onEditObjeto(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Item Edited", ((ObjetoAseguradoIlaDTO) event.getObject()).getNumeroItem().toString());
+		FacesMessage msg = new FacesMessage("Item Edited", ((ObjetoAseguradoIlaDTO) event.getObject()).getDetalle().toString());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
