@@ -82,7 +82,7 @@ public class RamoIncendioLineasAliada extends Auditoria implements Serializable 
 	private BigDecimal tasaVidrios;
 
 	@Column(name="valor_items_incendio")
-	private BigDecimal valorItemsIncendio;
+	private Double valorItemsIncendio;
 
 	//bi-directional many-to-one association to ClausulasAddIncendio
 	@OneToMany(mappedBy="ramoIncendioLineasAliada")
@@ -249,11 +249,11 @@ public class RamoIncendioLineasAliada extends Auditoria implements Serializable 
 		this.tasaVidrios = tasaVidrios;
 	}
 
-	public BigDecimal getValorItemsIncendio() {
+	public Double getValorItemsIncendio() {
 		return this.valorItemsIncendio;
 	}
 
-	public void setValorItemsIncendio(BigDecimal valorItemsIncendio) {
+	public void setValorItemsIncendio(Double valorItemsIncendio) {
 		this.valorItemsIncendio = valorItemsIncendio;
 	}
 

@@ -45,7 +45,7 @@ public class ObjAsegIncendio extends Auditoria implements Serializable {
 	private BigDecimal utilidadBrutaIncendioLa;
 
 	@Column(name = "valor_obj_aseg_incendio")
-	private BigDecimal valorObjAsegIncendio;
+	private Double valorObjAsegIncendio;
 
 	// bi-directional many-to-one association to RamoIncendioLineasAliada
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -103,11 +103,11 @@ public class ObjAsegIncendio extends Auditoria implements Serializable {
 		this.utilidadBrutaIncendioLa = utilidadBrutaIncendioLa;
 	}
 
-	public BigDecimal getValorObjAsegIncendio() {
+	public Double getValorObjAsegIncendio() {
 		return this.valorObjAsegIncendio;
 	}
 
-	public void setValorObjAsegIncendio(BigDecimal valorObjAsegIncendio) {
+	public void setValorObjAsegIncendio(Double valorObjAsegIncendio) {
 		this.valorObjAsegIncendio = valorObjAsegIncendio;
 	}
 
