@@ -4,7 +4,6 @@
 package ec.com.avila.hiperion.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * <b> Incluir aqui la descripcion de la clase. </b>
@@ -16,32 +15,15 @@ import java.math.BigDecimal;
 public class ObjetoAseguradoIlaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Integer numeroItem;
 	private String ubicacionRiesgo;
 	private String detalle;
-	private BigDecimal valor;
+	private Double valor;
 
-	public ObjetoAseguradoIlaDTO(Integer numeroItem, String ubicacionRiesgo, String detalle, BigDecimal valor) {
+	public ObjetoAseguradoIlaDTO(String ubicacionRiesgo, String detalle, Double valor) {
 		super();
-		this.numeroItem = numeroItem;
 		this.ubicacionRiesgo = ubicacionRiesgo;
 		this.detalle = detalle;
 		this.valor = valor;
-	}
-
-	/**
-	 * @return the numeroItem
-	 */
-	public Integer getNumeroItem() {
-		return numeroItem;
-	}
-
-	/**
-	 * @param numeroItem
-	 *            the numeroItem to set
-	 */
-	public void setNumeroItem(Integer numeroItem) {
-		this.numeroItem = numeroItem;
 	}
 
 	/**
@@ -77,7 +59,7 @@ public class ObjetoAseguradoIlaDTO implements Serializable {
 	/**
 	 * @return the valor
 	 */
-	public BigDecimal getValor() {
+	public Double getValor() {
 		return valor;
 	}
 
@@ -85,7 +67,7 @@ public class ObjetoAseguradoIlaDTO implements Serializable {
 	 * @param valor
 	 *            the valor to set
 	 */
-	public void setValor(BigDecimal valor) {
+	public void setValor(Double valor) {
 		this.valor = valor;
 	}
 
