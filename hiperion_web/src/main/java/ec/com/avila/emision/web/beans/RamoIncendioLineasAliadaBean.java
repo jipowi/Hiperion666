@@ -506,7 +506,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 *            the ubicacionRiesgo to set
 	 */
 	public void setUbicacionRiesgo(String ubicacionRiesgo) {
-		this.ubicacionRiesgo = ubicacionRiesgo;
+		this.ubicacionRiesgo = ubicacionRiesgo.toUpperCase();
 	}
 
 	/**
@@ -600,6 +600,7 @@ public class RamoIncendioLineasAliadaBean implements Serializable {
 	 * @return
 	 */
 	public void addActionObjeto() {
+		valorItems = 0.0;
 		ObjetoAseguradoIlaDTO orderitem = new ObjetoAseguradoIlaDTO(this.ubicacionRiesgo, this.detalleObjeto, this.valor);
 		objetoList.add(orderitem);
 
