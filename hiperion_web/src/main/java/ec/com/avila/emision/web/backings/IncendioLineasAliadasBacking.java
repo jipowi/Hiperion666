@@ -32,7 +32,6 @@ import ec.com.avila.hiperion.dto.AseguradoraDTO;
 import ec.com.avila.hiperion.dto.ClausulaAdicionalDTO;
 import ec.com.avila.hiperion.dto.CoberturaAdicionalDTO;
 import ec.com.avila.hiperion.dto.CoberturaDTO;
-import ec.com.avila.hiperion.dto.CondicionEspecialDTO;
 import ec.com.avila.hiperion.dto.ObjetoAseguradoIlaDTO;
 import ec.com.avila.hiperion.dto.TablaAmortizacionDTO;
 import ec.com.avila.hiperion.emision.entities.Aseguradora;
@@ -131,7 +130,7 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	private List<ClausulasAddIncendio> clausulasAdicionales;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<CondEspIncendio> condicionesEspeciales;
-	private List<CondicionEspecialDTO> condicionesEspecialesDTO = new ArrayList<>();
+	private List<CondEspIncendio> selectedCondicionesEsp;
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 	private List<TablaAmortizacionDTO> tablaAmortizacionList = new ArrayList<TablaAmortizacionDTO>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
@@ -545,18 +544,12 @@ public class IncendioLineasAliadasBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 3) {
 					CondEspIncendio condicion = new CondEspIncendio();
+					condicion.setIdCondicionEspIncendio(anexo.getIdDetalleAnexo());
 					condicion.setCondicionEspIncendio(anexo.getNombreDetalleAnexo());
 
 					condicionesEspeciales.add(condicion);
 				}
 
-			}
-			for (CondEspIncendio condicion : condicionesEspeciales) {
-				CondicionEspecialDTO condicionDTO = new CondicionEspecialDTO();
-				condicionDTO.setCondicionEspecial(condicion.getCondicionEspIncendio());
-				condicionDTO.setSeleccion(false);
-
-				condicionesEspecialesDTO.add(condicionDTO);
 			}
 
 		}
@@ -703,23 +696,18 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 * 
 	 */
 	public void setearCondiciones() {
-		int contCondicion = 0;
-		List<CondEspIncendio> condiciones = new ArrayList<>();
-		for (CondicionEspecialDTO condicionDTO : condicionesEspecialesDTO) {
-			if (condicionDTO.getSeleccion()) {
-				contCondicion++;
-				CondEspIncendio condicion = new CondEspIncendio();
-				condicion.setCondicionEspIncendio(condicionDTO.getCondicionEspecial());
 
-				condiciones.add(condicion);
-			}
+		List<CondEspIncendio> condiciones = new ArrayList<>();
+		for (CondEspIncendio condicion : selectedCondicionesEsp) {
+			CondEspIncendio condicionEsp = new CondEspIncendio();
+			condicionEsp.setIdCondicionEspIncendio(condicion.getIdCondicionEspIncendio());
+			condicionEsp.setCondicionEspIncendio(condicion.getCondicionEspIncendio());
+
+			condiciones.add(condicion);
 		}
-		if (contCondicion == 0) {
-			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.condicionesEsp"));
-		} else {
-			ramoIncendioLineasAliada.setCondEspIncendios(condiciones);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
-		}
+
+		ramoIncendioLineasAliada.setCondEspIncendios(condiciones);
+		MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
 	}
 
 	/**
@@ -858,20 +846,6 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	}
 
 	/**
-	 * 
-	 * <b> Permite editar un registro de la tabla</b>
-	 * <p>
-	 * [Author: Paul Jimenez, Date: Aug 3, 2014]
-	 * </p>
-	 * 
-	 * @param event
-	 */
-	public void onEditCondicionesEsp(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Item Edited", ((CondicionEspecialDTO) event.getObject()).getCondicionEspecial());
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-	}
-
-	/**
 	 * @return the usuarioBean
 	 */
 	public UsuarioBean getUsuarioBean() {
@@ -937,21 +911,6 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 */
 	public void setClausulasAdicionalesDTO(List<ClausulaAdicionalDTO> clausulasAdicionalesDTO) {
 		this.clausulasAdicionalesDTO = clausulasAdicionalesDTO;
-	}
-
-	/**
-	 * @return the condicionesEspecialesDTO
-	 */
-	public List<CondicionEspecialDTO> getCondicionesEspecialesDTO() {
-		return condicionesEspecialesDTO;
-	}
-
-	/**
-	 * @param condicionesEspecialesDTO
-	 *            the condicionesEspecialesDTO to set
-	 */
-	public void setCondicionesEspecialesDTO(List<CondicionEspecialDTO> condicionesEspecialesDTO) {
-		this.condicionesEspecialesDTO = condicionesEspecialesDTO;
 	}
 
 	/**
@@ -1312,6 +1271,34 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 */
 	public void setItem(Integer item) {
 		this.item = item;
+	}
+
+	/**
+	 * @return the condicionesEspeciales
+	 */
+	public List<CondEspIncendio> getCondicionesEspeciales() {
+		return condicionesEspeciales;
+	}
+
+	/**
+	 * @param condicionesEspeciales the condicionesEspeciales to set
+	 */
+	public void setCondicionesEspeciales(List<CondEspIncendio> condicionesEspeciales) {
+		this.condicionesEspeciales = condicionesEspeciales;
+	}
+
+	/**
+	 * @return the selectedCondicionesEsp
+	 */
+	public List<CondEspIncendio> getSelectedCondicionesEsp() {
+		return selectedCondicionesEsp;
+	}
+
+	/**
+	 * @param selectedCondicionesEsp the selectedCondicionesEsp to set
+	 */
+	public void setSelectedCondicionesEsp(List<CondEspIncendio> selectedCondicionesEsp) {
+		this.selectedCondicionesEsp = selectedCondicionesEsp;
 	}
 
 }
