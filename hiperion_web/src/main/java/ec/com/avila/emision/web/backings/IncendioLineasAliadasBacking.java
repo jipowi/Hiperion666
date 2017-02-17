@@ -124,13 +124,17 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	Logger log = Logger.getLogger(IncendioLineasAliadasBacking.class);
 
 	private List<CobertIncendio> coberturas;
-	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
+	private List<CobertIncendio> selectedCoberturas;
+
 	private List<CobertAddIncendio> coberturasAdd;
-	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
+	private List<CobertAddIncendio> selectedCoberturasAdd;
+
 	private List<ClausulasAddIncendio> clausulasAdicionales;
-	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
+	private List<ClausulasAddIncendio> selectedClausulasAdd;
+
 	private List<CondEspIncendio> condicionesEspeciales;
 	private List<CondEspIncendio> selectedCondicionesEsp;
+
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 	private List<TablaAmortizacionDTO> tablaAmortizacionList = new ArrayList<TablaAmortizacionDTO>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
@@ -447,19 +451,12 @@ public class IncendioLineasAliadasBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertIncendio cobertura = new CobertIncendio();
+					cobertura.setIdCobertIncendio(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaIncendio(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertIncendio cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaIncendio());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -480,6 +477,7 @@ public class IncendioLineasAliadasBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddIncendio cobertura = new CobertAddIncendio();
+					cobertura.setIdCobertAdRamoInc(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAddIncendio(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
@@ -487,13 +485,6 @@ public class IncendioLineasAliadasBacking implements Serializable {
 
 			}
 
-			for (CobertAddIncendio cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddIncendio());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
-			}
 		}
 
 	}
@@ -512,18 +503,12 @@ public class IncendioLineasAliadasBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddIncendio clausula = new ClausulasAddIncendio();
+					clausula.setIdClausulaAdIncendio(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddIncendio(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddIncendio clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddIncendio());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -636,54 +621,12 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertIncendio> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertIncendio cobertura = new CobertIncendio();
-				cobertura.setCoberturaIncendio(coberturaDTO.getCobertura());
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoIncendioLineasAliada.setCobertIncendios(coberturas);
+			ramoIncendioLineasAliada.setCobertIncendios(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
-		}
-	}
-
-	/**
-	 * 
-	 * <b> permite setear las coberturas adicionales seleccionadas en el Bean. </b>
-	 * <p>
-	 * [Author: Paul Jimenez, Date: 14/07/2015]
-	 * </p>
-	 * 
-	 */
-	public void setearCoberturasAdd() {
-
-		int contCoberturas = 0;
-
-		List<CobertAddIncendio> coberturas = new ArrayList<>();
-		for (CoberturaAdicionalDTO coberturaDTO : coberturasAddDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAddIncendio cobertura = new CobertAddIncendio();
-				cobertura.setCoberturaAddIncendio(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
-			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
-		} else {
-			ramoIncendioLineasAliada.setCobertAddIncendios(coberturas);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
 		}
 	}
 
@@ -697,17 +640,31 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 */
 	public void setearCondiciones() {
 
-		List<CondEspIncendio> condiciones = new ArrayList<>();
-		for (CondEspIncendio condicion : selectedCondicionesEsp) {
-			CondEspIncendio condicionEsp = new CondEspIncendio();
-			condicionEsp.setIdCondicionEspIncendio(condicion.getIdCondicionEspIncendio());
-			condicionEsp.setCondicionEspIncendio(condicion.getCondicionEspIncendio());
-
-			condiciones.add(condicion);
+		if (selectedCondicionesEsp.isEmpty()) {
+			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.condicionesEsp"));
+		} else {
+			ramoIncendioLineasAliada.setCondEspIncendios(selectedCondicionesEsp);
+			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
 		}
 
-		ramoIncendioLineasAliada.setCondEspIncendios(condiciones);
-		MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
+	}
+
+	/**
+	 * 
+	 * <b> permite setear las coberturas adicionales seleccionadas en el Bean. </b>
+	 * <p>
+	 * [Author: Paul Jimenez, Date: 14/07/2015]
+	 * </p>
+	 * 
+	 */
+	public void setearCoberturasAdd() {
+
+		if (selectedCoberturasAdd.isEmpty()) {
+			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
+		} else {
+			ramoIncendioLineasAliada.setCobertAddIncendios(selectedCoberturasAdd);
+			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
+		}
 	}
 
 	/**
@@ -720,24 +677,10 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddIncendio> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddIncendio clausula = new ClausulasAddIncendio();
-				clausula.setClausulaAddIncendio(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoIncendioLineasAliada.setClausulasAddIncendios(clausulas);
+			ramoIncendioLineasAliada.setClausulasAddIncendios(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -869,48 +812,18 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	}
 
 	/**
-	 * @return the coberturasDTO
+	 * @return the selectedCoberturas
 	 */
-	public List<CoberturaDTO> getCoberturasDTO() {
-		return coberturasDTO;
+	public List<CobertIncendio> getSelectedCoberturas() {
+		return selectedCoberturas;
 	}
 
 	/**
-	 * @param coberturasDTO
-	 *            the coberturasDTO to set
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
 	 */
-	public void setCoberturasDTO(List<CoberturaDTO> coberturasDTO) {
-		this.coberturasDTO = coberturasDTO;
-	}
-
-	/**
-	 * @return the coberturasAddDTO
-	 */
-	public List<CoberturaAdicionalDTO> getCoberturasAddDTO() {
-		return coberturasAddDTO;
-	}
-
-	/**
-	 * @param coberturasAddDTO
-	 *            the coberturasAddDTO to set
-	 */
-	public void setCoberturasAddDTO(List<CoberturaAdicionalDTO> coberturasAddDTO) {
-		this.coberturasAddDTO = coberturasAddDTO;
-	}
-
-	/**
-	 * @return the clausulasAdicionalesDTO
-	 */
-	public List<ClausulaAdicionalDTO> getClausulasAdicionalesDTO() {
-		return clausulasAdicionalesDTO;
-	}
-
-	/**
-	 * @param clausulasAdicionalesDTO
-	 *            the clausulasAdicionalesDTO to set
-	 */
-	public void setClausulasAdicionalesDTO(List<ClausulaAdicionalDTO> clausulasAdicionalesDTO) {
-		this.clausulasAdicionalesDTO = clausulasAdicionalesDTO;
+	public void setSelectedCoberturas(List<CobertIncendio> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
 	}
 
 	/**
@@ -1281,7 +1194,8 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	}
 
 	/**
-	 * @param condicionesEspeciales the condicionesEspeciales to set
+	 * @param condicionesEspeciales
+	 *            the condicionesEspeciales to set
 	 */
 	public void setCondicionesEspeciales(List<CondEspIncendio> condicionesEspeciales) {
 		this.condicionesEspeciales = condicionesEspeciales;
@@ -1295,10 +1209,86 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCondicionesEsp the selectedCondicionesEsp to set
+	 * @param selectedCondicionesEsp
+	 *            the selectedCondicionesEsp to set
 	 */
 	public void setSelectedCondicionesEsp(List<CondEspIncendio> selectedCondicionesEsp) {
 		this.selectedCondicionesEsp = selectedCondicionesEsp;
+	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertIncendio> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas
+	 *            the coberturas to set
+	 */
+	public void setCoberturas(List<CobertIncendio> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the coberturasAdd
+	 */
+	public List<CobertAddIncendio> getCoberturasAdd() {
+		return coberturasAdd;
+	}
+
+	/**
+	 * @param coberturasAdd
+	 *            the coberturasAdd to set
+	 */
+	public void setCoberturasAdd(List<CobertAddIncendio> coberturasAdd) {
+		this.coberturasAdd = coberturasAdd;
+	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddIncendio> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd
+	 *            the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddIncendio> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddIncendio> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales
+	 *            the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddIncendio> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddIncendio> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddIncendio> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
 
 }
