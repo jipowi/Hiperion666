@@ -39,7 +39,8 @@
 									<tr>
 										<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.addGrupo}"
 												disabled="#{accidentesPersonalesBacking.activarCotizar}" /></td>
-										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente" disabled="#{!accidentesPersonalesBacking.activarPresentar}" /></td>
+										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente"
+												disabled="#{!accidentesPersonalesBacking.activarPresentar}" /></td>
 										<td><p:commandButton id="idTres" value="Aceptar" title="Aceptado Oferta" disabled="#{!accidentesPersonalesBacking.activarAceptar}" /></td>
 										<td><p:commandButton id="idCuatro" value="Emitir" title="Solicitar Emisión" disabled="#{!accidentesPersonalesBacking.activarEmitir}" /></td>
 										<td><p:commandButton id="idCinco" value="Entregar" title="Entregar Emisión" disabled="#{!accidentesPersonalesBacking.activarEntregar}" /></td>
@@ -271,32 +272,81 @@
 										<p:outputLabel value="#{emision['ap.deducible']}" styleClass="negrita" />
 										<p:inputText value="#{ramoAccidentesPersonalesBean.deducible}" />
 									</h:panelGrid>
+									<p:spacer height="15px;" />
+									<!-- COBERTURAS-->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['anexo.titulo.cob']}">
+											<p:dataTable id="idCoberturas" var="cobertura" value="#{accidentesPersonalesBacking.coberturas}"
+												selection="#{accidentesPersonalesBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertura}" style="margin-bottom:0" paginator="true"
+												rows="5">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{cobertura.idCobertura}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cob']}">
+													<h:outputText value="#{cobertura.coberturaAccPersonales}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCoberturas" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{accidentesPersonalesBacking.setearCoberturas()}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
+									<p:spacer height="15px;" />
+									<!-- CONDICIONES ESPECIALES -->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['anexo.titulo.cep']}">
+											<p:dataTable id="idCondicionesEsp" var="condicion" value="#{accidentesPersonalesBacking.condicionesEspeciales}"
+												selection="#{accidentesPersonalesBacking.selectedCondicionesEsp}" rowKey="#{condicion.idCondicionEspAcc}" style="margin-bottom:0"
+												paginator="true" rows="5">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cep']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{condicion.idCondicionEspAcc}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cep']}">
+													<h:outputText value="#{condicion.condicionAcc}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCondicionesEsp" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{accidentesPersonalesBacking.setearCondiciones()}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
+									<p:spacer height="15px;" />
+									<!-- CLAUSULAS ADICIONALES -->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['anexo.titulo.cad']}">
+											<p:dataTable id="idClausulasAdd" var="clausula" value="#{accidentesPersonalesBacking.clausulasAdicionales}"
+												selection="#{accidentesPersonalesBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAdAcidente}" style="margin-bottom:0"
+												paginator="true" rows="5" editable="true">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cobad']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{clausula.idClausulaAdAcidente}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cobad']}">
+													<h:outputText value="#{clausula.clausulaAccPersonales}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idClausulasAdd" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{accidentesPersonalesBacking.setearClausulasAdd()}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
 								</p:panel>
 
 								<p:spacer height="30px;" />
-								<!-- COBERTURAS -->
-								<h:panelGrid columns="2">
-									<p:outputLabel value="#{emision['lbl.seleccionarCoberturas']}" styleClass="negrita" />
-									<p:commandLink title="#{emision['lbl.seleccionarCoberturas']}" oncomplete="PF('coberturas').show();" update=":idCobertura">
-										<h:graphicImage name="check.png" library="img" />
-									</p:commandLink>
-								</h:panelGrid>
-								<!-- CONDICIONES ESPECIALES -->
-								<h:panelGrid columns="2">
-									<p:outputLabel value="#{emision['lbl.seleccionarCondicionesEsp']}" styleClass="negrita" />
-									<p:commandLink title="#{emision['lbl.seleccionarCondicionesEsp']}" oncomplete="PF('condiciones').show();"
-										actionListener="#{accidentesPersonalesBacking.obtenerCondicionesEspeciales()}" update=":idCondicionesEspeciales">
-										<h:graphicImage name="check.png" library="img" />
-									</p:commandLink>
-								</h:panelGrid>
-								<!-- CLAUSULAS ADICIONALES -->
-								<h:panelGrid columns="2">
-									<p:outputLabel value="#{emision['lbl.seleccionarClausulasAdd']}" styleClass="negrita" />
-									<p:commandLink title="#{emision['lbl.seleccionarClausulasAdd']}" oncomplete="PF('clausulasAdd').show();"
-										actionListener="#{accidentesPersonalesBacking.obtenerClausulasAdicionales()}" update=":idClausulasAdd">
-										<h:graphicImage name="check.png" library="img" />
-									</p:commandLink>
-								</h:panelGrid>
 								<!-- PAGO POLIZA -->
 								<div align="center">
 									<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update=":idPagoPoliza">
