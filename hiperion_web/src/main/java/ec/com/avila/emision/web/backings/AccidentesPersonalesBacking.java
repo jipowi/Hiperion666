@@ -106,8 +106,10 @@ public class AccidentesPersonalesBacking implements Serializable {
 	private List<ClausulasAddAccPer> clausulasAdicionales;
 	private List<CoberturaDTO> coberturasDTO;
 	private List<CobertAccPer> coberturas;
+	private List<CobertAccPer> selectedCoberturas;
 	private List<CondicionEspecialDTO> condicionesEspecialesDTO;
 	private List<CondEspAccPer> condicionesEspeciales;
+	private List<CondEspAccPer> selectedCondicionesEsp;
 	private List<SelectItem> sexoItems;
 	private List<SelectItem> parentescoItems;
 	private List<SelectItem> contactosItems = new ArrayList<>();
@@ -139,6 +141,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 	private Double valorGrupo;
 
 	private Usuario usuario;
+	private List<ClausulasAddAccPer> selectedClausulasAdd;
 	RamoAccidentesPersonale accidentesPersonales = new RamoAccidentesPersonale();
 
 	Logger log = Logger.getLogger(AccidentesPersonalesBacking.class);
@@ -488,23 +491,21 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 * @return
 	 */
 	public void obtenerCondicionesEspeciales() {
+
 		condicionesEspeciales = new ArrayList<CondEspAccPer>();
 		if (anexos != null && anexos.size() > 0) {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 3) {
 					CondEspAccPer condicion = new CondEspAccPer();
+
+					condicion.setIdCondicionEspAcc(anexo.getIdDetalleAnexo());
 					condicion.setCondicionAcc(anexo.getNombreDetalleAnexo());
 					condicionesEspeciales.add(condicion);
-				}
-			}
-		}
-		condicionesEspecialesDTO = new ArrayList<>();
-		for (CondEspAccPer condicion : condicionesEspeciales) {
-			CondicionEspecialDTO condicionDTO = new CondicionEspecialDTO();
-			condicionDTO.setCondicionEspecial(condicion.getCondicionAcc());
-			condicionDTO.setSeleccion(false);
 
-			condicionesEspecialesDTO.add(condicionDTO);
+				}
+
+			}
+
 		}
 
 	}
@@ -524,18 +525,14 @@ public class AccidentesPersonalesBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddAccPer clausula = new ClausulasAddAccPer();
+					clausula.setIdClausulaAdAcidente(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAccPersonales(anexo.getNombreDetalleAnexo());
+
 					clausulasAdicionales.add(clausula);
 				}
-			}
-		}
-		clausulasAdicionalesDTO = new ArrayList<>();
-		for (ClausulasAddAccPer clausula : clausulasAdicionales) {
-			ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-			clausulaDTO.setClausula(clausula.getClausulaAccPersonales());
-			clausulaDTO.setSeleccion(false);
 
-			clausulasAdicionalesDTO.add(clausulaDTO);
+			}
+
 		}
 
 	}
@@ -555,18 +552,12 @@ public class AccidentesPersonalesBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertAccPer cobertura = new CobertAccPer();
+					cobertura.setIdCobertura(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAccPersonales(anexo.getNombreDetalleAnexo());
 					coberturas.add(cobertura);
 				}
-			}
-		}
-		coberturasDTO = new ArrayList<>();
-		for (CobertAccPer cobertura : coberturas) {
-			CoberturaDTO coberturaDTO = new CoberturaDTO();
-			coberturaDTO.setCobertura(cobertura.getCoberturaAccPersonales());
-			coberturaDTO.setSeleccion(false);
 
-			coberturasDTO.add(coberturaDTO);
+			}
 		}
 
 	}
@@ -596,11 +587,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 				accidentesPersonales.setFechaCreacion(new Date());
 				accidentesPersonales.setEstado(EstadoEnum.A);
 
-				//Informacion Grupos
+				// Informacion Grupos
 				List<GrupoAccPersonale> grupos = new ArrayList<>();
-				for(GrupoAccPersonalesDTO grupo: gruposDTO){
+				for (GrupoAccPersonalesDTO grupo : gruposDTO) {
 					GrupoAccPersonale grupoDB = new GrupoAccPersonale();
-					
+
 					grupoDB.setNombreGrupoAcc(grupo.getNomGrupo());
 					grupoDB.setNumeroPersonasAcc(grupo.getNumPersonas());
 					grupoDB.setActividadAcc(grupo.getActividad());
@@ -608,11 +599,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 					grupoDB.setIdUsuarioCreacion(usuario.getIdUsuario());
 					grupoDB.setFechaCreacion(new Date());
 					grupoDB.setEstado(EstadoEnum.A);
-					
+
 					grupos.add(grupoDB);
 				}
 				accidentesPersonales.setGrupoAccPersonales(grupos);
-				
+
 				ramoAccidentesPersonalesService.guardarRamoAccidentesPersonales(accidentesPersonales, poliza);
 
 				MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
@@ -637,24 +628,10 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddAccPer> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddAccPer clausula = new ClausulasAddAccPer();
-				clausula.setClausulaAccPersonales(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			accidentesPersonales.setClausulasAddAccPers(clausulas);
+			accidentesPersonales.setClausulasAddAccPers(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -669,22 +646,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertAccPer> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAccPer cobertura = new CobertAccPer();
-				cobertura.setCoberturaAccPersonales(coberturaDTO.getCobertura());
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			accidentesPersonales.setCoberturasAcc(coberturas);
+			accidentesPersonales.setCoberturasAcc(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -740,23 +706,13 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 * 
 	 */
 	public void setearCondiciones() {
-		int contCondicion = 0;
-		List<CondEspAccPer> condiciones = new ArrayList<>();
-		for (CondicionEspecialDTO condicionDTO : condicionesEspecialesDTO) {
-			if (condicionDTO.getSeleccion()) {
-				contCondicion++;
-				CondEspAccPer condicion = new CondEspAccPer();
-				condicion.setCondicionAcc(condicionDTO.getCondicionEspecial());
-
-				condiciones.add(condicion);
-			}
-		}
-		if (contCondicion == 0) {
+		if (selectedCondicionesEsp.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.condicionesEsp"));
 		} else {
-			accidentesPersonales.setCondicionesEspAcc(condiciones);
+			accidentesPersonales.setCondicionesEspAcc(selectedCondicionesEsp);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
 		}
+
 	}
 
 	/**
@@ -1362,7 +1318,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
-	 * @param activarCotizar the activarCotizar to set
+	 * @param activarCotizar
+	 *            the activarCotizar to set
 	 */
 	public void setActivarCotizar(Boolean activarCotizar) {
 		this.activarCotizar = activarCotizar;
@@ -1376,7 +1333,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
-	 * @param activarPresentar the activarPresentar to set
+	 * @param activarPresentar
+	 *            the activarPresentar to set
 	 */
 	public void setActivarPresentar(Boolean activarPresentar) {
 		this.activarPresentar = activarPresentar;
@@ -1390,7 +1348,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
-	 * @param activarAceptar the activarAceptar to set
+	 * @param activarAceptar
+	 *            the activarAceptar to set
 	 */
 	public void setActivarAceptar(Boolean activarAceptar) {
 		this.activarAceptar = activarAceptar;
@@ -1404,7 +1363,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
-	 * @param activarEmitir the activarEmitir to set
+	 * @param activarEmitir
+	 *            the activarEmitir to set
 	 */
 	public void setActivarEmitir(Boolean activarEmitir) {
 		this.activarEmitir = activarEmitir;
@@ -1418,7 +1378,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
-	 * @param activarEntregar the activarEntregar to set
+	 * @param activarEntregar
+	 *            the activarEntregar to set
 	 */
 	public void setActivarEntregar(Boolean activarEntregar) {
 		this.activarEntregar = activarEntregar;
@@ -1432,10 +1393,56 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
-	 * @param activarDocumentar the activarDocumentar to set
+	 * @param activarDocumentar
+	 *            the activarDocumentar to set
 	 */
 	public void setActivarDocumentar(Boolean activarDocumentar) {
 		this.activarDocumentar = activarDocumentar;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertAccPer> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertAccPer> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the selectedCondicionesEsp
+	 */
+	public List<CondEspAccPer> getSelectedCondicionesEsp() {
+		return selectedCondicionesEsp;
+	}
+
+	/**
+	 * @param selectedCondicionesEsp
+	 *            the selectedCondicionesEsp to set
+	 */
+	public void setSelectedCondicionesEsp(List<CondEspAccPer> selectedCondicionesEsp) {
+		this.selectedCondicionesEsp = selectedCondicionesEsp;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddAccPer> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddAccPer> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
 
 }
