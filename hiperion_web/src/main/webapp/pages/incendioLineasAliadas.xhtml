@@ -330,16 +330,18 @@
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
+									<p:spacer height="15px;" />
 									<!-- COBERTURAS -->
 									<p:accordionPanel multiple="true" activeIndex="">
 										<p:tab title="#{emision['anexo.titulo.cob']}">
 											<p:dataTable id="idCoberturas" var="cobertura" value="#{incendioLineasAliadasBacking.coberturas}"
-												selection="#{incendioLineasAliadasBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertIncendio}" style="margin-bottom:0" paginator="true" rows="5">
+												selection="#{incendioLineasAliadasBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertIncendio}" style="margin-bottom:0"
+												paginator="true" rows="5">
 												<f:facet name="header">
 													<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
 												</f:facet>
 												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-												<p:column headerText="Número">
+												<p:column headerText="Número" width="10%">
 													<h:outputText value="#{cobertura.idCobertIncendio}" />
 												</p:column>
 												<p:column headerText="#{emision['anexo.titulo.cob']}">
@@ -352,16 +354,18 @@
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
+									<p:spacer height="15px;" />
 									<!-- COBERTURAS ADICONALES-->
 									<p:accordionPanel multiple="true" activeIndex="">
 										<p:tab title="#{emision['anexo.titulo.cobad']}">
 											<p:dataTable id="idCoberturasAdd" var="coberturaAdd" value="#{incendioLineasAliadasBacking.coberturas}"
-												selection="#{incendioLineasAliadasBacking.selectedCoberturasAdd}" rowKey="#{coberturaAdd.idCobertIncendio}" style="margin-bottom:0" paginator="true" rows="5" editable="true">
+												selection="#{incendioLineasAliadasBacking.selectedCoberturasAdd}" rowKey="#{coberturaAdd.idCobertIncendio}" style="margin-bottom:0"
+												paginator="true" rows="5" editable="true">
 												<f:facet name="header">
 													<h:outputLabel value="#{emision['anexo.titulo.cobad']}" />
 												</f:facet>
 												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-												<p:column headerText="Número">
+												<p:column headerText="Número" width="10%">
 													<h:outputText value="#{coberturaAdd.idCobertIncendio}" />
 												</p:column>
 												<p:column headerText="#{emision['anexo.titulo.cobad']}">
@@ -378,12 +382,13 @@
 									<p:accordionPanel multiple="true" activeIndex="">
 										<p:tab title="#{emision['anexo.titulo.cad']}">
 											<p:dataTable id="idClausulasAdd" var="clausula" value="#{incendioLineasAliadasBacking.clausulasAdicionales}"
-												selection="#{incendioLineasAliadasBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAdIncendio}" style="margin-bottom:0" paginator="true" rows="5" editable="true">
+												selection="#{incendioLineasAliadasBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAdIncendio}" style="margin-bottom:0"
+												paginator="true" rows="5" editable="true">
 												<f:facet name="header">
-													<h:outputLabel value="#{emision['anexo.titulo.cobad']}" />
+													<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
 												</f:facet>
 												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-												<p:column headerText="Número">
+												<p:column headerText="Número" width="10%">
 													<h:outputText value="#{clausula.idClausulaAdIncendio}" />
 												</p:column>
 												<p:column headerText="#{emision['anexo.titulo.cobad']}">

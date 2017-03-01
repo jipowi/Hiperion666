@@ -22,34 +22,34 @@
 						<p:outputPanel id="messageAgropecuario">
 							<p:messages id="messagesAgropecuario" showDetail="true" autoUpdate="true" closable="true" />
 						</p:outputPanel>
-						
+
 						<h:form id="forCliente">
-								<p:panel id="panelCliente">
-							<!-- ESTADO POLIZA -->
-							<table align="center">
-								<tr>
-									<td align="center"><h:graphicImage name="Circle_Grey.png" library="img" /></td>
-									<td align="center"><h:graphicImage name="Circle_Blue.png" library="img" /></td>
-									<td align="center"><h:graphicImage name="Circle_Green.png" library="img" /></td>
-									<td align="center"><h:graphicImage name="Circle_Yellow.png" library="img" /></td>
-									<td align="center"><h:graphicImage name="Circle_Orange.png" library="img" /></td>
-									<td align="center"><h:graphicImage name="Circle_Red.png" library="img" /></td>
-								</tr>
-								<tr>
-									<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.addGrupo}"
-											disabled="#{accidentesPersonalesBacking.activarCotizar}" /></td>
-									<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente" disabled="#{accidentesPersonalesBacking.activarPresentar}" /></td>
-									<td><p:commandButton id="idTres" value="Aceptar" title="Aceptado Oferta" disabled="#{accidentesPersonalesBacking.activarAceptar}" /></td>
-									<td><p:commandButton id="idCuatro" value="Emitir" title="Solicitar Emisión" disabled="#{accidentesPersonalesBacking.activarEmitir}" /></td>
-									<td><p:commandButton id="idCinco" value="Entregar" title="Entregar Emisión" disabled="#{accidentesPersonalesBacking.activarEntregar}" /></td>
-									<td><p:commandButton id="idSeis" value="Documentar" title="Recibir Documentos"
-											disabled="#{accidentesPersonalesBacking.activarDocumentar}" /></td>
-								</tr>
-							</table>
-						
-							<p:spacer height="30px;" />
-							<!-- CLIENTE -->
-						
+							<p:panel id="panelCliente">
+								<!-- ESTADO POLIZA -->
+								<table align="center">
+									<tr>
+										<td align="center"><h:graphicImage name="Circle_Grey.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Blue.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Green.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Yellow.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Orange.png" library="img" /></td>
+										<td align="center"><h:graphicImage name="Circle_Red.png" library="img" /></td>
+									</tr>
+									<tr>
+										<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.addGrupo}"
+												disabled="#{accidentesPersonalesBacking.activarCotizar}" /></td>
+										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente" disabled="#{accidentesPersonalesBacking.activarPresentar}" /></td>
+										<td><p:commandButton id="idTres" value="Aceptar" title="Aceptado Oferta" disabled="#{accidentesPersonalesBacking.activarAceptar}" /></td>
+										<td><p:commandButton id="idCuatro" value="Emitir" title="Solicitar Emisión" disabled="#{accidentesPersonalesBacking.activarEmitir}" /></td>
+										<td><p:commandButton id="idCinco" value="Entregar" title="Entregar Emisión" disabled="#{accidentesPersonalesBacking.activarEntregar}" /></td>
+										<td><p:commandButton id="idSeis" value="Documentar" title="Recibir Documentos"
+												disabled="#{accidentesPersonalesBacking.activarDocumentar}" /></td>
+									</tr>
+								</table>
+
+								<p:spacer height="30px;" />
+								<!-- CLIENTE -->
+
 								<h:panelGrid columns="1">
 									<p:panel>
 										<f:facet name="header">
@@ -137,7 +137,6 @@
 										</p:dataTable>
 									</p:panel>
 								</h:panelGrid>
-
 								<h:panelGrid columns="1" id="ramo">
 									<!-- RAMO -->
 									<h:panelGrid columns="2" cellpadding="2">
@@ -378,6 +377,14 @@
 										</p:dataTable>
 									</p:panel>
 								</h:panelGrid>
+								<p:panel>
+									<f:facet name="header">
+										<h:outputText value="#{emision['titulo.infoRamo']}" />
+									</f:facet>
+									<p:spacer height="15px;" />
+									<!-- COBERTURAS-->
+									
+								</p:panel>
 								<h:panelGrid columns="1" cellpadding="3">
 									<h:panelGrid columns="2">
 										<p:outputLabel for="polizaVigente" value="#{emision['agropecuario.lbl.polizaVigente']}" />

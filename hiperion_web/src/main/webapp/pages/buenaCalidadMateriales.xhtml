@@ -18,14 +18,14 @@
 						</div>
 					</ui:define>
 					<ui:define name="ramoContent">
-						
-							<p:outputPanel id="messageMateriales">
-								<p:messages id="messagesMateriales" showDetail="true" autoUpdate="true" closable="true" />
-							</p:outputPanel>
-							<p:panel id="panelCliente">
+
+						<p:outputPanel id="messageMateriales">
+							<p:messages id="messagesMateriales" showDetail="true" autoUpdate="true" closable="true" />
+						</p:outputPanel>
+						<p:panel id="panelCliente">
 							<h:form id="formCliente">
-							<!-- ESTADO POLIZA -->
-							<table align="center">
+								<!-- ESTADO POLIZA -->
+								<table align="center">
 									<tr>
 										<td align="center"><h:graphicImage name="Circle_Grey.png" library="img" /></td>
 										<td align="center"><h:graphicImage name="Circle_Blue.png" library="img" /></td>
@@ -47,8 +47,8 @@
 								</table>
 								<p:spacer height="30px;" />
 
-							<!-- CLIENTE -->
-							
+								<!-- CLIENTE -->
+
 
 								<h:panelGrid columns="1">
 									<p:panel>
@@ -136,8 +136,39 @@
 										</p:dataTable>
 									</p:panel>
 								</h:panelGrid>
-							
-						</h:form>
+
+							</h:form>
+							<p:panel>
+								<p:spacer height="30px;" />
+								<!-- INFORMACION POLIZA - AGROPECUARIO -->
+								<f:facet name="header">
+									<h:outputText value="#{emision['titulo.infoRamo']}" />
+								</f:facet>
+								<p:spacer height="15px;" />
+									<!-- COBERTURAS-->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['anexo.titulo.cob']}">
+											<p:dataTable id="idCoberturas" var="cobertura" value="#{buenaCalidadMaterialesBacking.coberturas}"
+												selection="#{buenaCalidadMaterialesBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertMateriales}" style="margin-bottom:0" paginator="true"
+												rows="5">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{cobertura.idCobertMateriales}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cob']}">
+													<h:outputText value="#{cobertura.coberturaMateriales}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCoberturas" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{buenUsoAnticipoBacking.setearCoberturas()}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
+							</p:panel>
 						</p:panel>
 						<p:panel>
 
@@ -168,7 +199,7 @@
 
 											<p:outputLabel for="objetoAsegurado" value="#{emision['calidadMateriales.objetoAsegurado']}" styleClass="negrita" />
 											<p:inputTextarea id="objetoAsegurado" cols="50" rows="2" value="#{ramoBuenaCalMatBean.objetoAsegurado}" required="true"
-												requiredMessage="#{emision['calidadMateriales.objetoAsegurado.msn']}" style="text-transform:uppercase;"/>
+												requiredMessage="#{emision['calidadMateriales.objetoAsegurado.msn']}" style="text-transform:uppercase;" />
 
 										</h:panelGrid>
 
@@ -183,52 +214,6 @@
 								</div>
 							</h:form>
 
-							<!-- COBERTURAS -->
-							<h:panelGrid columns="2">
-								<p:outputLabel value="#{emision['lbl.seleccionarCoberturas']}" styleClass="negrita" />
-								<p:commandLink title="#{emision['lbl.seleccionarCoberturas']}" oncomplete="PF('coberturas').show();" update="idCobertura">
-									<h:graphicImage name="check.png" library="img" />
-								</p:commandLink>
-							</h:panelGrid>
-							<p:dialog id="idCobertura" header="#{emision['anexo.titulo.tab.cob']}" widgetVar="coberturas" modal="true" position="center" showEffect="fade"
-								hideEffect="explode" resizable="false" closable="true" width="500" height="300">
-								<h:form id="coberturasForm">
-									<p:dataTable value="#{buenaCalidadMaterialesBacking.coberturasDTO}" var="cobertura" paginator="true" editable="true">
-										<p:ajax event="rowEdit" listener="#{buenaCalidadMaterialesBacking.onEditCobertura}" />
-										<p:column>
-											<f:facet name="header">
-												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
-											</f:facet>
-											<h:outputText value="#{cobertura.cobertura}" />
-										</p:column>
-										<p:column>
-											<f:facet name="header">
-												<h:outputLabel value="#{emision['lbl.seleccion']}" />
-											</f:facet>
-											<p:cellEditor>
-												<f:facet name="output">
-													<div align="center">
-														<p:selectBooleanCheckbox value="#{cobertura.seleccion}" disabled="true" />
-													</div>
-												</f:facet>
-												<f:facet name="input">
-													<div align="center">
-														<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
-													</div>
-												</f:facet>
-											</p:cellEditor>
-										</p:column>
-										<p:column headerText="Options" style="width:50px">
-											<p:rowEditor />
-										</p:column>
-									</p:dataTable>
-									<p:spacer height="15px;" />
-									<div align="center">
-										<p:commandButton id="guardarCoberturas" process="@this" actionListener="#{buenaCalidadMaterialesBacking.setearCoberturas()}"
-											icon="icon-save" value="#{emision['boton.guardar']}" title="Guardar" oncomplete="PF('coberturas').hide()" />
-									</div>
-								</h:form>
-							</p:dialog>
 							<!-- PAGO POLIZA -->
 							<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update="idPagoPoliza">
 								<h:graphicImage name="pago.jpg" library="img" />

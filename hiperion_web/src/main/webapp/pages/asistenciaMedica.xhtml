@@ -18,13 +18,13 @@
 						</div>
 					</ui:define>
 					<ui:define name="ramoContent">
-					<p:panel id="panelCliente">
-						<h:form id="formCliente">
-							<p:outputPanel id="messageAsm">
-								<p:messages id="messagesAsm" showDetail="true" autoUpdate="true" closable="true" />
-							</p:outputPanel>
-							<!-- ESTADO POLIZA -->
-							<table align="center">
+						<p:panel id="panelCliente">
+							<h:form id="formCliente">
+								<p:outputPanel id="messageAsm">
+									<p:messages id="messagesAsm" showDetail="true" autoUpdate="true" closable="true" />
+								</p:outputPanel>
+								<!-- ESTADO POLIZA -->
+								<table align="center">
 									<tr>
 										<td align="center"><h:graphicImage name="Circle_Grey.png" library="img" /></td>
 										<td align="center"><h:graphicImage name="Circle_Blue.png" library="img" /></td>
@@ -45,8 +45,8 @@
 									</tr>
 								</table>
 								<p:spacer height="30px;" />
-							<!-- CLIENTE -->
-							
+								<!-- CLIENTE -->
+
 
 								<h:panelGrid columns="1">
 									<p:panel>
@@ -153,9 +153,19 @@
 										</h:panelGrid>
 									</h:panelGrid>
 								</div>
+
 								<p:spacer height="15px;" />
-								<h:outputLabel style="color : #F4751B;" value="Limites y Costos" />
-								<p:spacer height="15px;" />
+								<p:panel>
+									<f:facet name="header">
+										<h:outputText value="#{emision['titulo.infoRamo']}" />
+										<p:spacer height="15px;" />
+									</f:facet>
+									<h:outputLabel style="color : #F4751B;" value="Limites y Costos" />
+									<!-- BENEFICIOS-->
+									<p:accordionPanel multiple="true" activeIndex="">
+										
+									</p:accordionPanel>
+								</p:panel>
 								<!-- BENEFICIOS -->
 								<h:panelGrid columns="2">
 									<p:outputLabel value="#{emision['lbl.beneficios']}" styleClass="negrita" />
@@ -181,8 +191,8 @@
 								<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update=":idPagoPoliza">
 									<h:graphicImage name="pago.jpg" library="img" />
 								</p:commandLink>
-							
-						</h:form>
+
+							</h:form>
 						</p:panel>
 
 						<p:dialog id="idBeneficios" header="#{emision['anexo.titulo.beneficios']}" widgetVar="beneficios" modal="true" position="center"
@@ -1076,7 +1086,7 @@
 								</p:tab>
 							</p:accordionPanel>
 						</p:tab>
-						
+
 					</ui:define>
 				</ui:decorate>
 			</ui:define>

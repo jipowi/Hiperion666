@@ -136,6 +136,40 @@
 								</h:panelGrid>
 
 							</h:form>
+
+							<p:panel>
+
+								<p:spacer height="30px;" />
+								<!-- INFORMACION POLIZA - AGROPECUARIO -->
+								<f:facet name="header">
+									<h:outputText value="#{emision['titulo.infoRamo']}" />
+								</f:facet>
+								<p:spacer height="15px;" />
+								<!-- COBERTURAS -->
+								<p:accordionPanel multiple="true" activeIndex="">
+									<p:tab title="#{emision['anexo.titulo.cob']}">
+										<p:dataTable id="idCoberturas" var="cobertura" value="#{garantiaAduaneraBacking.coberturas}"
+											selection="#{garantiaAduaneraBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertAduanera}" style="margin-bottom:0" paginator="true"
+											rows="5">
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+											<p:column headerText="Número" width="10%">
+												<h:outputText value="#{cobertura.idCobertAduanera}" />
+											</p:column>
+											<p:column headerText="#{emision['anexo.titulo.cob']}">
+												<h:outputText value="#{cobertura.coberturaAduanera}" />
+											</p:column>
+											<f:facet name="footer">
+												<p:commandButton process="idCoberturas" icon="icon-save" value="#{emision['boton.guardar']}"
+													action="#{garantiaAduaneraBacking.setearCoberturas()}" />
+											</f:facet>
+										</p:dataTable>
+									</p:tab>
+								</p:accordionPanel>
+
+							</p:panel>
 						</p:panel>
 						<p:panel>
 							<h:form id="formPrincipal">
@@ -168,53 +202,6 @@
 								</div>
 							</h:form>
 							<p:spacer height="30px;" />
-							<!-- COBERTURAS -->
-							<h:panelGrid columns="2">
-								<p:outputLabel value="#{emision['lbl.seleccionarCoberturas']}" styleClass="negrita" />
-								<p:commandLink title="#{emision['lbl.seleccionarCoberturas']}" oncomplete="PF('coberturas').show();" update="idCobertura">
-									<h:graphicImage name="check.png" library="img" />
-								</p:commandLink>
-							</h:panelGrid>
-							<p:dialog id="idCobertura" header="#{emision['anexo.titulo.tab.cob']}" widgetVar="coberturas" modal="true" position="center" showEffect="fade"
-								hideEffect="explode" resizable="false" closable="true" width="800" height="300">
-								<h:form id="coberturaForm">
-									<p:messages id="messagesCoberturas" showDetail="true" autoUpdate="true" closable="true" />
-									<p:dataTable id="tablaCoberturas" value="#{garantiaAduaneraBacking.coberturasDTO}" var="cobertura" paginator="true" rows="4" editable="true">
-										<p:ajax event="rowEdit" listener="#{garantiaAduaneraBacking.onEditCobertura}" />
-										<p:column>
-											<f:facet name="header">
-												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
-											</f:facet>
-											<h:outputText value="#{cobertura.cobertura}" />
-										</p:column>
-										<p:column>
-											<f:facet name="header">
-												<h:outputLabel value="#{emision['lbl.seleccion']}" />
-											</f:facet>
-											<p:cellEditor>
-												<f:facet name="output">
-													<div align="center">
-														<p:selectBooleanCheckbox value="#{cobertura.seleccion}" disabled="true" />
-													</div>
-												</f:facet>
-												<f:facet name="input">
-													<div align="center">
-														<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
-													</div>
-												</f:facet>
-											</p:cellEditor>
-										</p:column>
-										<p:column headerText="Options" style="width:50px">
-											<p:rowEditor />
-										</p:column>
-									</p:dataTable>
-									<p:spacer height="15px;" />
-									<div align="center">
-										<p:commandButton id="guardarCoberturas" process="@this" actionListener="#{garantiaAduaneraBacking.setearCoberturas()}" icon="icon-save"
-											value="#{emision['boton.guardar']}" title="Guardar" oncomplete="PF('coberturas').hide()" />
-									</div>
-								</h:form>
-							</p:dialog>
 							<!-- PAGO POLIZA -->
 							<div align="center">
 								<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update="idPagoPoliza">

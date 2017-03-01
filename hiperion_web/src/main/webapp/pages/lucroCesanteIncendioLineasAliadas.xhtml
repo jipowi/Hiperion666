@@ -136,6 +136,64 @@
 									</p:panel>
 								</h:panelGrid>
 							</h:form>
+
+							<p:panel>
+
+								<p:spacer height="30px;" />
+								<!-- INFORMACION POLIZA - AGROPECUARIO -->
+								<f:facet name="header">
+									<h:outputText value="#{emision['titulo.infoRamo']}" />
+								</f:facet>
+								<p:spacer height="15px;" />
+								<!-- COBERTURAS -->
+								<p:accordionPanel multiple="true" activeIndex="">
+									<p:tab title="#{emision['anexo.titulo.cob']}">
+										<p:dataTable id="idCoberturas" var="cobertura" value="#{lucroCesanteIncendioBacking.coberturas}"
+											selection="#{lucroCesanteIncendioBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertLucro}" style="margin-bottom:0" paginator="true"
+											rows="5">
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+											<p:column headerText="Número" width="10%">
+												<h:outputText value="#{cobertura.idCobertLucro}" />
+											</p:column>
+											<p:column headerText="#{emision['anexo.titulo.cob']}">
+												<h:outputText value="#{cobertura.coberturaLcIncendio}" />
+											</p:column>
+											<f:facet name="footer">
+												<p:commandButton process="idCoberturas" icon="icon-save" value="#{emision['boton.guardar']}"
+													action="#{lucroCesanteIncendioBacking.setearCoberturas()}" />
+											</f:facet>
+										</p:dataTable>
+									</p:tab>
+								</p:accordionPanel>
+								<p:spacer height="15px;" />
+								<!-- CLAUSULAS ADICIONALES -->
+								<p:accordionPanel multiple="true" activeIndex="">
+									<p:tab title="#{emision['anexo.titulo.cad']}">
+										<p:dataTable id="idClausulasAdd" var="clausula" value="#{lucroCesanteIncendioBacking.clausulasAdicionales}"
+											selection="#{lucroCesanteIncendioBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAdLucro}" style="margin-bottom:0"
+											paginator="true" rows="5" editable="true">
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cobad']}" />
+											</f:facet>
+											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+											<p:column headerText="Número" width="10%">
+												<h:outputText value="#{clausula.idClausulaAdLucro}" />
+											</p:column>
+											<p:column headerText="#{emision['anexo.titulo.cobad']}">
+												<h:outputText value="#{clausula.clausulaAddLcIncendio}" />
+											</p:column>
+											<f:facet name="footer">
+												<p:commandButton process="idClausulasAdd" icon="icon-save" value="#{emision['boton.guardar']}"
+													action="#{lucroCesanteIncendioBacking.setearClausulasAdd()}" />
+											</f:facet>
+										</p:dataTable>
+									</p:tab>
+								</p:accordionPanel>
+
+							</p:panel>
 						</p:panel>
 						<!-- RAMO LUCRO CESANTE INCENDIO Y LINEAS ALIADAS -->
 						<p:tabView effect="blind" effectDuration="normal">

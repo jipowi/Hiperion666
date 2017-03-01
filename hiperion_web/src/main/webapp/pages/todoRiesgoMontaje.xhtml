@@ -135,6 +135,62 @@
 									</p:panel>
 								</h:panelGrid>
 							</h:form>
+							<p:panel>
+
+								<p:spacer height="30px;" />
+								<!-- INFORMACION POLIZA - AGROPECUARIO -->
+								<f:facet name="header">
+									<h:outputText value="#{emision['titulo.infoRamo']}" />
+								</f:facet>
+								<p:spacer height="15px;" />
+								<!-- COBERTURAS -->
+								<p:accordionPanel multiple="true" activeIndex="">
+									<p:tab title="#{emision['anexo.titulo.cob']}">
+										<p:dataTable id="idCoberturas" var="cobertura" value="#{todoRiesgoMontajeBacking.coberturas}"
+											selection="#{todoRiesgoMontajeBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertMontaje}" style="margin-bottom:0"
+											paginator="true" rows="5">
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+											<p:column headerText="Número" width="10%">
+												<h:outputText value="#{cobertura.idCobertMontaje}" />
+											</p:column>
+											<p:column headerText="#{emision['anexo.titulo.cob']}">
+												<h:outputText value="#{cobertura.coberturaMontaje}" />
+											</p:column>
+											<f:facet name="footer">
+												<p:commandButton process="idCoberturas" icon="icon-save" value="#{emision['boton.guardar']}"
+													action="#{todoRiesgoMontajeBacking.setearCoberturas()}" />
+											</f:facet>
+										</p:dataTable>
+									</p:tab>
+								</p:accordionPanel>
+								<p:spacer height="15px;" />
+									<!-- CLAUSULAS ADICIONALES -->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['anexo.titulo.cad']}">
+											<p:dataTable id="idClausulasAdd" var="clausula" value="#{todoRiesgoMontajeBacking.clausulasAdicionales}"
+												selection="#{todoRiesgoMontajeBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAdMontaje}" style="margin-bottom:0"
+												paginator="true" rows="5" editable="true">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{clausula.idClausulaAdMontaje}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cobad']}">
+													<h:outputText value="#{clausula.clausulaAddMontaje}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idClausulasAdd" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{todoRiesgoMontajeBacking.setearClausulasAdd()}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
+							</p:panel>
 						</p:panel>
 						<p:tabView id="tabGeneral">
 							<p:tab id="tabRamo" title="#{emision['montaje.tab.principal']}">
