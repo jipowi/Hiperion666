@@ -102,6 +102,7 @@ public class BuenaCalidadMaterialesBacking implements Serializable {
 	private List<SelectItem> cuentaBancoItems;
 
 	private List<CobertMateriale> coberturas;
+	private List<CobertMateriale> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 	private List<TablaAmortizacionDTO> tablaAmortizacionList = new ArrayList<TablaAmortizacionDTO>();
@@ -155,21 +156,14 @@ public class BuenaCalidadMaterialesBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertMateriale cobertura = new CobertMateriale();
+					cobertura.setIdCobertMateriales(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaMateriales(anexo.getNombreDetalleAnexo());
-
 					coberturas.add(cobertura);
 				}
-			}
-
-			for (CobertMateriale cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaMateriales());
-
-				coberturasDTO.add(coberturaDTO);
 
 			}
-
 		}
+
 
 	}
 
@@ -263,22 +257,12 @@ public class BuenaCalidadMaterialesBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertMateriale> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertMateriale cobertura = new CobertMateriale();
-				cobertura.setCoberturaMateriales(coberturaDTO.getCobertura());
+		
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			buenaCalidadMateriales.setCobertMateriales(coberturas);
+			buenaCalidadMateriales.setCobertMateriales(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -985,5 +969,21 @@ public class BuenaCalidadMaterialesBacking implements Serializable {
 	public void setCuentaBancoItems(List<SelectItem> cuentaBancoItems) {
 		this.cuentaBancoItems = cuentaBancoItems;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertMateriale> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertMateriale> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+	
+	
 
 }

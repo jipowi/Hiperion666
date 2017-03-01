@@ -113,10 +113,13 @@ public class EquipoElectronicoBacking implements Serializable {
 	RamoEquipoElectronico equipoElectronico = new RamoEquipoElectronico();
 
 	private List<CobertEquipo> coberturas;
+	private List<CobertEquipo> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<CobertAddEquipo> coberturasAdd;
+	private List<CobertAddEquipo> selectedCoberturasAdd;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<ClausulasAddEquipo> clausulasAdicionales;
+	private List<ClausulasAddEquipo>selectedClausulasAdd;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<GarantiaPoliza> garantias;
 	private List<GarantiaPolizaDTO> garantiasDTO = new ArrayList<>();
@@ -466,19 +469,12 @@ public class EquipoElectronicoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertEquipo cobertura = new CobertEquipo();
+					cobertura.setIdCobertEquipo(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaEqElec(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertEquipo cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaEqElec());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -499,6 +495,7 @@ public class EquipoElectronicoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddEquipo cobertura = new CobertAddEquipo();
+					cobertura.setIdCobertAdEquipo(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAddEqElec(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
@@ -506,13 +503,6 @@ public class EquipoElectronicoBacking implements Serializable {
 
 			}
 
-			for (CobertAddEquipo cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddEqElec());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
-			}
 		}
 
 	}
@@ -564,18 +554,12 @@ public class EquipoElectronicoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddEquipo clausula = new ClausulasAddEquipo();
+					clausula.setIdClausulaAdEquipo(anexo.getIdDetalleAnexo());
 					clausula.setClausulaEqElec(anexo.getNombreDetalleAnexo());
-
+					
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddEquipo clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaEqElec());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -594,44 +578,44 @@ public class EquipoElectronicoBacking implements Serializable {
 	public Poliza setearDatosPoliza() {
 
 		Poliza poliza = new Poliza();
-		if(polizaBean.getEstadoPoliza().equals("EMITIDO")){
-		poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
-		poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
-		poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
-		poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
-		poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
-		poliza.setDiasCobertura(polizaBean.getDiasCobertura());
-		poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
-		poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
-		poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
-		poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
-		poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
-		poliza.setEstadoPoliza("COTIZADO");
+		if (polizaBean.getEstadoPoliza().equals("EMITIDO")) {
+			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
+			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
+			poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
+			poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
+			poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
+			poliza.setDiasCobertura(polizaBean.getDiasCobertura());
+			poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
+			poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
+			poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
+			poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
+			poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
+			poliza.setEstadoPoliza("COTIZADO");
 
-		PagoPoliza pagoPoliza = new PagoPoliza();
-		pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
-		pagoPoliza.setSubtotal(polizaBean.getSubtotal());
-		pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
-		pagoPoliza.setIva(polizaBean.getIva());
-		pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
-		pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
-		pagoPoliza.setEstado(EstadoEnum.A);
-		pagoPoliza.setFechaCreacion(new Date());
-		pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
+			PagoPoliza pagoPoliza = new PagoPoliza();
+			pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
+			pagoPoliza.setSubtotal(polizaBean.getSubtotal());
+			pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
+			pagoPoliza.setIva(polizaBean.getIva());
+			pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
+			pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
+			pagoPoliza.setEstado(EstadoEnum.A);
+			pagoPoliza.setFechaCreacion(new Date());
+			pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
 
-		List<Financiamiento> financiamientos = new ArrayList<>();
-		for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
-			Financiamiento financiamientoTemp = new Financiamiento();
-			financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
-			financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
-			financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
+			List<Financiamiento> financiamientos = new ArrayList<>();
+			for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
+				Financiamiento financiamientoTemp = new Financiamiento();
+				financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
+				financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
+				financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
 
-			financiamientos.add(financiamientoTemp);
-		}
+				financiamientos.add(financiamientoTemp);
+			}
 
-		pagoPoliza.setFinanciamientos(financiamientos);
+			pagoPoliza.setFinanciamientos(financiamientos);
 
-		poliza.setPagoPoliza(pagoPoliza);
+			poliza.setPagoPoliza(pagoPoliza);
 
 		}
 		poliza.setEstadoPoliza(polizaBean.getEstadoPoliza());
@@ -717,22 +701,10 @@ public class EquipoElectronicoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertEquipo> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertEquipo cobertura = new CobertEquipo();
-				cobertura.setCoberturaEqElec(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			equipoElectronico.setCobertEquipos(coberturas);
+			equipoElectronico.setCobertEquipos(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -746,22 +718,10 @@ public class EquipoElectronicoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturasAdd() {
-		int contCoberturas = 0;
-		List<CobertAddEquipo> coberturas = new ArrayList<>();
-		for (CoberturaAdicionalDTO coberturaDTO : coberturasAddDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAddEquipo cobertura = new CobertAddEquipo();
-				cobertura.setCoberturaAddEqElec(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
 		} else {
-			equipoElectronico.setCobertAddEquipos(coberturas);
+			equipoElectronico.setCobertAddEquipos(selectedCoberturasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
 		}
 	}
@@ -1104,7 +1064,7 @@ public class EquipoElectronicoBacking implements Serializable {
 	 * 
 	 * @return
 	 */
-	public List<SelectItem> getFormasPagoItems() throws HiperionException{
+	public List<SelectItem> getFormasPagoItems() throws HiperionException {
 		this.formasPagoItems = new ArrayList<SelectItem>();
 		// Busqueda por el Codigo de Formas de Pago (4)
 		Catalogo catalogo = catalogoService.consultarCatalogoById(HiperionMensajes.getInstancia().getLong(
@@ -1273,5 +1233,95 @@ public class EquipoElectronicoBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertEquipo> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas
+	 *            the coberturas to set
+	 */
+	public void setCoberturas(List<CobertEquipo> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertEquipo> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertEquipo> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the coberturasAdd
+	 */
+	public List<CobertAddEquipo> getCoberturasAdd() {
+		return coberturasAdd;
+	}
+
+	/**
+	 * @param coberturasAdd
+	 *            the coberturasAdd to set
+	 */
+	public void setCoberturasAdd(List<CobertAddEquipo> coberturasAdd) {
+		this.coberturasAdd = coberturasAdd;
+	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddEquipo> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd
+	 *            the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddEquipo> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddEquipo> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddEquipo> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddEquipo> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddEquipo> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+	
+	
 
 }

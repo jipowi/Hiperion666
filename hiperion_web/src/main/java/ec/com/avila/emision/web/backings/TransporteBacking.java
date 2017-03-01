@@ -92,10 +92,13 @@ public class TransporteBacking implements Serializable {
 
 	private List<SelectItem> tipoTransporteItems;
 	private List<ClausulasAddTran> clausulasAdicionales;
+	private List<ClausulasAddTran>selectedClausulasAdd;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<CobertTran> coberturas;
+	private List<CobertTran> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<CondEspTran> condicionesEspeciales;
+	private List<CondEspTran> selectedCondicionesEsp;
 	private List<CondicionEspecialDTO> condicionesEspecialesDTO = new ArrayList<>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
 	private List<SelectItem> aseguradorasItems;
@@ -506,19 +509,12 @@ public class TransporteBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertTran cobertura = new CobertTran();
+					cobertura.setIdCobertTransporte(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaTransporte(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertTran cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaTransporte());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -538,18 +534,12 @@ public class TransporteBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddTran clausula = new ClausulasAddTran();
+					clausula.setIdClausulaAdTransporte(anexo.getIdDetalleAnexo());
 					clausula.setClausulaTrans(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddTran clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaTrans());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -570,18 +560,12 @@ public class TransporteBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 3) {
 					CondEspTran condicion = new CondEspTran();
+					condicion.setIdCondicionEspTransporte(anexo.getIdDetalleAnexo());
 					condicion.setCondicionEspTrans(anexo.getNombreDetalleAnexo());
 
 					condicionesEspeciales.add(condicion);
 				}
 
-			}
-			for (CondEspTran condicion : condicionesEspeciales) {
-				CondicionEspecialDTO condicionDTO = new CondicionEspecialDTO();
-				condicionDTO.setCondicionEspecial(condicion.getCondicionEspTrans());
-				condicionDTO.setSeleccion(false);
-
-				condicionesEspecialesDTO.add(condicionDTO);
 			}
 
 		}
@@ -690,24 +674,10 @@ public class TransporteBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddTran> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddTran clausula = new ClausulasAddTran();
-				clausula.setClausulaTrans(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoTransporte.setClausulasAddTrans(clausulas);
+			ramoTransporte.setClausulasAddTrans(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -723,23 +693,11 @@ public class TransporteBacking implements Serializable {
 	 */
 	public void setearCoberturas() {
 
-		int contCobeturas = 0;
-		List<CobertTran> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCobeturas++;
-				CobertTran cobertura = new CobertTran();
-				cobertura.setCoberturaTransporte(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCobeturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoTransporte.setCobertTrans(coberturas);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
+			ramoTransporte.setCobertTrans(selectedCoberturas);
+			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
 
@@ -1250,5 +1208,50 @@ public class TransporteBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertTran> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertTran> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the selectedCondicionesEsp
+	 */
+	public List<CondEspTran> getSelectedCondicionesEsp() {
+		return selectedCondicionesEsp;
+	}
+
+	/**
+	 * @param selectedCondicionesEsp
+	 *            the selectedCondicionesEsp to set
+	 */
+	public void setSelectedCondicionesEsp(List<CondEspTran> selectedCondicionesEsp) {
+		this.selectedCondicionesEsp = selectedCondicionesEsp;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddTran> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddTran> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+	
 
 }

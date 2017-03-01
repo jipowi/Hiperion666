@@ -109,6 +109,7 @@ public class CumplimientoContratoBacking implements Serializable {
 	private Usuario usuario;
 
 	private List<CobertContrato> coberturas;
+	private List<CobertContrato> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
 	private List<SelectItem> aseguradorasItems;
@@ -434,19 +435,11 @@ public class CumplimientoContratoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertContrato cobertura = new CobertContrato();
+					cobertura.setIdCobertContrato(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaContrato(anexo.getNombreDetalleAnexo());
-
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertContrato cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaContrato());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -507,22 +500,11 @@ public class CumplimientoContratoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertContrato> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertContrato cobertura = new CobertContrato();
-				cobertura.setCoberturaContrato(coberturaDTO.getCobertura());
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			cumplimientoContrato.setCobertContratos(coberturas);
+			cumplimientoContrato.setCobertContratos(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -943,5 +925,36 @@ public class CumplimientoContratoBacking implements Serializable {
 	public void setCuentaBancoItems(List<SelectItem> cuentaBancoItems) {
 		this.cuentaBancoItems = cuentaBancoItems;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertContrato> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertContrato> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertContrato> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas the coberturas to set
+	 */
+	public void setCoberturas(List<CobertContrato> coberturas) {
+		this.coberturas = coberturas;
+	}
+	
+	
 
 }

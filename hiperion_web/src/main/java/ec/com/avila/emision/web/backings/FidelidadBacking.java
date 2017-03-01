@@ -113,8 +113,10 @@ public class FidelidadBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 
 	private List<CobertFidelidad> coberturas;
+	private List<CobertFidelidad> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<ClausulasAddFidelidad> clausulasAdicionales;
+	private List<ClausulasAddFidelidad> selectedClausulasAdd;
 	private List<SelectItem> aseguradorasItems;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
@@ -448,19 +450,12 @@ public class FidelidadBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertFidelidad cobertura = new CobertFidelidad();
+					cobertura.setIdCobertFidelidad(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaFidelidad(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertFidelidad cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaFidelidad());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -480,18 +475,12 @@ public class FidelidadBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddFidelidad clausula = new ClausulasAddFidelidad();
+					clausula.setIdClausulaAdFidelidad(anexo.getIdDetalleAnexo());
 					clausula.setClausulaFidelidad(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddFidelidad clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaFidelidad());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -535,22 +524,10 @@ public class FidelidadBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertFidelidad> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertFidelidad cobertura = new CobertFidelidad();
-				cobertura.setCoberturaFidelidad(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoFidelidad.setCobertFidelidads(coberturas);
+			ramoFidelidad.setCobertFidelidads(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -565,24 +542,10 @@ public class FidelidadBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddFidelidad> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddFidelidad clausula = new ClausulasAddFidelidad();
-				clausula.setClausulaFidelidad(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoFidelidad.setClausulasAddFidelidads(clausulas);
+			ramoFidelidad.setClausulasAddFidelidads(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -1173,6 +1136,66 @@ public class FidelidadBacking implements Serializable {
 	 */
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
+	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertFidelidad> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas
+	 *            the coberturas to set
+	 */
+	public void setCoberturas(List<CobertFidelidad> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertFidelidad> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertFidelidad> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddFidelidad> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales
+	 *            the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddFidelidad> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddFidelidad> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddFidelidad> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
 
 }

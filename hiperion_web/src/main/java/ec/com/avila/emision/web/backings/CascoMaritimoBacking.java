@@ -102,6 +102,22 @@ public class CascoMaritimoBacking implements Serializable {
 	private List<SelectItem> embarcacionItems;
 	private List<SelectItem> zonasItems;
 	private List<CobertAddCasco> coberturasAdd;
+	private List<CobertAddCasco> selectedCoberturasAdd;
+	private List<ClausulasAddCasco>selectedClausulasAdd;
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddCasco> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddCasco> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
 	private List<ClausulasAddCasco> clausulasAdd;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<ClausulasAddCasco> clausulasAdicionales;
@@ -298,18 +314,14 @@ public class CascoMaritimoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddCasco cobertura = new CobertAddCasco();
+					cobertura.setIdCobertAdCasco(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaCasco(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
 				}
+
 			}
 
-			for (CobertAddCasco coberturaAdd : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAdicionalDTO = new CoberturaAdicionalDTO();
-				coberturaAdicionalDTO.setCobertura(coberturaAdd.getCoberturaCasco());
-
-				coberturasAddDTO.add(coberturaAdicionalDTO);
-			}
 		}
 	}
 
@@ -325,20 +337,14 @@ public class CascoMaritimoBacking implements Serializable {
 		clausulasAdicionales = new ArrayList<ClausulasAddCasco>();
 		if (anexos != null && anexos.size() > 0) {
 			for (DetalleAnexo anexo : anexos) {
-				if (anexo.getAnexo().getIdAnexo() == 1) {
-					ClausulasAddCasco clausula = new ClausulasAddCasco();
-					clausula.setClausulaAddMaritimo(anexo.getNombreDetalleAnexo());
+				if (anexo.getAnexo().getIdAnexo() == 6) {
+					ClausulasAddCasco cobertura = new ClausulasAddCasco();
+					cobertura.setIdClausulaAdCasco(anexo.getIdDetalleAnexo());
+					cobertura.setClausulaAddMaritimo(anexo.getNombreDetalleAnexo());
 
-					clausulasAdicionales.add(clausula);
+					clausulasAdd.add(cobertura);
 				}
 
-			}
-			for (ClausulasAddCasco clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddMaritimo());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -460,24 +466,10 @@ public class CascoMaritimoBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddCasco> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddCasco clausula = new ClausulasAddCasco();
-				clausula.setClausulaAddMaritimo(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			cascoMaritimo.setClausulasAddCascos(clausulas);
+			cascoMaritimo.setClausulasAddCascos(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -492,22 +484,10 @@ public class CascoMaritimoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturasAdd() {
-		int contCoberturas = 0;
-		List<CobertAddCasco> coberturas = new ArrayList<>();
-		for (CoberturaAdicionalDTO coberturaDTO : coberturasAddDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAddCasco cobertura = new CobertAddCasco();
-				cobertura.setCoberturaCasco(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
 		} else {
-			cascoMaritimo.setCobertAddCascos(coberturas);
+			cascoMaritimo.setCobertAddCascos(selectedCoberturasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
 		}
 	}
@@ -1102,5 +1082,51 @@ public class CascoMaritimoBacking implements Serializable {
 	public void setCuentaBancoItems(List<SelectItem> cuentaBancoItems) {
 		this.cuentaBancoItems = cuentaBancoItems;
 	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddCasco> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd
+	 *            the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddCasco> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the coberturasAdd
+	 */
+	public List<CobertAddCasco> getCoberturasAdd() {
+		return coberturasAdd;
+	}
+
+	/**
+	 * @param coberturasAdd
+	 *            the coberturasAdd to set
+	 */
+	public void setCoberturasAdd(List<CobertAddCasco> coberturasAdd) {
+		this.coberturasAdd = coberturasAdd;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddCasco> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddCasco> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+	
+	
 
 }

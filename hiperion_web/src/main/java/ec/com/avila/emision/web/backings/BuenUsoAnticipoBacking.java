@@ -122,6 +122,7 @@ public class BuenUsoAnticipoBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 
 	private List<CobertBuenUsoAnt> coberturas;
+	private List<CobertBuenUsoAnt> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<SelectItem> aseguradorasItems;
 	private List<SelectItem> pagoFinanciadoItems;
@@ -169,23 +170,18 @@ public class BuenUsoAnticipoBacking implements Serializable {
 	 * @return
 	 */
 	public void obtenerCoberturas() {
-		coberturas = new ArrayList<CobertBuenUsoAnt>();
+		coberturas= new ArrayList<CobertBuenUsoAnt>();
+		
 		if (anexos != null && anexos.size() > 0) {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
-					CobertBuenUsoAnt cobertura = new CobertBuenUsoAnt();
+					CobertBuenUsoAnt cobertura= new CobertBuenUsoAnt();
+					cobertura.setIdCobertBuenUsoAnt(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAnticipo(anexo.getNombreDetalleAnexo());
-
 					coberturas.add(cobertura);
 				}
-			}
-			for (CobertBuenUsoAnt cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaAnticipo());
 
-				coberturasDTO.add(coberturaDTO);
 			}
-
 		}
 
 	}
@@ -399,18 +395,17 @@ public class BuenUsoAnticipoBacking implements Serializable {
 	public void guardarRamo() throws HiperionException, IOException {
 
 		try {
-		Poliza poliza = setearDatosPoliza();
+			Poliza poliza = setearDatosPoliza();
 
-		buenUsoAnt.setSectorAnticipo(ramoBuenUsoAnticipoBean.getSector());
-		buenUsoAnt.setObjAsegAnticipo(ramoBuenUsoAnticipoBean.getObjetoAsegurado());
-		buenUsoAnt.setValorContratoAnticipo(ramoBuenUsoAnticipoBean.getValorContrato());
-		buenUsoAnt.setValorPolizaAnticipo(ramoBuenUsoAnticipoBean.getValorPoliza());
+			buenUsoAnt.setSectorAnticipo(ramoBuenUsoAnticipoBean.getSector());
+			buenUsoAnt.setObjAsegAnticipo(ramoBuenUsoAnticipoBean.getObjetoAsegurado());
+			buenUsoAnt.setValorContratoAnticipo(ramoBuenUsoAnticipoBean.getValorContrato());
+			buenUsoAnt.setValorPolizaAnticipo(ramoBuenUsoAnticipoBean.getValorPoliza());
 
-		buenUsoAnt.setIdUsuarioCreacion(usuario.getIdUsuario());
-		buenUsoAnt.setFechaCreacion(new Date());
-		buenUsoAnt.setEstado(EstadoEnum.A);
+			buenUsoAnt.setIdUsuarioCreacion(usuario.getIdUsuario());
+			buenUsoAnt.setFechaCreacion(new Date());
+			buenUsoAnt.setEstado(EstadoEnum.A);
 
-		
 			ramoBuenUsoAnticipoService.guardarRamoBuenUsoAnticipo(buenUsoAnt, poliza);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
 
@@ -434,24 +429,10 @@ public class BuenUsoAnticipoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertBuenUsoAnt> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertBuenUsoAnt cobertura = new CobertBuenUsoAnt();
-				cobertura.setCoberturaAnticipo(coberturaDTO.getCobertura());
-				cobertura.setEstado(EstadoEnum.A);
-				cobertura.setFechaCreacion(new Date());
-				cobertura.setIdUsuarioCreacion(usuario.getIdUsuario());
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			buenUsoAnt.setCobertBuenUsoAnts(coberturas);
+			buenUsoAnt.setCobertBuenUsoAnts(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -1073,6 +1054,21 @@ public class BuenUsoAnticipoBacking implements Serializable {
 	 */
 	public void setCuentaBancoItems(List<SelectItem> cuentaBancoItems) {
 		this.cuentaBancoItems = cuentaBancoItems;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertBuenUsoAnt> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertBuenUsoAnt> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
 	}
 
 }

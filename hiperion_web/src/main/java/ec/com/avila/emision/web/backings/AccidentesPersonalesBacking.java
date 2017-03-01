@@ -154,11 +154,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 			Ramo ramo = ramoService.consultarRamoPorCodigo("AP");
 			anexos = ramo.getDetalleAnexos();
 
-			if (coberturasDTO == null) {
+			
 				obtenerCoberturas();
 				obtenerClausulasAdicionales();
 				obtenerCondicionesEspeciales();
-			}
+			
 		} catch (HiperionException e) {
 			e.printStackTrace();
 		}

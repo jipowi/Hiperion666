@@ -36,6 +36,7 @@ import ec.com.avila.hiperion.emision.entities.Aseguradora;
 import ec.com.avila.hiperion.emision.entities.Catalogo;
 import ec.com.avila.hiperion.emision.entities.ClausulasAddResp;
 import ec.com.avila.hiperion.emision.entities.Cliente;
+import ec.com.avila.hiperion.emision.entities.CobertResp;
 import ec.com.avila.hiperion.emision.entities.DetalleAnexo;
 import ec.com.avila.hiperion.emision.entities.DetalleCatalogo;
 import ec.com.avila.hiperion.emision.entities.Financiamiento;
@@ -111,6 +112,9 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	Logger log = Logger.getLogger(ResponsabilidadCivilBacking.class);
 
 	private List<ClausulasAddResp> clausulasAdicionales;
+	private List<ClausulasAddResp>selectedClausulasAdd;
+	private List<CobertResp> coberturas;
+	private List<CobertResp> selectedCoberturas;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 	private List<TablaAmortizacionDTO> tablaAmortizacionList = new ArrayList<TablaAmortizacionDTO>();
@@ -122,6 +126,8 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	private List<SelectItem> bancoItems;
 	private List<SelectItem> cuentaBancoItems;
 	private Usuario usuario;
+
+	RamoResponsabilidadCivil ramoResponsabilidadCivil = new RamoResponsabilidadCivil();
 
 	@PostConstruct
 	public void inicializar() {
@@ -420,18 +426,12 @@ public class ResponsabilidadCivilBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddResp clausula = new ClausulasAddResp();
+					clausula.setIdClausulaAdResponsabilidad(anexo.getIdDetalleAnexo());
 					clausula.setClausulaResp(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddResp clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaResp());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -572,6 +572,50 @@ public class ResponsabilidadCivilBacking implements Serializable {
 
 	/**
 	 * 
+	 * <b> Permite obtener las coberturas del ramo. </b>
+	 * <p>
+	 * [Author:Franklin Pozo , Date: 24/02/2017]
+	 * </p>
+	 * 
+	 */
+	public void obtenerCoberturas() {
+
+		coberturas = new ArrayList<CobertResp>();
+		if (anexos != null && anexos.size() > 0) {
+			for (DetalleAnexo anexo : anexos) {
+				if (anexo.getAnexo().getIdAnexo() == 2) {
+					CobertResp cobertura = new CobertResp();
+					cobertura.setIdCobertResponsabilidad(anexo.getIdDetalleAnexo());
+					cobertura.setCoberturaResp(anexo.getNombreDetalleAnexo());
+
+					coberturas.add(cobertura);
+				}
+
+			}
+		}
+
+	}
+
+	/**
+	 * 
+	 * <b> permite setear las coberturas seleccionadas </b>
+	 * <p>
+	 * [Author: Franklin Pozo B, Date: 24/02/2017]
+	 * </p>
+	 * 
+	 */
+	public void setearCoberturas() {
+
+		if (selectedCoberturas.isEmpty()) {
+			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
+		} else {
+			ramoResponsabilidadCivil.setCobertResps(selectedCoberturas);
+			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
+		}
+	}
+
+	/**
+	 * 
 	 * <b> permite setear las clausualas adicionales seleccionadas. </b>
 	 * <p>
 	 * [Author: Paul Jimenez, Date: 14/07/2015]
@@ -580,27 +624,12 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddResp> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddResp clausula = new ClausulasAddResp();
-				clausula.setClausulaResp(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			responsabilidadCivil.setClausulasAddResps(clausulas);
+			ramoResponsabilidadCivil.setClausulasAddResps(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
-
 	}
 
 	/**
@@ -974,5 +1003,65 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertResp> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas
+	 *            the coberturas to set
+	 */
+	public void setCoberturas(List<CobertResp> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertResp> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertResp> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddResp> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddResp> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddResp> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddResp> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+	
+	
 
 }

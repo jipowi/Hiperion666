@@ -108,8 +108,10 @@ public class DineroValoresBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 
 	private List<CobertDineroVal> coberturas;
+	private List<CobertDineroVal>selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<ClausulasAddDinero> clausulasAdicionales;
+	private List<ClausulasAddDinero>selectedClausulasAdd;
 	private List<SelectItem> aseguradorasItems;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
@@ -442,19 +444,12 @@ public class DineroValoresBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertDineroVal cobertura = new CobertDineroVal();
+					cobertura.setIdCobertDineroValores(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaDinero(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertDineroVal cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaDinero());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -497,25 +492,10 @@ public class DineroValoresBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertDineroVal> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertDineroVal cobertura = new CobertDineroVal();
-				cobertura.setCoberturaDinero(coberturaDTO.getCobertura());
-				cobertura.setEstado(EstadoEnum.A);
-				cobertura.setFechaCreacion(new Date());
-				cobertura.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoDineroValores.setCobertDineroVals(coberturas);
+			ramoDineroValores.setCobertDineroVals(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -529,24 +509,10 @@ public class DineroValoresBacking implements Serializable {
 	 * 
 	 */
 	public void setearClausulasAdd() {
-		int contClausulas = 0;
-		List<ClausulasAddDinero> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddDinero clausula = new ClausulasAddDinero();
-				clausula.setClausulaAddDinero(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoDineroValores.setClausulasAddDineros(clausulas);
+			ramoDineroValores.setClausulasAddDineros(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -566,22 +532,15 @@ public class DineroValoresBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddDinero clausula = new ClausulasAddDinero();
+					clausula.setIdClausulaAdDinero(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddDinero(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
 			}
-			for (ClausulasAddDinero clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddDinero());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
-			}
 
 		}
-
 	}
 
 	/**
@@ -1103,5 +1062,64 @@ public class DineroValoresBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertDineroVal> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertDineroVal> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertDineroVal> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas the coberturas to set
+	 */
+	public void setCoberturas(List<CobertDineroVal> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddDinero> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddDinero> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddDinero> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddDinero> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+	
+	
+
 
 }

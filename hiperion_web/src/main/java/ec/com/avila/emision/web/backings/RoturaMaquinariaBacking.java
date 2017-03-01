@@ -108,10 +108,13 @@ public class RoturaMaquinariaBacking implements Serializable {
 
 	RamoRoturaMaquinaria ramoRoturaMaquinaria = new RamoRoturaMaquinaria();
 	private List<ClausulasAddRotura> clausulasAdicionales;
+	private List<ClausulasAddRotura> selectedClausulasAdd;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<CobertRotura> coberturas;
+	private List<CobertRotura> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<CobertAddRotura> coberturasAdd;
+	private List<CobertAddRotura> selectedCoberturasAdd;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<SelectItem> aseguradorasItems;
 	private List<SelectItem> contactosItems = new ArrayList<>();
@@ -444,19 +447,12 @@ public class RoturaMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertRotura cobertura = new CobertRotura();
+					cobertura.setIdCobertRotura(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaRotura(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertRotura cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaRotura());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -477,22 +473,13 @@ public class RoturaMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddRotura cobertura = new CobertAddRotura();
+					cobertura.setIdCobertAdRotura(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAddRotura(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
 				}
-
-			}
-
-			for (CobertAddRotura cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddRotura());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
 			}
 		}
-
 	}
 
 	/**
@@ -509,18 +496,12 @@ public class RoturaMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddRotura clausula = new ClausulasAddRotura();
+					clausula.setIdClausulaAdRotura(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddRotura(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddRotura clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddRotura());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -539,44 +520,44 @@ public class RoturaMaquinariaBacking implements Serializable {
 	public Poliza setearDatosPoliza() {
 
 		Poliza poliza = new Poliza();
-		if(polizaBean.getEstadoPoliza().equals("EMITIDO")){
-		poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
-		poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
-		poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
-		poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
-		poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
-		poliza.setDiasCobertura(polizaBean.getDiasCobertura());
-		poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
-		poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
-		poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
-		poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
-		poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
-		poliza.setEstadoPoliza("COTIZADO");
+		if (polizaBean.getEstadoPoliza().equals("EMITIDO")) {
+			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
+			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
+			poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
+			poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
+			poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
+			poliza.setDiasCobertura(polizaBean.getDiasCobertura());
+			poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
+			poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
+			poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
+			poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
+			poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
+			poliza.setEstadoPoliza("COTIZADO");
 
-		PagoPoliza pagoPoliza = new PagoPoliza();
-		pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
-		pagoPoliza.setSubtotal(polizaBean.getSubtotal());
-		pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
-		pagoPoliza.setIva(polizaBean.getIva());
-		pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
-		pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
-		pagoPoliza.setEstado(EstadoEnum.A);
-		pagoPoliza.setFechaCreacion(new Date());
-		pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
+			PagoPoliza pagoPoliza = new PagoPoliza();
+			pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
+			pagoPoliza.setSubtotal(polizaBean.getSubtotal());
+			pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
+			pagoPoliza.setIva(polizaBean.getIva());
+			pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
+			pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
+			pagoPoliza.setEstado(EstadoEnum.A);
+			pagoPoliza.setFechaCreacion(new Date());
+			pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
 
-		List<Financiamiento> financiamientos = new ArrayList<>();
-		for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
-			Financiamiento financiamientoTemp = new Financiamiento();
-			financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
-			financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
-			financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
+			List<Financiamiento> financiamientos = new ArrayList<>();
+			for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
+				Financiamiento financiamientoTemp = new Financiamiento();
+				financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
+				financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
+				financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
 
-			financiamientos.add(financiamientoTemp);
-		}
+				financiamientos.add(financiamientoTemp);
+			}
 
-		pagoPoliza.setFinanciamientos(financiamientos);
+			pagoPoliza.setFinanciamientos(financiamientos);
 
-		poliza.setPagoPoliza(pagoPoliza);
+			poliza.setPagoPoliza(pagoPoliza);
 		}
 		poliza.setEstadoPoliza(polizaBean.getEstadoPoliza());
 		poliza.setCliente(polizaBean.getCliente());
@@ -656,22 +637,10 @@ public class RoturaMaquinariaBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertRotura> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertRotura cobertura = new CobertRotura();
-				cobertura.setCoberturaRotura(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoRoturaMaquinaria.setCobertRoturas(coberturas);
+			ramoRoturaMaquinaria.setCobertRoturas(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -685,22 +654,10 @@ public class RoturaMaquinariaBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturasAdd() {
-		int contCoberturas = 0;
-		List<CobertAddRotura> coberturas = new ArrayList<>();
-		for (CoberturaAdicionalDTO coberturaDTO : coberturasAddDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAddRotura cobertura = new CobertAddRotura();
-				cobertura.setCoberturaAddRotura(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
 		} else {
-			ramoRoturaMaquinaria.setCobertAddRoturas(coberturas);
+			ramoRoturaMaquinaria.setCobertAddRoturas(selectedCoberturasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
 		}
 	}
@@ -715,24 +672,10 @@ public class RoturaMaquinariaBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddRotura> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddRotura clausula = new ClausulasAddRotura();
-				clausula.setClausulaAddRotura(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoRoturaMaquinaria.setClausulasAddRoturas(clausulas);
+			ramoRoturaMaquinaria.setClausulasAddRoturas(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -1228,6 +1171,51 @@ public class RoturaMaquinariaBacking implements Serializable {
 	 */
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertRotura> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertRotura> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddRotura> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd
+	 *            the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddRotura> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddRotura> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddRotura> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
 
 }

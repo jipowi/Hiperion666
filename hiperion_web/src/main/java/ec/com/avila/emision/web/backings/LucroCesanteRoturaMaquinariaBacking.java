@@ -111,8 +111,10 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 
 	private List<DetalleAnexo> anexos;
 	private List<CobertLcRot> coberturas;
+	private List<CobertLcRot> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<CobertAddLcRot> coberturasAdd;
+	public List<CobertAddLcRot>selectedCoberturasAdd;
 	private List<SelectItem> aseguradorasItems;
 	private List<SelectItem> formasPagoItems;
 	private List<SelectItem> pagoFinanciadoItems;
@@ -120,6 +122,7 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 	private List<SelectItem> cuentaBancoItems;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<ClaAddLcRot> clausulasAdicionales;
+	private List<ClaAddLcRot>selectedClausulasAdd;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
@@ -439,19 +442,12 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertLcRot cobertura = new CobertLcRot();
+					cobertura.setIdCobertCesante(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaLcRotura(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertLcRot cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaLcRotura());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -472,6 +468,7 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddLcRot cobertura = new CobertAddLcRot();
+					cobertura.setIdCobertAdCesante(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAddLcRotura(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
@@ -479,13 +476,6 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 
 			}
 
-			for (CobertAddLcRot cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddLcRotura());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
-			}
 		}
 
 	}
@@ -500,26 +490,13 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClaAddLcRot> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClaAddLcRot clausula = new ClaAddLcRot();
-				clausula.setClausulaAddLcRotura(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoCesanteRoturaMaq.setClaAddLcRots(clausulas);
+			ramoCesanteRoturaMaq.setClaAddLcRots(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
+
 
 	}
 
@@ -537,18 +514,12 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClaAddLcRot clausula = new ClaAddLcRot();
+					clausula.setIdClausulaAdCesante(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddLcRotura(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClaAddLcRot clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddLcRotura());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -683,22 +654,11 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertLcRot> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertLcRot cobertura = new CobertLcRot();
-				cobertura.setCoberturaLcRotura(coberturaDTO.getCobertura());
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoCesanteRoturaMaq.setCobertLcRots(coberturas);
+			ramoCesanteRoturaMaq.setCobertLcRots(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -1170,5 +1130,93 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertLcRot> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas
+	 *            the coberturas to set
+	 */
+	public void setCoberturas(List<CobertLcRot> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertLcRot> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertLcRot> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the coberturasAdd
+	 */
+	public List<CobertAddLcRot> getCoberturasAdd() {
+		return coberturasAdd;
+	}
+
+	/**
+	 * @param coberturasAdd the coberturasAdd to set
+	 */
+	public void setCoberturasAdd(List<CobertAddLcRot> coberturasAdd) {
+		this.coberturasAdd = coberturasAdd;
+	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddLcRot> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddLcRot> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClaAddLcRot> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClaAddLcRot> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClaAddLcRot> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClaAddLcRot> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+	
+	
 
 }

@@ -114,9 +114,11 @@ public class CascoAereoBacking implements Serializable {
 	private Usuario usuario;
 
 	private List<CobertAddCascoAereo> coberturasAdd;
+	private List<CobertAddCascoAereo> selectedCoberturasAdd;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
 	private List<ClausulasAddCascoAereo> clausulasAdicionales;
+	private List<ClausulasAddCascoAereo> selectedClausulasAdd;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<SelectItem> pagoFinanciadoItems;
 	private List<SelectItem> bancoItems;
@@ -353,6 +355,7 @@ public class CascoAereoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddCascoAereo cobertura = new CobertAddCascoAereo();
+					cobertura.setIdCobertAdCascoAereo(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAddCascoAereo(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
@@ -360,13 +363,6 @@ public class CascoAereoBacking implements Serializable {
 
 			}
 
-			for (CobertAddCascoAereo cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddCascoAereo());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
-			}
 		}
 
 	}
@@ -385,18 +381,12 @@ public class CascoAereoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddCascoAereo clausula = new ClausulasAddCascoAereo();
+					clausula.setIdClausulaAdCascoAereo(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddAereo(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddCascoAereo clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddAereo());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -519,27 +509,12 @@ public class CascoAereoBacking implements Serializable {
 	 */
 	public void setearClausulasAdd() {
 
-		int contClausulas = 0;
-		List<ClausulasAddCascoAereo> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddCascoAereo clausula = new ClausulasAddCascoAereo();
-				clausula.setClausulaAddAereo(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			cascoAereo.setClausulasAddCascoAereos(clausulas);
+			cascoAereo.setClausulasAddCascoAereos(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
-
 	}
 
 	/**
@@ -1087,5 +1062,66 @@ public class CascoAereoBacking implements Serializable {
 	public void setCuentaBancoItems(List<SelectItem> cuentaBancoItems) {
 		this.cuentaBancoItems = cuentaBancoItems;
 	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddCascoAereo> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd
+	 *            the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddCascoAereo> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the coberturasAdd
+	 */
+	public List<CobertAddCascoAereo> getCoberturasAdd() {
+		return coberturasAdd;
+	}
+
+	/**
+	 * @param coberturasAdd
+	 *            the coberturasAdd to set
+	 */
+	public void setCoberturasAdd(List<CobertAddCascoAereo> coberturasAdd) {
+		this.coberturasAdd = coberturasAdd;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddCascoAereo> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddCascoAereo> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+
+	/**
+	 * @return the clausulasAdicionales
+	 */
+	public List<ClausulasAddCascoAereo> getClausulasAdicionales() {
+		return clausulasAdicionales;
+	}
+
+	/**
+	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 */
+	public void setClausulasAdicionales(List<ClausulasAddCascoAereo> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+	
+	
 
 }

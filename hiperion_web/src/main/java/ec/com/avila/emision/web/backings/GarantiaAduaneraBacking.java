@@ -109,6 +109,7 @@ public class GarantiaAduaneraBacking implements Serializable {
 	private List<SelectItem> aseguradorasItems;
 
 	private List<CobertAduanera> coberturas;
+	private List<CobertAduanera> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
 	private List<SelectItem> formasPagoItems;
@@ -430,22 +431,14 @@ public class GarantiaAduaneraBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertAduanera cobertura = new CobertAduanera();
+					cobertura.setIdCobertAduanera(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAduanera(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
 			}
-
-			for (CobertAduanera cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaAduanera());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
-			}
 		}
-
 	}
 
 	/**
@@ -491,22 +484,10 @@ public class GarantiaAduaneraBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertAduanera> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAduanera cobertura = new CobertAduanera();
-				cobertura.setCoberturaAduanera(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoGarantiaAduanera.setCobertAduaneras(coberturas);
+			ramoGarantiaAduanera.setCobertAduaneras(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -991,5 +972,36 @@ public class GarantiaAduaneraBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertAduanera> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertAduanera> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertAduanera> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas the coberturas to set
+	 */
+	public void setCoberturas(List<CobertAduanera> coberturas) {
+		this.coberturas = coberturas;
+	}
+	
+	
 
 }

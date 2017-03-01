@@ -85,6 +85,7 @@ public class SoatBacking implements Serializable {
 	private List<SelectItem> tipoSoatItems;
 	private List<SelectItem> modeloItems;
 	private List<CobertSoat> coberturas;
+	private List<CobertSoat>selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<DetalleAnexo> anexos;
 	private List<SelectItem> contactosItems = new ArrayList<>();
@@ -442,21 +443,15 @@ public class SoatBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertSoat cobertura = new CobertSoat();
+					cobertura.setIdCobertSoat(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaSoat(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
 			}
-
-			for (CobertSoat cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaSoat());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
-			}
 		}
+
 
 	}
 
@@ -567,22 +562,11 @@ public class SoatBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertSoat> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertSoat cobertura = new CobertSoat();
-				cobertura.setCoberturaSoat(coberturaDTO.getCobertura());
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoSoat.setCobertSoats(coberturas);
+			ramoSoat.setCobertSoats(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -1180,5 +1164,21 @@ public class SoatBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertSoat> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertSoat> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+	
+	
 
 }

@@ -106,10 +106,14 @@ public class RoboAsaltoBacking implements Serializable {
 	RamoRoboAsalto ramoRoboAsalto = new RamoRoboAsalto();
 
 	private List<CoberturaRobo> coberturas;
+	private List<CoberturaRobo> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<CobertAddRobo> coberturasAdd;
+	private List<CobertAddRobo>selectedCoberturasAdd;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<ClausulasAddRobo> clausulasAdicionales;
+	private List<ClausulasAddRobo>selectedClausulasAdd;
+	private List<CondEspRobo>selectedCondicionesEsp;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<CondEspRobo> condicionesEspeciales;
 	private List<CondicionEspecialDTO> condicionesEspecialesDTO = new ArrayList<>();
@@ -354,14 +358,14 @@ public class RoboAsaltoBacking implements Serializable {
 		polizaBean.setDiasCobertura(Integer.parseInt(Long.toString(dias)));
 
 	}
-	
+
 	/**
 	 * 
-	 * <b>
-	 * Permite editar un registro de la tabla de amortizacion 
-	 * </b>
-	 * <p>[Author: Franklin Pozo, Date: 13/04/2016]</p>
-	 *
+	 * <b> Permite editar un registro de la tabla de amortizacion </b>
+	 * <p>
+	 * [Author: Franklin Pozo, Date: 13/04/2016]
+	 * </p>
+	 * 
 	 * @param event
 	 */
 	public void onEditTable(RowEditEvent event) {
@@ -442,44 +446,44 @@ public class RoboAsaltoBacking implements Serializable {
 	public Poliza setearDatosPoliza() {
 
 		Poliza poliza = new Poliza();
-		if(polizaBean.getEstadoPoliza().equals("EMITIDO")){
-		poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
-		poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
-		poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
-		poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
-		poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
-		poliza.setDiasCobertura(polizaBean.getDiasCobertura());
-		poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
-		poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
-		poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
-		poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
-		poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
-		poliza.setEstadoPoliza("COTIZADO");
+		if (polizaBean.getEstadoPoliza().equals("EMITIDO")) {
+			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
+			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
+			poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
+			poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
+			poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
+			poliza.setDiasCobertura(polizaBean.getDiasCobertura());
+			poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
+			poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
+			poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
+			poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
+			poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
+			poliza.setEstadoPoliza("COTIZADO");
 
-		PagoPoliza pagoPoliza = new PagoPoliza();
-		pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
-		pagoPoliza.setSubtotal(polizaBean.getSubtotal());
-		pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
-		pagoPoliza.setIva(polizaBean.getIva());
-		pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
-		pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
-		pagoPoliza.setEstado(EstadoEnum.A);
-		pagoPoliza.setFechaCreacion(new Date());
-		pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
+			PagoPoliza pagoPoliza = new PagoPoliza();
+			pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
+			pagoPoliza.setSubtotal(polizaBean.getSubtotal());
+			pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
+			pagoPoliza.setIva(polizaBean.getIva());
+			pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
+			pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
+			pagoPoliza.setEstado(EstadoEnum.A);
+			pagoPoliza.setFechaCreacion(new Date());
+			pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
 
-		List<Financiamiento> financiamientos = new ArrayList<>();
-		for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
-			Financiamiento financiamientoTemp = new Financiamiento();
-			financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
-			financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
-			financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
+			List<Financiamiento> financiamientos = new ArrayList<>();
+			for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
+				Financiamiento financiamientoTemp = new Financiamiento();
+				financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
+				financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
+				financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
 
-			financiamientos.add(financiamientoTemp);
-		}
+				financiamientos.add(financiamientoTemp);
+			}
 
-		pagoPoliza.setFinanciamientos(financiamientos);
+			pagoPoliza.setFinanciamientos(financiamientos);
 
-		poliza.setPagoPoliza(pagoPoliza);
+			poliza.setPagoPoliza(pagoPoliza);
 		}
 		poliza.setEstadoPoliza(polizaBean.getEstadoPoliza());
 		poliza.setCliente(polizaBean.getCliente());
@@ -505,19 +509,12 @@ public class RoboAsaltoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CoberturaRobo cobertura = new CoberturaRobo();
+					cobertura.setIdCobertRobo(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaRobo(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CoberturaRobo cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaRobo());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -538,6 +535,7 @@ public class RoboAsaltoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
 					CobertAddRobo cobertura = new CobertAddRobo();
+					cobertura.setIdCobertAdRobo(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaAddRobo(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
@@ -545,13 +543,6 @@ public class RoboAsaltoBacking implements Serializable {
 
 			}
 
-			for (CobertAddRobo cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddRobo());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
-			}
 		}
 
 	}
@@ -570,21 +561,16 @@ public class RoboAsaltoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddRobo clausula = new ClausulasAddRobo();
+					clausula.setIdClausulaAdRobo(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddRobo(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
 			}
-			for (ClausulasAddRobo clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddRobo());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
-			}
 
 		}
+
 
 	}
 
@@ -602,21 +588,16 @@ public class RoboAsaltoBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 3) {
 					CondEspRobo condicion = new CondEspRobo();
+					condicion.setIdCondEspRobo(anexo.getIdDetalleAnexo());
 					condicion.setCondicionEspRobo(anexo.getNombreDetalleAnexo());
 
 					condicionesEspeciales.add(condicion);
 				}
 
 			}
-			for (CondEspRobo condicion : condicionesEspeciales) {
-				CondicionEspecialDTO condicionDTO = new CondicionEspecialDTO();
-				condicionDTO.setCondicionEspecial(condicion.getCondicionEspRobo());
-				condicionDTO.setSeleccion(false);
-
-				condicionesEspecialesDTO.add(condicionDTO);
-			}
 
 		}
+
 
 	}
 
@@ -696,22 +677,11 @@ public class RoboAsaltoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CoberturaRobo> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CoberturaRobo cobertura = new CoberturaRobo();
-				cobertura.setCoberturaRobo(coberturaDTO.getCobertura());
 
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoRoboAsalto.setCoberturaRobos(coberturas);
+			ramoRoboAsalto.setCoberturaRobos(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -725,22 +695,10 @@ public class RoboAsaltoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturasAdd() {
-		int contCoberturas = 0;
-		List<CobertAddRobo> coberturas = new ArrayList<>();
-		for (CoberturaAdicionalDTO coberturaDTO : coberturasAddDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAddRobo cobertura = new CobertAddRobo();
-				cobertura.setCoberturaAddRobo(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
 		} else {
-			ramoRoboAsalto.setCobertAddRobos(coberturas);
+			ramoRoboAsalto.setCobertAddRobos(selectedCoberturasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
 		}
 	}
@@ -754,27 +712,15 @@ public class RoboAsaltoBacking implements Serializable {
 	 * 
 	 */
 	public void setearClausulasAdd() {
+		
 
-		int contClausulas = 0;
-		List<ClausulasAddRobo> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddRobo clausula = new ClausulasAddRobo();
-				clausula.setClausulaAddRobo(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoRoboAsalto.setClausulasAddRobos(clausulas);
+			ramoRoboAsalto.setClausulasAddRobos(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
+
 
 	}
 
@@ -787,23 +733,14 @@ public class RoboAsaltoBacking implements Serializable {
 	 * 
 	 */
 	public void setearCondiciones() {
-		int contCondicion = 0;
-		List<CondEspRobo> condiciones = new ArrayList<>();
-		for (CondicionEspecialDTO condicionDTO : condicionesEspecialesDTO) {
-			if (condicionDTO.getSeleccion()) {
-				contCondicion++;
-				CondEspRobo condicion = new CondEspRobo();
-				condicion.setCondicionEspRobo(condicionDTO.getCondicionEspecial());
 
-				condiciones.add(condicion);
-			}
-		}
-		if (contCondicion == 0) {
+		if (selectedCondicionesEsp.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.condicionesEsp"));
 		} else {
-			ramoRoboAsalto.setCondEspRobos(condiciones);
+			ramoRoboAsalto.setCondEspRobos(selectedCondicionesEsp);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
 		}
+
 	}
 
 	/**
@@ -1335,11 +1272,70 @@ public class RoboAsaltoBacking implements Serializable {
 	}
 
 	/**
-	 * @param tablaAmortizacionList the tablaAmortizacionList to set
+	 * @param tablaAmortizacionList
+	 *            the tablaAmortizacionList to set
 	 */
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CoberturaRobo> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CoberturaRobo> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddRobo> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddRobo> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddRobo> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddRobo> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+
+	/**
+	 * @return the selectedCondicionesEsp
+	 */
+	public List<CondEspRobo> getSelectedCondicionesEsp() {
+		return selectedCondicionesEsp;
+	}
+
+	/**
+	 * @param selectedCondicionesEsp the selectedCondicionesEsp to set
+	 */
+	public void setSelectedCondicionesEsp(List<CondEspRobo> selectedCondicionesEsp) {
+		this.selectedCondicionesEsp = selectedCondicionesEsp;
+	}
+	
 	
 	
 

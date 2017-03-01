@@ -38,7 +38,6 @@ import ec.com.avila.hiperion.emision.entities.Aseguradora;
 import ec.com.avila.hiperion.emision.entities.Catalogo;
 import ec.com.avila.hiperion.emision.entities.Cliente;
 import ec.com.avila.hiperion.emision.entities.CobertAddEqMaq;
-import ec.com.avila.hiperion.emision.entities.CobertAddRobo;
 import ec.com.avila.hiperion.emision.entities.CobertEqMaq;
 import ec.com.avila.hiperion.emision.entities.DetalleAnexo;
 import ec.com.avila.hiperion.emision.entities.DetalleCatalogo;
@@ -106,9 +105,11 @@ public class EquipoMaquinariaBacking implements Serializable {
 
 	RamoEquipoMaquinaria ramoEquipoMaquinaria = new RamoEquipoMaquinaria();
 	private List<CobertEqMaq> coberturas;
+	private List<CobertEqMaq> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
-	private List<CobertAddRobo> coberturasAdd;
+	private List<CobertAddEqMaq> coberturasAdd;
+	private List<CobertAddEqMaq>selectedCoberturasAdd;
 	private List<SelectItem> aseguradorasItems;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
@@ -506,19 +507,12 @@ public class EquipoMaquinariaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 2) {
 					CobertEqMaq cobertura = new CobertEqMaq();
+					cobertura.setIdCobertEqMaq(anexo.getIdDetalleAnexo());
 					cobertura.setCoberturaEqMaq(anexo.getNombreDetalleAnexo());
 
 					coberturas.add(cobertura);
 				}
 
-			}
-
-			for (CobertEqMaq cobertura : coberturas) {
-				CoberturaDTO coberturaDTO = new CoberturaDTO();
-				coberturaDTO.setCobertura(cobertura.getCoberturaEqMaq());
-				coberturaDTO.setSeleccion(false);
-
-				coberturasDTO.add(coberturaDTO);
 			}
 		}
 
@@ -534,25 +528,19 @@ public class EquipoMaquinariaBacking implements Serializable {
 	 */
 	public void obtenerCoberturasAdicionales() {
 
-		coberturasAdd = new ArrayList<CobertAddRobo>();
+		coberturasAdd = new ArrayList<CobertAddEqMaq>();
 		if (anexos != null && anexos.size() > 0) {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 6) {
-					CobertAddRobo cobertura = new CobertAddRobo();
-					cobertura.setCoberturaAddRobo(anexo.getNombreDetalleAnexo());
+					CobertAddEqMaq cobertura = new CobertAddEqMaq();
+					cobertura.setIdCobertAdEqMaq(anexo.getIdDetalleAnexo());
+					cobertura.setCoberturaAddEqMaq(anexo.getNombreDetalleAnexo());
 
 					coberturasAdd.add(cobertura);
 				}
 
 			}
 
-			for (CobertAddRobo cobertura : coberturasAdd) {
-				CoberturaAdicionalDTO coberturaAddDTO = new CoberturaAdicionalDTO();
-				coberturaAddDTO.setCobertura(cobertura.getCoberturaAddRobo());
-				coberturaAddDTO.setSeleccion(false);
-
-				coberturasAddDTO.add(coberturaAddDTO);
-			}
 		}
 
 	}
@@ -633,22 +621,10 @@ public class EquipoMaquinariaBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturas() {
-		int contCoberturas = 0;
-		List<CobertEqMaq> coberturas = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertEqMaq cobertura = new CobertEqMaq();
-				cobertura.setCoberturaEqMaq(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturas.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			ramoEquipoMaquinaria.setCobertEqMaqs(coberturas);
+			ramoEquipoMaquinaria.setCobertEqMaqs(selectedCoberturas);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
 		}
 	}
@@ -662,22 +638,10 @@ public class EquipoMaquinariaBacking implements Serializable {
 	 * 
 	 */
 	public void setearCoberturasAdd() {
-		int contCoberturas = 0;
-		List<CobertAddEqMaq> coberturas = new ArrayList<>();
-		for (CoberturaAdicionalDTO coberturaDTO : coberturasAddDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				contCoberturas++;
-				CobertAddEqMaq cobertura = new CobertAddEqMaq();
-				cobertura.setCoberturaAddEqMaq(coberturaDTO.getCobertura());
-
-				coberturas.add(cobertura);
-			}
-		}
-
-		if (contCoberturas == 0) {
+		if (selectedCoberturasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturasAdd"));
 		} else {
-			ramoEquipoMaquinaria.setCobertAddEqMaqs(coberturas);
+			ramoEquipoMaquinaria.setCobertAddEqMaqs(selectedCoberturasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturasAdd"));
 		}
 	}
@@ -1086,5 +1050,65 @@ public class EquipoMaquinariaBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the coberturas
+	 */
+	public List<CobertEqMaq> getCoberturas() {
+		return coberturas;
+	}
+
+	/**
+	 * @param coberturas
+	 *            the coberturas to set
+	 */
+	public void setCoberturas(List<CobertEqMaq> coberturas) {
+		this.coberturas = coberturas;
+	}
+
+	/**
+	 * @return the selectedCoberturas
+	 */
+	public List<CobertEqMaq> getSelectedCoberturas() {
+		return selectedCoberturas;
+	}
+
+	/**
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
+	 */
+	public void setSelectedCoberturas(List<CobertEqMaq> selectedCoberturas) {
+		this.selectedCoberturas = selectedCoberturas;
+	}
+
+	/**
+	 * @return the coberturasAdd
+	 */
+	public List<CobertAddEqMaq> getCoberturasAdd() {
+		return coberturasAdd;
+	}
+
+	/**
+	 * @param coberturasAdd the coberturasAdd to set
+	 */
+	public void setCoberturasAdd(List<CobertAddEqMaq> coberturasAdd) {
+		this.coberturasAdd = coberturasAdd;
+	}
+
+	/**
+	 * @return the selectedCoberturasAdd
+	 */
+	public List<CobertAddEqMaq> getSelectedCoberturasAdd() {
+		return selectedCoberturasAdd;
+	}
+
+	/**
+	 * @param selectedCoberturasAdd the selectedCoberturasAdd to set
+	 */
+	public void setSelectedCoberturasAdd(List<CobertAddEqMaq> selectedCoberturasAdd) {
+		this.selectedCoberturasAdd = selectedCoberturasAdd;
+	}
+	
+	
 
 }

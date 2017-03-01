@@ -123,8 +123,10 @@ public class VehiculosBacking implements Serializable {
 	private List<SelectItem> modeloItems;
 	private List<DetalleAnexo> anexos;
 	private List<ClausulasAddVh> clausulasAdicionales;
+	private List<ClausulasAddVh>selectedClausulasAdd;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<CondEspVh> condicionesEspeciales;
+	private List<CondEspVh>selectedCondicionesEsp;
 	private List<CondicionEspecialDTO> condicionesEspecialesDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 	private List<TablaAmortizacionDTO> tablaAmortizacionList = new ArrayList<TablaAmortizacionDTO>();
@@ -451,18 +453,12 @@ public class VehiculosBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 1) {
 					ClausulasAddVh clausula = new ClausulasAddVh();
+					clausula.setIdClausulaAdVehiculo(anexo.getIdDetalleAnexo());
 					clausula.setClausulaAddVh(anexo.getNombreDetalleAnexo());
 
 					clausulasAdicionales.add(clausula);
 				}
 
-			}
-			for (ClausulasAddVh clausula : clausulasAdicionales) {
-				ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-				clausulaDTO.setClausula(clausula.getClausulaAddVh());
-				clausulaDTO.setSeleccion(false);
-
-				clausulasAdicionalesDTO.add(clausulaDTO);
 			}
 
 		}
@@ -507,26 +503,10 @@ public class VehiculosBacking implements Serializable {
 	 * 
 	 */
 	public void setearClausulasAdd() {
-
-		// Clausulas Adicionales
-		int contClausulas = 0;
-		List<ClausulasAddVh> clausulas = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddVh clausula = new ClausulasAddVh();
-				clausula.setClausulaAddVh(clausualaDTO.getClausula());
-				clausula.setEstado(EstadoEnum.A);
-				clausula.setFechaCreacion(new Date());
-				clausula.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulas.add(clausula);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			ramoVehiculo.setClausulasAddVhs(clausulas);
+			ramoVehiculo.setClausulasAddVhs(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 
@@ -541,21 +521,10 @@ public class VehiculosBacking implements Serializable {
 	 * 
 	 */
 	public void setearCondiciones() {
-		int contCondicion = 0;
-		List<CondEspVh> condiciones = new ArrayList<>();
-		for (CondicionEspecialDTO condicionDTO : condicionesEspecialesDTO) {
-			if (condicionDTO.getSeleccion()) {
-				contCondicion++;
-				CondEspVh condicion = new CondEspVh();
-				condicion.setCondicionEspVh(condicionDTO.getCondicionEspecial());
-
-				condiciones.add(condicion);
-			}
-		}
-		if (contCondicion == 0) {
+		if (selectedCondicionesEsp.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.condicionesEsp"));
 		} else {
-			ramoVehiculo.setCondEspVhs(condiciones);
+			ramoVehiculo.setCondEspVhs(selectedCondicionesEsp);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
 		}
 	}
@@ -574,21 +543,16 @@ public class VehiculosBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 				if (anexo.getAnexo().getIdAnexo() == 3) {
 					CondEspVh condicion = new CondEspVh();
+					condicion.setIdCondicionEspVehiculo(anexo.getIdDetalleAnexo());
 					condicion.setCondicionEspVh(anexo.getNombreDetalleAnexo());
 
 					condicionesEspeciales.add(condicion);
 				}
 
 			}
-			for (CondEspVh condicion : condicionesEspeciales) {
-				CondicionEspecialDTO condicionDTO = new CondicionEspecialDTO();
-				condicionDTO.setCondicionEspecial(condicion.getCondicionEspVh());
-				condicionDTO.setSeleccion(false);
-
-				condicionesEspecialesDTO.add(condicionDTO);
-			}
 
 		}
+
 
 	}
 
@@ -1430,5 +1394,35 @@ public class VehiculosBacking implements Serializable {
 	public void setTablaAmortizacionList(List<TablaAmortizacionDTO> tablaAmortizacionList) {
 		this.tablaAmortizacionList = tablaAmortizacionList;
 	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddVh> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddVh> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+
+	/**
+	 * @return the selectedCondicionesEsp
+	 */
+	public List<CondEspVh> getSelectedCondicionesEsp() {
+		return selectedCondicionesEsp;
+	}
+
+	/**
+	 * @param selectedCondicionesEsp the selectedCondicionesEsp to set
+	 */
+	public void setSelectedCondicionesEsp(List<CondEspVh> selectedCondicionesEsp) {
+		this.selectedCondicionesEsp = selectedCondicionesEsp;
+	}
+	
+	
 
 }
