@@ -26,7 +26,7 @@ public class CondEspTran extends Auditoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_condicion_esp_transporte")
-	private Integer idCondicionEspTransporte;
+	private Long idCondicionEspTransporte;
 
 	@Column(name = "condicion_esp_trans")
 	private String condicionEspTrans;
@@ -42,11 +42,11 @@ public class CondEspTran extends Auditoria implements Serializable {
 	public CondEspTran() {
 	}
 
-	public Integer getIdCondicionEspTransporte() {
+	public Long getIdCondicionEspTransporte() {
 		return this.idCondicionEspTransporte;
 	}
 
-	public void setIdCondicionEspTransporte(Integer idCondicionEspTransporte) {
+	public void setIdCondicionEspTransporte(Long idCondicionEspTransporte) {
 		this.idCondicionEspTransporte = idCondicionEspTransporte;
 	}
 

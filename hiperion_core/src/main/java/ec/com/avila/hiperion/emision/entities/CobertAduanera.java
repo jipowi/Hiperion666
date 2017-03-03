@@ -26,7 +26,7 @@ public class CobertAduanera extends Auditoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_cobert_aduanera")
-	private Integer idCobertAduanera;
+	private Long idCobertAduanera;
 
 	@Column(name = "cobertura_aduanera")
 	private String coberturaAduanera;
@@ -39,11 +39,11 @@ public class CobertAduanera extends Auditoria implements Serializable {
 	public CobertAduanera() {
 	}
 
-	public Integer getIdCobertAduanera() {
+	public Long getIdCobertAduanera() {
 		return this.idCobertAduanera;
 	}
 
-	public void setIdCobertAduanera(Integer idCobertAduanera) {
+	public void setIdCobertAduanera(Long idCobertAduanera) {
 		this.idCobertAduanera = idCobertAduanera;
 	}
 

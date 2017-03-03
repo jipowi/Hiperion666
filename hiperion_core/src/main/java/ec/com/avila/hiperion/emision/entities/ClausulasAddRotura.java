@@ -26,7 +26,7 @@ public class ClausulasAddRotura extends Auditoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_clausula_ad_rotura")
-	private Integer idClausulaAdRotura;
+	private Long idClausulaAdRotura;
 
 	@Column(name = "clausula_add_rotura")
 	private String clausulaAddRotura;
@@ -42,11 +42,11 @@ public class ClausulasAddRotura extends Auditoria implements Serializable {
 	public ClausulasAddRotura() {
 	}
 
-	public Integer getIdClausulaAdRotura() {
+	public Long getIdClausulaAdRotura() {
 		return this.idClausulaAdRotura;
 	}
 
-	public void setIdClausulaAdRotura(Integer idClausulaAdRotura) {
+	public void setIdClausulaAdRotura(Long idClausulaAdRotura) {
 		this.idClausulaAdRotura = idClausulaAdRotura;
 	}
 

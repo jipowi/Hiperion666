@@ -17,7 +17,7 @@ public class CobertAccPer implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_cobertura")
-	private Integer idCobertura;
+	private Long idCobertura;
 
 	@Column(name = "cobertura_acc_personales")
 	private String coberturaAccPersonales;
@@ -30,11 +30,11 @@ public class CobertAccPer implements Serializable {
 	public CobertAccPer() {
 	}
 
-	public Integer getIdCobertura() {
+	public Long getIdCobertura() {
 		return this.idCobertura;
 	}
 
-	public void setIdCobertura(Integer idCobertura) {
+	public void setIdCobertura(Long idCobertura) {
 		this.idCobertura = idCobertura;
 	}
 

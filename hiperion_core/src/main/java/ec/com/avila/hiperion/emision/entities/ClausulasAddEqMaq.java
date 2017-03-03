@@ -26,7 +26,7 @@ public class ClausulasAddEqMaq extends Auditoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_clausula_ad_eq_maq")
-	private Integer idClausulaAdEqMaq;
+	private Long idClausulaAdEqMaq;
 
 	@Column(name = "clausula_eq_maq")
 	private String clausulaEqMaq;
@@ -42,11 +42,11 @@ public class ClausulasAddEqMaq extends Auditoria implements Serializable {
 	public ClausulasAddEqMaq() {
 	}
 
-	public Integer getIdClausulaAdEqMaq() {
+	public Long getIdClausulaAdEqMaq() {
 		return this.idClausulaAdEqMaq;
 	}
 
-	public void setIdClausulaAdEqMaq(Integer idClausulaAdEqMaq) {
+	public void setIdClausulaAdEqMaq(Long idClausulaAdEqMaq) {
 		this.idClausulaAdEqMaq = idClausulaAdEqMaq;
 	}
 

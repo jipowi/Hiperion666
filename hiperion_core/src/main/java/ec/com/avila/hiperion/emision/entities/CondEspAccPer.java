@@ -17,7 +17,7 @@ public class CondEspAccPer implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_condicion_esp_acc")
-	private Integer idCondicionEspAcc;
+	private Long idCondicionEspAcc;
 
 	@Column(name = "condicion_acc")
 	private String condicionAcc;
@@ -30,11 +30,11 @@ public class CondEspAccPer implements Serializable {
 	public CondEspAccPer() {
 	}
 
-	public Integer getIdCondicionEspAcc() {
+	public Long getIdCondicionEspAcc() {
 		return this.idCondicionEspAcc;
 	}
 
-	public void setIdCondicionEspAcc(Integer idCondicionEspAcc) {
+	public void setIdCondicionEspAcc(Long idCondicionEspAcc) {
 		this.idCondicionEspAcc = idCondicionEspAcc;
 	}
 
