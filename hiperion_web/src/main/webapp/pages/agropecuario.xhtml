@@ -137,345 +137,357 @@
 										</p:dataTable>
 									</p:panel>
 								</h:panelGrid>
-								<h:panelGrid columns="1" id="ramo">
-									<!-- RAMO -->
-									<h:panelGrid columns="2" cellpadding="2">
-										<p:outputLabel value="#{emision['agropecuario.tipoObjeto']}:" styleClass="negrita" />
-										<p:selectOneMenu id="idTipoObjeto" value="#{ramoAgropecuarioBean.tipoObjeto}" effect="drop">
-											<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
-											<f:selectItems value="#{agropecuarioBacking.tipoObjetoItems}" />
-											<p:ajax event="change" listener="#{agropecuarioBacking.obtenerTipoObjeto()}" update=" @form, plantacion, ganadero" />
-										</p:selectOneMenu>
-										<p:outputLabel for="tasa" value="#{emision['agropecuario.tasa']}:" styleClass="negrita" />
-										<p:inputText id="tasa" value="#{ramoAgropecuarioBean.tasa}" required="true" title="Ejemplo 2.56"
-											requiredMessage="#{emision['agropecuario.tasa.msn']}" />
-
-										<p:outputLabel for="deducible" value="#{emision['agropecuario.deducible']}" styleClass="negrita" />
-										<p:inputText id="deducible" value="#{ramoAgropecuarioBean.deducible}" required="true"
-											requiredMessage="#{emision['agropecuario.deducible.msn']}" />
-									</h:panelGrid>
-									<p:spacer height="15px;" />
-									<!-- PLANTACION -->
-									<h:panelGroup id="plantacion" rendered="#{!agropecuarioBacking.activarGanadero}">
-										<p:panel>
-											<h:panelGrid columns="1">
-												<h:panelGrid columns="2">
-													<h:outputLabel style="color : #F4751B;" value="#{emision['agropecuario.plantaciones']}" />
-													<h:graphicImage name="agropecuario.jpg" library="img" />
-												</h:panelGrid>
-
-												<h:panelGrid columns="2">
-													<p:outputLabel value="Subir archivo Excel:" styleClass="negrita" />
-													<p:inputText value="#{ramoAgropecuarioBean.valorAsegurado}" />
-
-													<p:outputLabel value="#{emision['agropecuario.detalle']}:" styleClass="negrita" />
-													<p:inputTextarea value="#{ramoAgropecuarioBean.detalle}" cols="50" rows="2" style="text-transform:uppercase;" />
-
-													<p:outputLabel value="#{emision['agropecuario.ubicacion']}:" styleClass="negrita" />
-													<p:inputTextarea value="#{ramoAgropecuarioBean.ubicacion}" cols="50" rows="2" style="text-transform:uppercase;" />
-												</h:panelGrid>
-											</h:panelGrid>
-											<div align="center">
-												<p:commandButton id="agregarPlantacion" update="tablaPlantacion" icon="icon-add" value="#{emision['boton.agregar']}"
-													actionListener="#{ramoAgropecuarioBean.addPlantacion}" title="Agregar" />
-											</div>
-											<p:spacer height="30px;" />
-											<p:dataTable id="tablaPlantacion" value="#{ramoAgropecuarioBean.objetoAseguradoPlantacionList}" var="obj" widgetVar="50" editable="true">
-												<p:ajax event="rowEdit" listener="#{ramoAgropecuarioBean.onEditPlantacion}" />
-												<p:ajax event="rowEditCancel" listener="#{ramoAgropecuarioBean.onCancelPlantacion}" />
-												<p:column>
-													<f:facet name="header">
-														<h:outputText value="#{emision['agropecuario.valorAsegurado']}" />
-													</f:facet>
-													<p:cellEditor>
-														<f:facet name="output">
-															<h:outputText value="#{obj.valorAsegurado}" />
-														</f:facet>
-														<f:facet name="input">
-															<p:inputText value="#{obj.valorAsegurado}" />
-														</f:facet>
-													</p:cellEditor>
-												</p:column>
-												<p:column>
-													<f:facet name="header">
-														<h:outputText value="#{emision['agropecuario.detalle']}" />
-													</f:facet>
-													<p:cellEditor>
-														<f:facet name="output">
-															<h:outputText value="#{obj.detalle}" />
-														</f:facet>
-														<f:facet name="input">
-															<p:inputText value="#{obj.detalle}" />
-
-														</f:facet>
-													</p:cellEditor>
-												</p:column>
-
-												<p:column>
-													<f:facet name="header">
-														<h:outputText value="#{emision['agropecuario.ubicacion']}" />
-													</f:facet>
-													<p:cellEditor>
-														<f:facet name="output">
-															<h:outputText value="#{obj.ubicacion}" />
-														</f:facet>
-														<f:facet name="input">
-															<p:inputTextarea value="#{obj.ubicacion}" cols="50" rows="2" />
-														</f:facet>
-													</p:cellEditor>
-												</p:column>
-
-												<p:column headerText="Options" style="width:50px">
-													<p:rowEditor />
-												</p:column>
-											</p:dataTable>
-										</p:panel>
-									</h:panelGroup>
-									<p:spacer height="15px;" />
-									<!-- GANADERO -->
-									<p:panel id="ganadero" visible="#{agropecuarioBacking.activarGanadero}">
-										<h:panelGrid columns="2">
-											<h:outputLabel style="color : #F4751B;" value="#{emision['agropecuario.tituloPlantacion']}" />
-											<h:graphicImage name="ganadero.png" library="img" />
-										</h:panelGrid>
-										<h:panelGrid columns="1">
-											<h:panelGrid columns="2">
-												<h:outputLabel for="idItem" value="#{emision['agropecuario.objeto.item']}:" styleClass="negrita" />
-												<p:inputText id="idItem" value="#{ramoAgropecuarioBean.item}" />
-
-												<h:outputLabel for="idNombre" value="#{emision['agropecuario.objeto.nombre']}:" styleClass="negrita" />
-												<p:inputText id="idNombre" value="#{ramoAgropecuarioBean.nombre}" style="text-transform:uppercase;" />
-
-												<h:outputLabel for="idSexo" value="#{emision['agropecuario.objeto.sexo']}:" styleClass="negrita" />
-												<p:selectOneMenu id="idSexo" value="#{ramoAgropecuarioBean.sexo}" effect="drop">
-													<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
-													<f:selectItems value="#{agropecuarioBacking.sexoItems}" />
-												</p:selectOneMenu>
-
-												<h:outputLabel value="#{emision['agropecuario.objeto.raza']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoAgropecuarioBean.raza}" style="text-transform:uppercase;" />
-
-												<h:outputLabel for="idColor" value="#{emision['agropecuario.objeto.color']}:" styleClass="negrita" />
-												<p:inputText id="idColor" value="#{ramoAgropecuarioBean.color}" style="text-transform:uppercase;" />
-
-												<h:outputLabel for="idEdad" value="#{emision['agropecuario.objeto.edad']}:" styleClass="negrita" />
-												<p:inputText id="idEdad" value="#{ramoAgropecuarioBean.edad}" />
-
-												<h:outputLabel for="idMontoAsegurado" value="#{emision['agropecuario.objeto.montoAsegurado']}:" styleClass="negrita" />
-												<p:inputText id="idMontoAsegurado" value="#{ramoAgropecuarioBean.montoAsegurado}" />
-											</h:panelGrid>
-											<div align="center">
-												<p:commandButton id="agregarObjeto" update="tabla" icon="icon-add" value="#{emision['boton.agregar']}"
-													actionListener="#{ramoAgropecuarioBean.addGanadero}" title="Agregar" />
-											</div>
-										</h:panelGrid>
-										<p:spacer height="30px;" />
-										<p:dataTable id="tabla" value="#{ramoAgropecuarioBean.objetoAseguradoList}" var="obj" widgetVar="50" editable="true">
-											<p:ajax event="rowEdit" listener="#{ramoAgropecuarioBean.onEditGanadero}" />
-											<p:ajax event="rowEditCancel" listener="#{ramoAgropecuarioBean.onCancelGanadero}" />
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.item']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.item}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.item}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.nombre']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.nombre}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.nombre}" style="width:100%" />
-
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.sexo']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<p:selectOneMenu value="#{obj.sexo}" effect="drop">
-															<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
-															<f:selectItems value="#{agropecuarioBacking.sexoItems}" />
-														</p:selectOneMenu>
-													</f:facet>
-													<f:facet name="input">
-														<p:selectOneMenu value="#{obj.sexo}" effect="drop">
-															<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
-															<f:selectItems value="#{agropecuarioBacking.sexoItems}" />
-														</p:selectOneMenu>
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.raza']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.raza}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.raza}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.color']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.color}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.color}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.edad']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.edad}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.edad}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column>
-												<f:facet name="header">
-													<h:outputText value="#{emision['agropecuario.objeto.montoAsegurado']}" />
-												</f:facet>
-												<p:cellEditor>
-													<f:facet name="output">
-														<h:outputText value="#{obj.montoAsegurado}" />
-													</f:facet>
-													<f:facet name="input">
-														<p:inputText value="#{obj.montoAsegurado}" style="width:100%" />
-													</f:facet>
-												</p:cellEditor>
-											</p:column>
-											<p:column headerText="Options" style="width:50px">
-												<p:rowEditor />
-											</p:column>
-										</p:dataTable>
-									</p:panel>
-								</h:panelGrid>
 								<p:panel>
 									<f:facet name="header">
 										<h:outputText value="#{emision['titulo.infoRamo']}" />
 									</f:facet>
 									<p:spacer height="15px;" />
+									<h:panelGrid columns="1" id="ramo">
+										<!-- RAMO -->
+										<h:panelGrid columns="2" cellpadding="2">
+											<p:outputLabel value="#{emision['agropecuario.tipoObjeto']}:" styleClass="negrita" />
+											<p:selectOneMenu id="idTipoObjeto" value="#{ramoAgropecuarioBean.tipoObjeto}" effect="drop">
+												<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+												<f:selectItems value="#{agropecuarioBacking.tipoObjetoItems}" />
+												<p:ajax event="change" listener="#{agropecuarioBacking.obtenerTipoObjeto()}" update=" @form, plantacion, ganadero" />
+											</p:selectOneMenu>
+											<p:outputLabel for="tasa" value="#{emision['agropecuario.tasa']}:" styleClass="negrita" />
+											<p:inputText id="tasa" value="#{ramoAgropecuarioBean.tasa}" required="true" title="Ejemplo 2.56"
+												requiredMessage="#{emision['agropecuario.tasa.msn']}" />
 
+											<p:outputLabel for="deducible" value="#{emision['agropecuario.deducible']}" styleClass="negrita" />
+											<p:inputText id="deducible" value="#{ramoAgropecuarioBean.deducible}" required="true"
+												requiredMessage="#{emision['agropecuario.deducible.msn']}" />
+										</h:panelGrid>
+										<p:spacer height="15px;" />
+										<!-- PLANTACION -->
+										<h:panelGroup id="plantacion" rendered="#{!agropecuarioBacking.activarGanadero}">
+											<p:panel>
+												<h:panelGrid columns="1">
+													<h:panelGrid columns="2">
+														<h:outputLabel style="color : #F4751B;" value="#{emision['agropecuario.plantaciones']}" />
+														<h:graphicImage name="agropecuario.jpg" library="img" />
+													</h:panelGrid>
 
-								</p:panel>
-								<h:panelGrid columns="1" cellpadding="3">
-									<h:panelGrid columns="2">
-										<p:outputLabel for="polizaVigente" value="#{emision['agropecuario.lbl.polizaVigente']}" />
-										<h:graphicImage name="pdf.png" library="img" />
+													<h:panelGrid columns="2">
+														<p:outputLabel value="Subir archivo Excel:" styleClass="negrita" />
+														<p:inputText value="#{ramoAgropecuarioBean.valorAsegurado}" />
+
+														<p:outputLabel value="#{emision['agropecuario.detalle']}:" styleClass="negrita" />
+														<p:inputTextarea value="#{ramoAgropecuarioBean.detalle}" cols="50" rows="2" style="text-transform:uppercase;" />
+
+														<p:outputLabel value="#{emision['agropecuario.ubicacion']}:" styleClass="negrita" />
+														<p:inputTextarea value="#{ramoAgropecuarioBean.ubicacion}" cols="50" rows="2" style="text-transform:uppercase;" />
+													</h:panelGrid>
+												</h:panelGrid>
+												<div align="center">
+													<p:commandButton id="agregarPlantacion" update="tablaPlantacion" icon="icon-add" value="#{emision['boton.agregar']}"
+														actionListener="#{ramoAgropecuarioBean.addPlantacion}" title="Agregar" />
+												</div>
+												<p:spacer height="30px;" />
+												<p:dataTable id="tablaPlantacion" value="#{ramoAgropecuarioBean.objetoAseguradoPlantacionList}" var="obj" widgetVar="50" editable="true">
+													<p:ajax event="rowEdit" listener="#{ramoAgropecuarioBean.onEditPlantacion}" />
+													<p:ajax event="rowEditCancel" listener="#{ramoAgropecuarioBean.onCancelPlantacion}" />
+													<p:column>
+														<f:facet name="header">
+															<h:outputText value="#{emision['agropecuario.valorAsegurado']}" />
+														</f:facet>
+														<p:cellEditor>
+															<f:facet name="output">
+																<h:outputText value="#{obj.valorAsegurado}" />
+															</f:facet>
+															<f:facet name="input">
+																<p:inputText value="#{obj.valorAsegurado}" />
+															</f:facet>
+														</p:cellEditor>
+													</p:column>
+													<p:column>
+														<f:facet name="header">
+															<h:outputText value="#{emision['agropecuario.detalle']}" />
+														</f:facet>
+														<p:cellEditor>
+															<f:facet name="output">
+																<h:outputText value="#{obj.detalle}" />
+															</f:facet>
+															<f:facet name="input">
+																<p:inputText value="#{obj.detalle}" />
+
+															</f:facet>
+														</p:cellEditor>
+													</p:column>
+
+													<p:column>
+														<f:facet name="header">
+															<h:outputText value="#{emision['agropecuario.ubicacion']}" />
+														</f:facet>
+														<p:cellEditor>
+															<f:facet name="output">
+																<h:outputText value="#{obj.ubicacion}" />
+															</f:facet>
+															<f:facet name="input">
+																<p:inputTextarea value="#{obj.ubicacion}" cols="50" rows="2" />
+															</f:facet>
+														</p:cellEditor>
+													</p:column>
+
+													<p:column headerText="Options" style="width:50px">
+														<p:rowEditor />
+													</p:column>
+												</p:dataTable>
+											</p:panel>
+										</h:panelGroup>
+										<p:spacer height="15px;" />
+										<!-- GANADERO -->
+										<p:panel id="ganadero" visible="#{agropecuarioBacking.activarGanadero}">
+											<h:panelGrid columns="2">
+												<h:outputLabel style="color : #F4751B;" value="#{emision['agropecuario.tituloPlantacion']}" />
+												<h:graphicImage name="ganadero.png" library="img" />
+											</h:panelGrid>
+											<h:panelGrid columns="1">
+												<h:panelGrid columns="2">
+													<h:outputLabel for="idItem" value="#{emision['agropecuario.objeto.item']}:" styleClass="negrita" />
+													<p:inputText id="idItem" value="#{ramoAgropecuarioBean.item}" />
+
+													<h:outputLabel for="idNombre" value="#{emision['agropecuario.objeto.nombre']}:" styleClass="negrita" />
+													<p:inputText id="idNombre" value="#{ramoAgropecuarioBean.nombre}" style="text-transform:uppercase;" />
+
+													<h:outputLabel for="idSexo" value="#{emision['agropecuario.objeto.sexo']}:" styleClass="negrita" />
+													<p:selectOneMenu id="idSexo" value="#{ramoAgropecuarioBean.sexo}" effect="drop">
+														<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+														<f:selectItems value="#{agropecuarioBacking.sexoItems}" />
+													</p:selectOneMenu>
+
+													<h:outputLabel value="#{emision['agropecuario.objeto.raza']}:" styleClass="negrita" />
+													<p:inputText value="#{ramoAgropecuarioBean.raza}" style="text-transform:uppercase;" />
+
+													<h:outputLabel for="idColor" value="#{emision['agropecuario.objeto.color']}:" styleClass="negrita" />
+													<p:inputText id="idColor" value="#{ramoAgropecuarioBean.color}" style="text-transform:uppercase;" />
+
+													<h:outputLabel for="idEdad" value="#{emision['agropecuario.objeto.edad']}:" styleClass="negrita" />
+													<p:inputText id="idEdad" value="#{ramoAgropecuarioBean.edad}" />
+
+													<h:outputLabel for="idMontoAsegurado" value="#{emision['agropecuario.objeto.montoAsegurado']}:" styleClass="negrita" />
+													<p:inputText id="idMontoAsegurado" value="#{ramoAgropecuarioBean.montoAsegurado}" />
+												</h:panelGrid>
+												<div align="center">
+													<p:commandButton id="agregarObjeto" update="tabla" icon="icon-add" value="#{emision['boton.agregar']}"
+														actionListener="#{ramoAgropecuarioBean.addGanadero}" title="Agregar" />
+												</div>
+											</h:panelGrid>
+											<p:spacer height="30px;" />
+											<p:dataTable id="tabla" value="#{ramoAgropecuarioBean.objetoAseguradoList}" var="obj" widgetVar="50" editable="true">
+												<p:ajax event="rowEdit" listener="#{ramoAgropecuarioBean.onEditGanadero}" />
+												<p:ajax event="rowEditCancel" listener="#{ramoAgropecuarioBean.onCancelGanadero}" />
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.item']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<h:outputText value="#{obj.item}" />
+														</f:facet>
+														<f:facet name="input">
+															<p:inputText value="#{obj.item}" style="width:100%" />
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.nombre']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<h:outputText value="#{obj.nombre}" />
+														</f:facet>
+														<f:facet name="input">
+															<p:inputText value="#{obj.nombre}" style="width:100%" />
+
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.sexo']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<p:selectOneMenu value="#{obj.sexo}" effect="drop">
+																<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+																<f:selectItems value="#{agropecuarioBacking.sexoItems}" />
+															</p:selectOneMenu>
+														</f:facet>
+														<f:facet name="input">
+															<p:selectOneMenu value="#{obj.sexo}" effect="drop">
+																<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+																<f:selectItems value="#{agropecuarioBacking.sexoItems}" />
+															</p:selectOneMenu>
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.raza']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<h:outputText value="#{obj.raza}" />
+														</f:facet>
+														<f:facet name="input">
+															<p:inputText value="#{obj.raza}" style="width:100%" />
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.color']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<h:outputText value="#{obj.color}" />
+														</f:facet>
+														<f:facet name="input">
+															<p:inputText value="#{obj.color}" style="width:100%" />
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.edad']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<h:outputText value="#{obj.edad}" />
+														</f:facet>
+														<f:facet name="input">
+															<p:inputText value="#{obj.edad}" style="width:100%" />
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="#{emision['agropecuario.objeto.montoAsegurado']}" />
+													</f:facet>
+													<p:cellEditor>
+														<f:facet name="output">
+															<h:outputText value="#{obj.montoAsegurado}" />
+														</f:facet>
+														<f:facet name="input">
+															<p:inputText value="#{obj.montoAsegurado}" style="width:100%" />
+														</f:facet>
+													</p:cellEditor>
+												</p:column>
+												<p:column headerText="Options" style="width:50px">
+													<p:rowEditor />
+												</p:column>
+											</p:dataTable>
+										</p:panel>
 									</h:panelGrid>
 
-									<p:fileUpload id="polizaVigente" fileUploadListener="#{agropecuarioBacking.cargarArchivoPoliza}" mode="advanced" dragDropSupport="false"
-										update="messages" sizeLimit="2000000" fileLimit="3" allowTypes="/(\.|\/)(pdf)$/" required="true" />
-									<p:growl id="messages" showDetail="true" />
-								</h:panelGrid>
-								<p:spacer height="30px;" />
 
-								<!-- DESCARGAR DOCUMENTOS -->
-								<h:panelGrid columns="2">
-									<p:commandLink title="Descargar Documento" actionListener="#{agropecuarioBacking.descargarAgropecuarioPDF()}">
-										<h:graphicImage name="pdf.png" library="img" />
-									</p:commandLink>
-								</h:panelGrid>
+									<!-- COBERTURAS -->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['anexo.titulo.cob']}">
 
-								<p:spacer height="15px;" />
-								<h:panelGrid columns="2">
-									<p:outputLabel value="#{emision['lbl.seleccionarCoberturas']}" styleClass="negrita" />
-									<p:commandLink title="#{emision['lbl.seleccionarCoberturas']}" oncomplete="PF('coberturas').show();">
-										<h:graphicImage name="check.png" library="img" />
-									</p:commandLink>
-								</h:panelGrid>
+											<h:outputLabel style="color : #F4751B;" value="Coberturas para Transporte" />
+											<p:spacer height="15px;" />
+											<p:dataTable id="idCoberturasTrans" var="cobertura" value="#{agropecuarioBacking.coberturasTransporte}"
+												selection="#{agropecuarioBacking.selectedCoberturasTransporte}" rowKey="#{cobertura.idCobertAgro}" style="margin-bottom:0"
+												paginator="true" rows="5">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{cobertura.idCobertAgro}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cob']}">
+													<h:outputText value="#{cobertura.coberturaAgro}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCoberturasTrans" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{agropecuarioBacking.selectedCoberturasTransporte}" />
+												</f:facet>
+											</p:dataTable>
+											<p:spacer height="15px;" />
+											<h:outputLabel style="color : #F4751B;" value="Coberturas para la vida" />
 
-								<h:panelGrid columns="2">
-									<p:outputLabel value="#{emision['lbl.seleccionarClausulasAdd']}" styleClass="negrita" />
-									<p:commandLink title="#{emision['lbl.seleccionarClausulasAdd']}" oncomplete="PF('clausulas').show();">
-										<h:graphicImage name="check.png" library="img" />
-									</p:commandLink>
-								</h:panelGrid>
+											<p:spacer height="15px;" />
+											<!-- Para Vida -->
+											<p:dataTable id="idCoberturasVida" var="coberturaVida" value="#{agropecuarioBacking.coberturasVida}"
+												selection="#{agropecuarioBacking.selectedCoberturasVida}" rowKey="#{coberturaVida.idCobertAgro}" style="margin-bottom:0" paginator="true"
+												rows="5">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+												</f:facet>
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{coberturaVida.idCobertAgro}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cob']}">
+													<h:outputText value="#{coberturaVida.coberturaAgro}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCoberturasVida" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{agropecuarioBacking.selectedCoberturasVida}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
+									<p:spacer height="15px;" />
+									<!-- CLAUSULAS ADICIONALES -->
+									<p:accordionPanel multiple="true" activeIndex="">
+										<p:tab title="#{emision['ap.tab.clausulasAdicionales']}">
+											<p:dataTable id="idClausulas" var="clausula" value="#{agropecuarioBacking.clausulasAdicionales}"
+												selection="#{agropecuarioBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAd}" style="margin-bottom:0" paginator="true"
+												rows="5">
+												<f:facet name="header">
+													<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
+												</f:facet>
 
-								<div align="center">
-									<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update=":idPagoPoliza">
-										<h:graphicImage name="pago.jpg" library="img" />
-									</p:commandLink>
-								</div>
-								<!-- COBERTURAS -->
-								<p:accordionPanel multiple="true" activeIndex="">
-									<p:tab title="#{emision['anexo.titulo.cob']}">
+												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												<p:column headerText="Número" width="10%">
+													<h:outputText value="#{clausula.idClausulaAd}" />
+												</p:column>
+												<p:column headerText="#{emision['anexo.titulo.cad']}">
+													<h:outputText value="#{clausula.clausulaAddAgro}" />
+												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idClausulas" icon="icon-save" value="#{emision['boton.guardar']}"
+														action="#{agropecuarioBacking.setearClausulas()}" />
+												</f:facet>
+											</p:dataTable>
+										</p:tab>
+									</p:accordionPanel>
 
-										<h:outputLabel style="color : #F4751B;" value="Coberturas para Transporte" />
-										<p:spacer height="15px;" />
-										<p:dataTable id="idCoberturasTrans" var="cobertura" value="#{agropecuarioBacking.coberturasTransporte}"
-											selection="#{agropecuarioBacking.selectedCoberturasTransporte}" rowKey="#{cobertura.idCobertAgro}" style="margin-bottom:0" paginator="true"
-											rows="5">
-											<f:facet name="header">
-												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
-											</f:facet>
-											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-											<p:column headerText="Número" width="10%">
-												<h:outputText value="#{cobertura.idCobertAgro}" />
-											</p:column>
-											<p:column headerText="#{emision['anexo.titulo.cob']}">
-												<h:outputText value="#{cobertura.coberturaAgro}" />
-											</p:column>
-											<f:facet name="footer">
-												<p:commandButton process="idCoberturasTrans" icon="icon-save" value="#{emision['boton.guardar']}"
-													action="#{agropecuarioBacking.selectedCoberturasTransporte}" />
-											</f:facet>
-										</p:dataTable>
-										<p:spacer height="15px;" />
-										<h:outputLabel style="color : #F4751B;" value="Coberturas para la vida" />
+									<h:panelGrid columns="1" cellpadding="3">
+										<h:panelGrid columns="2">
+											<p:outputLabel for="polizaVigente" value="#{emision['agropecuario.lbl.polizaVigente']}" />
+											<h:graphicImage name="pdf.png" library="img" />
+										</h:panelGrid>
 
-										<p:spacer height="15px;" />
-										<!-- Para Vida -->
-										<p:dataTable id="idCoberturasVida" var="coberturaVida" value="#{agropecuarioBacking.coberturasVida}"
-											selection="#{agropecuarioBacking.selectedCoberturasVida}" rowKey="#{coberturaVida.idCobertAgro}" style="margin-bottom:0" paginator="true"
-											rows="5">
-											<f:facet name="header">
-												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
-											</f:facet>
-											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-											<p:column headerText="Número" width="10%">
-												<h:outputText value="#{coberturaVida.idCobertAgro}" />
-											</p:column>
-											<p:column headerText="#{emision['anexo.titulo.cob']}">
-												<h:outputText value="#{coberturaVida.coberturaAgro}" />
-											</p:column>
-											<f:facet name="footer">
-												<p:commandButton process="idCoberturasVida" icon="icon-save" value="#{emision['boton.guardar']}"
-													action="#{agropecuarioBacking.selectedCoberturasVida}" />
-											</f:facet>
-										</p:dataTable>
-									</p:tab>
-								</p:accordionPanel>
+										<p:fileUpload id="polizaVigente" fileUploadListener="#{agropecuarioBacking.cargarArchivoPoliza}" mode="advanced" dragDropSupport="false"
+											update="messages" sizeLimit="2000000" fileLimit="3" allowTypes="/(\.|\/)(pdf)$/" required="true" />
+										<p:growl id="messages" showDetail="true" />
+									</h:panelGrid>
+									<p:spacer height="30px;" />
 
+									<!-- DESCARGAR DOCUMENTOS -->
+									<h:panelGrid columns="2">
+										<p:commandLink title="Descargar Documento" actionListener="#{agropecuarioBacking.descargarAgropecuarioPDF()}">
+											<h:graphicImage name="pdf.png" library="img" />
+										</p:commandLink>
+									</h:panelGrid>
+
+
+									<div align="center">
+										<p:commandLink title="Abrir opciones de pago" oncomplete="PF('pagoPoliza').show();" update=":idPagoPoliza">
+											<h:graphicImage name="pago.jpg" library="img" />
+										</p:commandLink>
+									</div>
+								</p:panel>
 							</p:panel>
 						</h:form>
+
 						<!-- PAGO POLIZA -->
 						<p:dialog id="idPagoPoliza" header="Pago Poliza" widgetVar="pagoPoliza" modal="true" position="center" showEffect="fade" hideEffect="explode"
 							resizable="false" closable="true" width="700" height="300">
@@ -697,64 +709,6 @@
 								</div>
 							</h:form>
 						</p:dialog>
-
-
-						<!-- CLAUSULAS ADICIONALES -->
-						<p:dialog id="idClausulas" header="#{emision['ap.tab.clausulasAdicionales']}" widgetVar="clausulas" modal="true" position="center"
-							showEffect="fade" hideEffect="explode" resizable="false" closable="true" width="700" height="300">
-
-							<h:form id="clausulaAddForm">
-								<p:dataTable var="clausula" value="#{agropecuarioBacking.clausulasAdicionalesDTO}" paginator="true" editable="true" rows="4">
-									<p:ajax event="rowEdit" listener="#{agropecuarioBacking.onEditClausula}" />
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
-										</f:facet>
-										<h:outputText value="#{clausula.clausula}" />
-									</p:column>
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['lbl.seleccion']}" />
-										</f:facet>
-										<p:cellEditor>
-											<f:facet name="output">
-												<div align="center">
-													<p:selectBooleanCheckbox value="#{clausula.seleccion}" disabled="true" />
-												</div>
-											</f:facet>
-											<f:facet name="input">
-												<div align="center">
-													<p:selectBooleanCheckbox value="#{clausula.seleccion}" />
-												</div>
-											</f:facet>
-										</p:cellEditor>
-									</p:column>
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['lbl.numeroDias']}" />
-										</f:facet>
-										<p:cellEditor>
-											<f:facet name="output">
-												<h:outputText value="#{clausula.numDias}" />
-											</f:facet>
-											<f:facet name="input">
-												<p:inputText value="#{clausula.numDias}" />
-											</f:facet>
-										</p:cellEditor>
-									</p:column>
-									<p:column headerText="Options" style="width:50px">
-										<p:rowEditor />
-									</p:column>
-								</p:dataTable>
-								<p:spacer height="15px;" />
-								<div align="center">
-									<p:commandButton id="guardarClausulas" process="@this" actionListener="#{agropecuarioBacking.setearClausulas()}" icon="icon-save"
-										value="#{emision['boton.guardar']}" title="Guardar" />
-								</div>
-							</h:form>
-						</p:dialog>
-
-
 					</ui:define>
 				</ui:decorate>
 			</ui:define>
