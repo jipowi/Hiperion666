@@ -30,7 +30,6 @@ import org.primefaces.model.UploadedFile;
 
 import ec.com.avila.emision.web.beans.PolizaBean;
 import ec.com.avila.emision.web.beans.RamoAgropecuarioBean;
-import ec.com.avila.emision.web.domain.ClausulaAdicional;
 import ec.com.avila.emision.web.validator.ValidatorCedula;
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.dto.AseguradoraDTO;
@@ -111,8 +110,8 @@ public class AgropecuarioBacking implements Serializable {
 	private PolizaBean polizaBean;
 
 	private List<DetalleAnexo> anexos;
-	private List<ClausulaAdicional> clausulasAdicionales;
-	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
+	private List<ClausulasAddAgro> clausulasAdicionales;
+	private List<ClausulasAddAgro> selectedClausulasAdd;
 	private List<CobertAgro> coberturasTransporte;
 	private List<CobertAgro> selectedCoberturasTransporte;
 	private List<CobertAgro> coberturasVida;
@@ -174,23 +173,20 @@ public class AgropecuarioBacking implements Serializable {
 	 * @return
 	 */
 	public void obtenerClausulasAdicionales() {
-		clausulasAdicionales = new ArrayList<ClausulaAdicional>();
+		clausulasAdicionales = new ArrayList<ClausulasAddAgro>();
 		if (anexos != null && anexos.size() > 0) {
 			for (DetalleAnexo anexo : anexos) {
 
-				if (anexo.getAnexo().getIdAnexo() == 1)
-					clausulasAdicionales.add(new ClausulaAdicional(anexo.getIdDetalleAnexo(), anexo.getNombreDetalleAnexo()));
+				if (anexo.getAnexo().getIdAnexo() == 1) {
+					ClausulasAddAgro clausula = new ClausulasAddAgro();
+					clausula.setIdClausulaAd(anexo.getIdDetalleAnexo());
+					clausula.setClausulaAddAgro(anexo.getNombreDetalleAnexo());
+					clausulasAdicionales.add(clausula);
+				}
 			}
 
 		}
 
-		for (ClausulaAdicional clausula : clausulasAdicionales) {
-			ClausulaAdicionalDTO clausulaDTO = new ClausulaAdicionalDTO();
-			clausulaDTO.setClausula(clausula.getNombre());
-			clausulaDTO.setSeleccion(false);
-
-			clausulasAdicionalesDTO.add(clausulaDTO);
-		}
 	}
 
 	/**
@@ -779,26 +775,10 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public void setearClausulas() {
 
-		// Clausulas Adicionales
-		int contClausulas = 0;
-		List<ClausulasAddAgro> clausulasAgropecuario = new ArrayList<>();
-		for (ClausulaAdicionalDTO clausualaDTO : clausulasAdicionalesDTO) {
-			if (clausualaDTO.getSeleccion()) {
-				contClausulas++;
-				ClausulasAddAgro clausulaAgropecuario = new ClausulasAddAgro();
-				clausulaAgropecuario.setClausulaAddAgro(clausualaDTO.getClausula());
-				clausulaAgropecuario.setNumDiasAgro(clausualaDTO.getNumDias());
-				clausulaAgropecuario.setEstado(EstadoEnum.A);
-				clausulaAgropecuario.setFechaCreacion(new Date());
-				clausulaAgropecuario.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				clausulasAgropecuario.add(clausulaAgropecuario);
-			}
-		}
-		if (contClausulas == 0) {
+		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
 		} else {
-			agropecuario.setClausulasAddAgros(clausulasAgropecuario);
+			agropecuario.setClausulasAddAgros(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
 	}
@@ -1124,18 +1104,33 @@ public class AgropecuarioBacking implements Serializable {
 	}
 
 	/**
-	 * @return the clausulasAdicionalesDTO
+	 * @return the clausulasAdicionales
 	 */
-	public List<ClausulaAdicionalDTO> getClausulasAdicionalesDTO() {
-		return clausulasAdicionalesDTO;
+	public List<ClausulasAddAgro> getClausulasAdicionales() {
+		return clausulasAdicionales;
 	}
 
 	/**
-	 * @param clausulasAdicionalesDTO
-	 *            the clausulasAdicionalesDTO to set
+	 * @param clausulasAdicionales
+	 *            the clausulasAdicionales to set
 	 */
-	public void setClausulasAdicionalesDTO(List<ClausulaAdicionalDTO> clausulasAdicionalesDTO) {
-		this.clausulasAdicionalesDTO = clausulasAdicionalesDTO;
+	public void setClausulasAdicionales(List<ClausulasAddAgro> clausulasAdicionales) {
+		this.clausulasAdicionales = clausulasAdicionales;
+	}
+
+	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddAgro> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddAgro> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
 
 	/**
@@ -1299,7 +1294,8 @@ public class AgropecuarioBacking implements Serializable {
 	}
 
 	/**
-	 * @param coberturasTransporte the coberturasTransporte to set
+	 * @param coberturasTransporte
+	 *            the coberturasTransporte to set
 	 */
 	public void setCoberturasTransporte(List<CobertAgro> coberturasTransporte) {
 		this.coberturasTransporte = coberturasTransporte;
@@ -1313,7 +1309,8 @@ public class AgropecuarioBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCoberturasTransporte the selectedCoberturasTransporte to set
+	 * @param selectedCoberturasTransporte
+	 *            the selectedCoberturasTransporte to set
 	 */
 	public void setSelectedCoberturasTransporte(List<CobertAgro> selectedCoberturasTransporte) {
 		this.selectedCoberturasTransporte = selectedCoberturasTransporte;
@@ -1327,7 +1324,8 @@ public class AgropecuarioBacking implements Serializable {
 	}
 
 	/**
-	 * @param coberturasVida the coberturasVida to set
+	 * @param coberturasVida
+	 *            the coberturasVida to set
 	 */
 	public void setCoberturasVida(List<CobertAgro> coberturasVida) {
 		this.coberturasVida = coberturasVida;
@@ -1341,7 +1339,8 @@ public class AgropecuarioBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCoberturasVida the selectedCoberturasVida to set
+	 * @param selectedCoberturasVida
+	 *            the selectedCoberturasVida to set
 	 */
 	public void setSelectedCoberturasVida(List<CobertAgro> selectedCoberturasVida) {
 		this.selectedCoberturasVida = selectedCoberturasVida;

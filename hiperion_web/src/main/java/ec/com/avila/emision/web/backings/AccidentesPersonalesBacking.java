@@ -102,12 +102,10 @@ public class AccidentesPersonalesBacking implements Serializable {
 	private PolizaService polizaService;
 
 	private List<DetalleAnexo> anexos;
-	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO;
 	private List<ClausulasAddAccPer> clausulasAdicionales;
-
+	private List<ClausulasAddAccPer> selectedClausulasAdd;
 	private List<CobertAccPer> coberturas;
 	private List<CobertAccPer> selectedCoberturas;
-	private List<CondicionEspecialDTO> condicionesEspecialesDTO;
 	private List<CondEspAccPer> condicionesEspeciales;
 	private List<CondEspAccPer> selectedCondicionesEsp;
 	private List<SelectItem> sexoItems;
@@ -141,7 +139,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 	private Double valorGrupo;
 
 	private Usuario usuario;
-	private List<ClausulasAddAccPer> selectedClausulasAdd;
+
 	RamoAccidentesPersonale accidentesPersonales = new RamoAccidentesPersonale();
 
 	Logger log = Logger.getLogger(AccidentesPersonalesBacking.class);
@@ -154,11 +152,10 @@ public class AccidentesPersonalesBacking implements Serializable {
 			Ramo ramo = ramoService.consultarRamoPorCodigo("AP");
 			anexos = ramo.getDetalleAnexos();
 
-			
-				obtenerCoberturas();
-				obtenerClausulasAdicionales();
-				obtenerCondicionesEspeciales();
-			
+			obtenerCoberturas();
+			obtenerClausulasAdicionales();
+			obtenerCondicionesEspeciales();
+
 		} catch (HiperionException e) {
 			e.printStackTrace();
 		}
@@ -795,38 +792,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 */
 	public void setSexoItems(List<SelectItem> sexoItems) {
 		this.sexoItems = sexoItems;
-	}
-
-	/**
-	 * @return the clausulasAdicionalesDTO
-	 */
-	public List<ClausulaAdicionalDTO> getClausulasAdicionalesDTO() {
-		return clausulasAdicionalesDTO;
-	}
-
-	/**
-	 * @param clausulasAdicionalesDTO
-	 *            the clausulasAdicionalesDTO to set
-	 */
-	public void setClausulasAdicionalesDTO(List<ClausulaAdicionalDTO> clausulasAdicionalesDTO) {
-		this.clausulasAdicionalesDTO = clausulasAdicionalesDTO;
-	}
-
-	
-
-	/**
-	 * @return the condicionesEspecialesDTO
-	 */
-	public List<CondicionEspecialDTO> getCondicionesEspecialesDTO() {
-		return condicionesEspecialesDTO;
-	}
-
-	/**
-	 * @param condicionesEspecialesDTO
-	 *            the condicionesEspecialesDTO to set
-	 */
-	public void setCondicionesEspecialesDTO(List<CondicionEspecialDTO> condicionesEspecialesDTO) {
-		this.condicionesEspecialesDTO = condicionesEspecialesDTO;
 	}
 
 	/**
