@@ -31,7 +31,6 @@ import org.primefaces.model.UploadedFile;
 import ec.com.avila.emision.web.beans.PolizaBean;
 import ec.com.avila.emision.web.beans.RamoAgropecuarioBean;
 import ec.com.avila.emision.web.domain.ClausulaAdicional;
-import ec.com.avila.emision.web.domain.Cobertura;
 import ec.com.avila.emision.web.validator.ValidatorCedula;
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.dto.AseguradoraDTO;
@@ -114,10 +113,10 @@ public class AgropecuarioBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 	private List<ClausulaAdicional> clausulasAdicionales;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
-	private List<Cobertura> coberturasTransporte;
-	private List<CoberturaDTO> coberturasTransporteDTO = new ArrayList<>();
-	private List<CoberturaDTO> coberturasVidaDTO = new ArrayList<>();
-	private List<Cobertura> coberturasVida;
+	private List<CobertAgro> coberturasTransporte;
+	private List<CobertAgro> selectedCoberturasTransporte;
+	private List<CobertAgro> coberturasVida;
+	private List<CobertAgro> selectedCoberturasVida;
 
 	private UploadedFile file;
 	private List<SelectItem> sexoItems;
@@ -322,7 +321,7 @@ public class AgropecuarioBacking implements Serializable {
 					ramoAgropecuarioBean.getContactoAseguradora());
 
 			aseguradorasDTO.add(aseguradoraDTO);
-			//contactosItems.clear();
+			// contactosItems.clear();
 
 		} catch (HiperionException e) {
 			e.printStackTrace();
@@ -484,7 +483,7 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public void obtenerCoberturasTransporte() throws HiperionException {
 
-		coberturasTransporte = new ArrayList<Cobertura>();
+		coberturasTransporte = new ArrayList<CobertAgro>();
 
 		if (anexos != null && anexos.size() > 0) {
 			List<DetalleAnexo> detallesTransporte = new ArrayList<>();
@@ -494,17 +493,8 @@ public class AgropecuarioBacking implements Serializable {
 				}
 			}
 			for (DetalleAnexo detalle : detallesTransporte) {
-				coberturasTransporte.add(new Cobertura(detalle.getIdDetalleAnexo(), detalle.getNombreDetalleAnexo()));
+				coberturasTransporte.add(new CobertAgro(detalle.getIdDetalleAnexo(), detalle.getNombreDetalleAnexo()));
 			}
-
-		}
-
-		for (Cobertura cobertura : coberturasTransporte) {
-			CoberturaDTO coberturaDTO = new CoberturaDTO();
-			coberturaDTO.setCobertura(cobertura.getNombre());
-			coberturaDTO.setSeleccion(false);
-
-			coberturasTransporteDTO.add(coberturaDTO);
 		}
 	}
 
@@ -613,8 +603,7 @@ public class AgropecuarioBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void obtenerCoberturasVida() throws HiperionException {
-		coberturasVida = new ArrayList<Cobertura>();
-
+		coberturasVida = new ArrayList<CobertAgro>();
 		if (anexos != null && anexos.size() > 0) {
 			List<DetalleAnexo> detallesVida = new ArrayList<>();
 			for (DetalleAnexo detalleAnexo : anexos) {
@@ -623,17 +612,8 @@ public class AgropecuarioBacking implements Serializable {
 				}
 			}
 			for (DetalleAnexo detalle : detallesVida) {
-				coberturasVida.add(new Cobertura(detalle.getIdDetalleAnexo(), detalle.getNombreDetalleAnexo()));
+				coberturasVida.add(new CobertAgro(detalle.getIdDetalleAnexo(), detalle.getNombreDetalleAnexo()));
 			}
-
-		}
-
-		for (Cobertura cobertura : coberturasVida) {
-			CoberturaDTO coberturaDTO = new CoberturaDTO();
-			coberturaDTO.setCobertura(cobertura.getNombre());
-			coberturaDTO.setSeleccion(false);
-
-			coberturasVidaDTO.add(coberturaDTO);
 		}
 	}
 
@@ -708,19 +688,18 @@ public class AgropecuarioBacking implements Serializable {
 
 			}
 			// Archivo
-			/*if (ramoAgropecuarioBean.getFilePolizaVigente() != null) {
-				ramoAgropecuarioBean.getFilePolizaVigente().setIdUsuarioCreacion(usuario.getIdUsuario());
-				ramoAgropecuarioBean.getFilePolizaVigente().setFechaCreacion(new Date());
-				ramoAgropecuarioBean.getFilePolizaVigente().setEstado(EstadoEnum.A);
-				ramoAgropecuarioService.guardarArchivoPoliza(ramoAgropecuarioBean.getFilePolizaVigente());
+			/*
+			 * if (ramoAgropecuarioBean.getFilePolizaVigente() != null) {
+			 * ramoAgropecuarioBean.getFilePolizaVigente().setIdUsuarioCreacion(usuario.getIdUsuario());
+			 * ramoAgropecuarioBean.getFilePolizaVigente().setFechaCreacion(new Date());
+			 * ramoAgropecuarioBean.getFilePolizaVigente().setEstado(EstadoEnum.A);
+			 * ramoAgropecuarioService.guardarArchivoPoliza(ramoAgropecuarioBean.getFilePolizaVigente());
+			 * 
+			 * MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save")); agropecuario = new
+			 * RamoAgropecuario(); ramoAgropecuarioBean.getObjetoAseguradoList().clear(); } else { MessagesController.addError(null,
+			 * HiperionMensajes.getInstancia().getString("hiperion.mensaje.error.archivoPoliza")); }
+			 */
 
-				MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
-				agropecuario = new RamoAgropecuario();
-				ramoAgropecuarioBean.getObjetoAseguradoList().clear();
-			} else {
-				MessagesController.addError(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.error.archivoPoliza"));
-			}*/
-			
 			ramoAgropecuarioService.guardarAgropecuario(agropecuario, poliza);
 
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
@@ -834,41 +813,24 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public void setearCoberturas() {
 		// Coberturas Transporte
-		int cont = 0;
-		List<CobertAgro> coberturasAgropecuario = new ArrayList<>();
-		for (CoberturaDTO coberturaDTO : coberturasTransporteDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				cont++;
-				CobertAgro coberturaAgropecuario = new CobertAgro();
-				coberturaAgropecuario.setCoberturaAgro(coberturaDTO.getCobertura());
-				coberturaAgropecuario.setEstado(EstadoEnum.A);
-				coberturaAgropecuario.setFechaCreacion(new Date());
-				coberturaAgropecuario.setIdUsuarioCreacion(usuario.getIdUsuario());
-				coberturaAgropecuario.setTipoCoberturaAgro("T");
 
-				coberturasAgropecuario.add(coberturaAgropecuario);
-			}
-		}
-		// coberturas Vida
-		for (CoberturaDTO coberturaDTO : coberturasVidaDTO) {
-			if (coberturaDTO.getSeleccion()) {
-				cont++;
-				CobertAgro coberturaAgropecuario = new CobertAgro();
-				coberturaAgropecuario.setCoberturaAgro(coberturaDTO.getCobertura());
-				coberturaAgropecuario.setEstado(EstadoEnum.A);
-				coberturaAgropecuario.setFechaCreacion(new Date());
-				coberturaAgropecuario.setIdUsuarioCreacion(usuario.getIdUsuario());
-				coberturaAgropecuario.setTipoCoberturaAgro("V");
-
-				coberturasAgropecuario.add(coberturaAgropecuario);
-			}
-		}
-		if (cont == 0) {
+		List<CobertAgro> coberturas = new ArrayList<>();
+		if (selectedCoberturasTransporte.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
 		} else {
-			agropecuario.setCobertAgros(coberturasAgropecuario);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
+			coberturas = selectedCoberturasTransporte;
 		}
+
+		// coberturas Vida
+		if (selectedCoberturasVida.isEmpty()) {
+			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
+		} else {
+			for (CobertAgro coberturaVida : selectedCoberturasVida) {
+				coberturas.add(coberturaVida);
+			}
+		}
+
+		agropecuario.setCobertAgros(coberturas);
 	}
 
 	/**
@@ -1177,36 +1139,6 @@ public class AgropecuarioBacking implements Serializable {
 	}
 
 	/**
-	 * @return the coberturasTransporteDTO
-	 */
-	public List<CoberturaDTO> getCoberturasTransporteDTO() {
-		return coberturasTransporteDTO;
-	}
-
-	/**
-	 * @param coberturasTransporteDTO
-	 *            the coberturasTransporteDTO to set
-	 */
-	public void setCoberturasTransporteDTO(List<CoberturaDTO> coberturasTransporteDTO) {
-		this.coberturasTransporteDTO = coberturasTransporteDTO;
-	}
-
-	/**
-	 * @return the coberturasVidaDTO
-	 */
-	public List<CoberturaDTO> getCoberturasVidaDTO() {
-		return coberturasVidaDTO;
-	}
-
-	/**
-	 * @param coberturasVidaDTO
-	 *            the coberturasVidaDTO to set
-	 */
-	public void setCoberturasVidaDTO(List<CoberturaDTO> coberturasVidaDTO) {
-		this.coberturasVidaDTO = coberturasVidaDTO;
-	}
-
-	/**
 	 * @return the activarGanadero
 	 */
 	public Boolean getActivarGanadero() {
@@ -1312,7 +1244,7 @@ public class AgropecuarioBacking implements Serializable {
 	public void setPagoFinanciadoItems(List<SelectItem> pagoFinanciadoItems) {
 		this.pagoFinanciadoItems = pagoFinanciadoItems;
 	}
-	
+
 	/**
 	 * @param tarjetasCreditoItems
 	 *            the tarjetasCreditoItems to set
@@ -1357,6 +1289,62 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public void setActivarDatosCliente(boolean activarDatosCliente) {
 		this.activarDatosCliente = activarDatosCliente;
+	}
+
+	/**
+	 * @return the coberturasTransporte
+	 */
+	public List<CobertAgro> getCoberturasTransporte() {
+		return coberturasTransporte;
+	}
+
+	/**
+	 * @param coberturasTransporte the coberturasTransporte to set
+	 */
+	public void setCoberturasTransporte(List<CobertAgro> coberturasTransporte) {
+		this.coberturasTransporte = coberturasTransporte;
+	}
+
+	/**
+	 * @return the selectedCoberturasTransporte
+	 */
+	public List<CobertAgro> getSelectedCoberturasTransporte() {
+		return selectedCoberturasTransporte;
+	}
+
+	/**
+	 * @param selectedCoberturasTransporte the selectedCoberturasTransporte to set
+	 */
+	public void setSelectedCoberturasTransporte(List<CobertAgro> selectedCoberturasTransporte) {
+		this.selectedCoberturasTransporte = selectedCoberturasTransporte;
+	}
+
+	/**
+	 * @return the coberturasVida
+	 */
+	public List<CobertAgro> getCoberturasVida() {
+		return coberturasVida;
+	}
+
+	/**
+	 * @param coberturasVida the coberturasVida to set
+	 */
+	public void setCoberturasVida(List<CobertAgro> coberturasVida) {
+		this.coberturasVida = coberturasVida;
+	}
+
+	/**
+	 * @return the selectedCoberturasVida
+	 */
+	public List<CobertAgro> getSelectedCoberturasVida() {
+		return selectedCoberturasVida;
+	}
+
+	/**
+	 * @param selectedCoberturasVida the selectedCoberturasVida to set
+	 */
+	public void setSelectedCoberturasVida(List<CobertAgro> selectedCoberturasVida) {
+		this.selectedCoberturasVida = selectedCoberturasVida;
 	}
 
 }

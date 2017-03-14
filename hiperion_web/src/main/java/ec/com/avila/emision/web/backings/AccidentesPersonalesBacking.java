@@ -104,7 +104,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO;
 	private List<ClausulasAddAccPer> clausulasAdicionales;
-	private List<CoberturaDTO> coberturasDTO;
+
 	private List<CobertAccPer> coberturas;
 	private List<CobertAccPer> selectedCoberturas;
 	private List<CondicionEspecialDTO> condicionesEspecialesDTO;
@@ -812,20 +812,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 		this.clausulasAdicionalesDTO = clausulasAdicionalesDTO;
 	}
 
-	/**
-	 * @return the coberturasDTO
-	 */
-	public List<CoberturaDTO> getCoberturasDTO() {
-		return coberturasDTO;
-	}
-
-	/**
-	 * @param coberturasDTO
-	 *            the coberturasDTO to set
-	 */
-	public void setCoberturasDTO(List<CoberturaDTO> coberturasDTO) {
-		this.coberturasDTO = coberturasDTO;
-	}
+	
 
 	/**
 	 * @return the condicionesEspecialesDTO
