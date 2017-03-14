@@ -382,8 +382,8 @@
 										<h:outputText value="#{emision['titulo.infoRamo']}" />
 									</f:facet>
 									<p:spacer height="15px;" />
-									<!-- COBERTURAS-->
-									
+
+
 								</p:panel>
 								<h:panelGrid columns="1" cellpadding="3">
 									<h:panelGrid columns="2">
@@ -424,6 +424,56 @@
 										<h:graphicImage name="pago.jpg" library="img" />
 									</p:commandLink>
 								</div>
+								<!-- COBERTURAS -->
+								<p:accordionPanel multiple="true" activeIndex="">
+									<p:tab title="#{emision['anexo.titulo.cob']}">
+
+										<h:outputLabel style="color : #F4751B;" value="Coberturas para Transporte" />
+										<p:spacer height="15px;" />
+										<p:dataTable id="idCoberturasTrans" var="cobertura" value="#{agropecuarioBacking.coberturasTransporte}"
+											selection="#{agropecuarioBacking.selectedCoberturasTransporte}" rowKey="#{cobertura.idCobertAgro}" style="margin-bottom:0" paginator="true"
+											rows="5">
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+											<p:column headerText="Número" width="10%">
+												<h:outputText value="#{cobertura.idCobertAgro}" />
+											</p:column>
+											<p:column headerText="#{emision['anexo.titulo.cob']}">
+												<h:outputText value="#{cobertura.coberturaAgro}" />
+											</p:column>
+											<f:facet name="footer">
+												<p:commandButton process="idCoberturasTrans" icon="icon-save" value="#{emision['boton.guardar']}"
+													action="#{agropecuarioBacking.selectedCoberturasTransporte}" />
+											</f:facet>
+										</p:dataTable>
+										<p:spacer height="15px;" />
+										<h:outputLabel style="color : #F4751B;" value="Coberturas para la vida" />
+
+										<p:spacer height="15px;" />
+										<!-- Para Vida -->
+										<p:dataTable id="idCoberturasVida" var="coberturaVida" value="#{agropecuarioBacking.coberturasVida}"
+											selection="#{agropecuarioBacking.selectedCoberturasVida}" rowKey="#{coberturaVida.idCobertAgro}" style="margin-bottom:0" paginator="true"
+											rows="5">
+											<f:facet name="header">
+												<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
+											</f:facet>
+											<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+											<p:column headerText="Número" width="10%">
+												<h:outputText value="#{coberturaVida.idCobertAgro}" />
+											</p:column>
+											<p:column headerText="#{emision['anexo.titulo.cob']}">
+												<h:outputText value="#{coberturaVida.coberturaAgro}" />
+											</p:column>
+											<f:facet name="footer">
+												<p:commandButton process="idCoberturasVida" icon="icon-save" value="#{emision['boton.guardar']}"
+													action="#{agropecuarioBacking.selectedCoberturasVida}" />
+											</f:facet>
+										</p:dataTable>
+									</p:tab>
+								</p:accordionPanel>
+
 							</p:panel>
 						</h:form>
 						<!-- PAGO POLIZA -->
@@ -703,83 +753,7 @@
 								</div>
 							</h:form>
 						</p:dialog>
-						<!-- COBERTURAS -->
-						<p:dialog id="idCoberturas" header="#{emision['ap.tab.coberturas']}" widgetVar="coberturas" modal="true" position="center" showEffect="fade"
-							hideEffect="explode" resizable="false" closable="true" width="700" height="300">
-							<h:form id="coberturasForm">
-								<h:outputLabel style="color : #F4751B;" value="Coberturas para Transporte" />
-								<p:spacer height="15px;" />
-								<p:dataTable var="cobertura" value="#{agropecuarioBacking.coberturasTransporteDTO}" paginator="true" rows="4" editable="true">
-									<p:ajax event="rowEdit" listener="#{agropecuarioBacking.onEditCobertura}" />
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['anexo.titulo.cob']}" />
-										</f:facet>
-										<h:outputText value="#{cobertura.cobertura}" />
-									</p:column>
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['lbl.seleccion']}" />
-										</f:facet>
-										<p:cellEditor>
-											<f:facet name="output">
-												<div align="center">
-													<p:selectBooleanCheckbox value="#{cobertura.seleccion}" disabled="true" />
-												</div>
-											</f:facet>
-											<f:facet name="input">
-												<div align="center">
-													<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
-												</div>
-											</f:facet>
-										</p:cellEditor>
-									</p:column>
-									<p:column headerText="Options" style="width:50px">
-										<p:rowEditor />
-									</p:column>
-								</p:dataTable>
-								<p:spacer height="15px;" />
-								<h:outputLabel style="color : #F4751B;" value="Coberturas para la vida" />
 
-								<p:spacer height="15px;" />
-								<!-- Para Vida -->
-								<p:dataTable var="cobertura" value="#{agropecuarioBacking.coberturasVidaDTO}" paginator="true" rows="4" editable="true">
-									<p:ajax event="rowEdit" listener="#{agropecuarioBacking.onEditCobertura}" />
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['anexo.titulo.cad']}" />
-										</f:facet>
-										<h:outputText value="#{cobertura.cobertura}" />
-									</p:column>
-									<p:column>
-										<f:facet name="header">
-											<h:outputLabel value="#{emision['lbl.seleccion']}" />
-										</f:facet>
-										<p:cellEditor>
-											<f:facet name="output">
-												<div align="center">
-													<p:selectBooleanCheckbox value="#{cobertura.seleccion}" disabled="true" />
-												</div>
-											</f:facet>
-											<f:facet name="input">
-												<div align="center">
-													<p:selectBooleanCheckbox value="#{cobertura.seleccion}" />
-												</div>
-											</f:facet>
-										</p:cellEditor>
-									</p:column>
-									<p:column headerText="Options" style="width:50px">
-										<p:rowEditor />
-									</p:column>
-								</p:dataTable>
-
-								<p:spacer height="15px;" />
-								<div align="center">
-									<p:commandButton id="guardarCoberturas" process="@this" actionListener="#{agropecuarioBacking.setearCoberturas()}" icon="icon-save"
-										value="#{emision['boton.guardar']}" title="Guardar" />
-								</div>
-							</h:form>
-						</p:dialog>
 
 					</ui:define>
 				</ui:decorate>
