@@ -105,11 +105,12 @@ public class AsistenciaMedicaBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 
 	private List<LimitesCostosAsm> limitesCostosBeneficios;
+	private List<LimitesCostosAsm> selectedBeneficios;
 	private List<LimitesCostosAsm> limitesCostosBenAdd;
+	private List<LimitesCostosAsm> selectedBeneficiosAdd;
 	private List<LimitesCostosAsm> limitesCostosMaternidad;
-	private List<LimitesCostosDTO> limitesCostosBeneficiosDTO = new ArrayList<>();
-	private List<LimitesCostosDTO> limitesCostosBenAddDTO = new ArrayList<>();
-	private List<LimitesCostosDTO> limitesCostosMaternidadDTO = new ArrayList<>();
+	private List<LimitesCostosAsm> selectedCostosMaternidad;
+
 	private List<TablaAmortizacionDTO> tablaAmortizacionList = new ArrayList<TablaAmortizacionDTO>();
 	private List<SelectItem> contactosItems = new ArrayList<>();
 	private List<SelectItem> pagoFinanciadoItems;
@@ -225,21 +226,19 @@ public class AsistenciaMedicaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 
 				Long idTitulo = ramoAstMedicaService.consultarIdTitulo(anexo.getIdDetalleAnexo());
-
 				if (anexo.getAnexo().getIdAnexo() == 4 && idTitulo == 3) {
 					LimitesCostosAsm limiteCosto = new LimitesCostosAsm();
+					limiteCosto.setIdLimiteCostoAsm(anexo.getIdDetalleAnexo());
+					limiteCosto.setTipoLimite(1);
+					limiteCosto.setEstado(EstadoEnum.A);
+					limiteCosto.setFechaCreacion(new Date());
+					limiteCosto.setIdUsuarioCreacion(usuario.getIdUsuario());
 					limiteCosto.setLimiteCosto(anexo.getNombreDetalleAnexo());
 
 					limitesCostosBeneficios.add(limiteCosto);
 				}
 			}
-			for (LimitesCostosAsm limite : limitesCostosBeneficios) {
-				LimitesCostosDTO limiteDTO = new LimitesCostosDTO();
-				limiteDTO.setLimitesCostos(limite.getLimiteCosto());
-				limiteDTO.setSeleccion(false);
 
-				limitesCostosBeneficiosDTO.add(limiteDTO);
-			}
 		}
 
 	}
@@ -259,24 +258,19 @@ public class AsistenciaMedicaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 
 				Long idTitulo = ramoAstMedicaService.consultarIdTitulo(anexo.getIdDetalleAnexo());
-
 				if (anexo.getAnexo().getIdAnexo() == 4 && idTitulo == 4) {
-
 					LimitesCostosAsm limiteCosto = new LimitesCostosAsm();
+					limiteCosto.setIdLimiteCostoAsm(anexo.getIdDetalleAnexo());
 					limiteCosto.setLimiteCosto(anexo.getNombreDetalleAnexo());
+					limiteCosto.setTipoLimite(2);
 
+					limiteCosto.setEstado(EstadoEnum.A);
+					limiteCosto.setFechaCreacion(new Date());
+					limiteCosto.setIdUsuarioCreacion(usuario.getIdUsuario());
 					limitesCostosBenAdd.add(limiteCosto);
 				}
 			}
-			for (LimitesCostosAsm limite : limitesCostosBenAdd) {
-				LimitesCostosDTO limiteDTO = new LimitesCostosDTO();
-				limiteDTO.setLimitesCostos(limite.getLimiteCosto());
-				limiteDTO.setSeleccion(false);
-
-				limitesCostosBenAddDTO.add(limiteDTO);
-			}
 		}
-
 	}
 
 	/**
@@ -294,21 +288,19 @@ public class AsistenciaMedicaBacking implements Serializable {
 			for (DetalleAnexo anexo : anexos) {
 
 				Long idTitulo = ramoAstMedicaService.consultarIdTitulo(anexo.getIdDetalleAnexo());
-
 				if (anexo.getAnexo().getIdAnexo() == 4 && idTitulo == 5) {
 
 					LimitesCostosAsm limiteCosto = new LimitesCostosAsm();
+					limiteCosto.setIdLimiteCostoAsm(anexo.getIdDetalleAnexo());
 					limiteCosto.setLimiteCosto(anexo.getNombreDetalleAnexo());
+					limiteCosto.setTipoLimite(3);
+
+					limiteCosto.setEstado(EstadoEnum.A);
+					limiteCosto.setFechaCreacion(new Date());
+					limiteCosto.setIdUsuarioCreacion(usuario.getIdUsuario());
 
 					limitesCostosMaternidad.add(limiteCosto);
 				}
-			}
-			for (LimitesCostosAsm limite : limitesCostosMaternidad) {
-				LimitesCostosDTO limiteDTO = new LimitesCostosDTO();
-				limiteDTO.setLimitesCostos(limite.getLimiteCosto());
-				limiteDTO.setSeleccion(false);
-
-				limitesCostosMaternidadDTO.add(limiteDTO);
 			}
 		}
 
@@ -325,56 +317,55 @@ public class AsistenciaMedicaBacking implements Serializable {
 	 */
 	public Poliza setearDatosPoliza() {
 
-		
 		Poliza poliza = new Poliza();
-		
-	if(polizaBean.getEstadoPoliza().equals("EMITIDO")){
-		
-		poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
-		poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
-		poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
-		poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
-		poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
-		poliza.setDiasCobertura(polizaBean.getDiasCobertura());
-		poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
-		poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
-		poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
-		poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
-		poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
-		poliza.setEstadoPoliza("COTIZADO");
 
-		PagoPoliza pagoPoliza = new PagoPoliza();
-		pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
-		pagoPoliza.setSubtotal(polizaBean.getSubtotal());
-		pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
-		pagoPoliza.setIva(polizaBean.getIva());
-		pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
-		pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
-		pagoPoliza.setEstado(EstadoEnum.A);
-		pagoPoliza.setFechaCreacion(new Date());
-		pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
+		if (polizaBean.getEstadoPoliza().equals("EMITIDO")) {
 
-		List<Financiamiento> financiamientos = new ArrayList<>();
-		for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
-			Financiamiento financiamientoTemp = new Financiamiento();
-			financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
-			financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
-			financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
+			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
+			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
+			poliza.setEjecutivo(polizaBean.getEjecutivo().getNombreUsuario());
+			poliza.setVigenciaDesde(polizaBean.getVigenciaDesde());
+			poliza.setVigenciaHasta(polizaBean.getVigenciaHasta());
+			poliza.setDiasCobertura(polizaBean.getDiasCobertura());
+			poliza.setSumaAsegurada(polizaBean.getSumaAsegurada());
+			poliza.setPrimaNeta(BigDecimal.valueOf(polizaBean.getPrimaNeta()));
+			poliza.setSuperBanSeguros(polizaBean.getSuperBanSeguros());
+			poliza.setSeguroCampesino(BigDecimal.valueOf(polizaBean.getSeguroCampesino()));
+			poliza.setDerechoEmision(BigDecimal.valueOf(polizaBean.getDerechoEmision()));
+			poliza.setEstadoPoliza("COTIZADO");
 
-			financiamientos.add(financiamientoTemp);
+			PagoPoliza pagoPoliza = new PagoPoliza();
+			pagoPoliza.setNumeroFactura(polizaBean.getNumeroFactura());
+			pagoPoliza.setSubtotal(polizaBean.getSubtotal());
+			pagoPoliza.setAdicionalSegCampesino(polizaBean.getAdicionalSegCampesino());
+			pagoPoliza.setIva(polizaBean.getIva());
+			pagoPoliza.setCuotaInicial(polizaBean.getCuotaInicial());
+			pagoPoliza.setValorTotalPagoPoliza(polizaBean.getTotal());
+			pagoPoliza.setEstado(EstadoEnum.A);
+			pagoPoliza.setFechaCreacion(new Date());
+			pagoPoliza.setIdUsuarioCreacion(usuario.getIdUsuario());
+
+			List<Financiamiento> financiamientos = new ArrayList<>();
+			for (TablaAmortizacionDTO financiamiento : polizaBean.getFinanciamientos()) {
+				Financiamiento financiamientoTemp = new Financiamiento();
+				financiamientoTemp.setNumeroCuota(financiamiento.getNumeroLetra());
+				financiamientoTemp.setValorLetra(BigDecimal.valueOf(financiamiento.getValor()));
+				financiamientoTemp.setFechaVencimiento(financiamiento.getFechaVencimiento());
+
+				financiamientos.add(financiamientoTemp);
+			}
+
+			pagoPoliza.setFinanciamientos(financiamientos);
+
+			poliza.setPagoPoliza(pagoPoliza);
 		}
 
-		pagoPoliza.setFinanciamientos(financiamientos);
-
-		poliza.setPagoPoliza(pagoPoliza);
-	}
-	
 		poliza.setEstadoPoliza(polizaBean.getEstadoPoliza());
 		poliza.setCliente(polizaBean.getCliente());
 		poliza.setFechaRegistro(new Date());
 		poliza.setRamo(RamoEnum.R3.getLabel());
 		poliza.setEjecutivo(usuario.getIdentificacionUsuario());
-		
+
 		return poliza;
 	}
 
@@ -391,7 +382,7 @@ public class AsistenciaMedicaBacking implements Serializable {
 		try {
 
 			Poliza poliza = setearDatosPoliza();
-		
+
 			asistenciaMedica.setTotalMensualGrupoAsm(ramoAsistenciaMedicaBean.getTotalMensualGrupo());
 			asistenciaMedica.setIdUsuarioCreacion(usuario.getIdUsuario());
 			asistenciaMedica.setFechaCreacion(new Date());
@@ -420,28 +411,15 @@ public class AsistenciaMedicaBacking implements Serializable {
 	 */
 	public void setearBeneficios() {
 
-		int contBeneficios = 0;
-		List<LimitesCostosAsm> limites = new ArrayList<>();
-		for (LimitesCostosDTO beneficioBTO : limitesCostosBeneficiosDTO) {
-			if (beneficioBTO.getSeleccion()) {
-				contBeneficios++;
-				LimitesCostosAsm limiteCosto = new LimitesCostosAsm();
-				limiteCosto.setLimiteCosto(beneficioBTO.getLimitesCostos());
-				limiteCosto.setTipoLimite(1);
-
-				limiteCosto.setEstado(EstadoEnum.A);
-				limiteCosto.setFechaCreacion(new Date());
-				limiteCosto.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				limites.add(limiteCosto);
-			}
-		}
-		if (contBeneficios == 0) {
+		if (selectedBeneficios.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.beneficios"));
 		} else {
-			asistenciaMedica.setLimitesCostosAsms(limites);
+			for (LimitesCostosAsm limite : selectedBeneficios) {
+				asistenciaMedica.getLimitesCostosAsms().add(limite);
+			}
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.beneficios"));
 		}
+
 	}
 
 	/**
@@ -454,26 +432,10 @@ public class AsistenciaMedicaBacking implements Serializable {
 	 */
 	public void setearBeneficiosAdd() {
 
-		int contBeneficios = 0;
-		List<LimitesCostosAsm> limites = new ArrayList<>();
-		for (LimitesCostosDTO beneficioBTO : limitesCostosBenAddDTO) {
-			if (beneficioBTO.getSeleccion()) {
-				contBeneficios++;
-				LimitesCostosAsm limiteCosto = new LimitesCostosAsm();
-				limiteCosto.setLimiteCosto(beneficioBTO.getLimitesCostos());
-				limiteCosto.setTipoLimite(2);
-
-				limiteCosto.setEstado(EstadoEnum.A);
-				limiteCosto.setFechaCreacion(new Date());
-				limiteCosto.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				limites.add(limiteCosto);
-			}
-		}
-		if (contBeneficios == 0) {
+		if (selectedBeneficiosAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.beneficiosAdd"));
 		} else {
-			for (LimitesCostosAsm limite : limites) {
+			for (LimitesCostosAsm limite : selectedBeneficiosAdd) {
 				asistenciaMedica.getLimitesCostosAsms().add(limite);
 			}
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.beneficiosAdd"));
@@ -491,26 +453,10 @@ public class AsistenciaMedicaBacking implements Serializable {
 	 */
 	public void setearMaternidad() {
 
-		int contMaternidad = 0;
-		List<LimitesCostosAsm> limites = new ArrayList<>();
-		for (LimitesCostosDTO beneficioBTO : limitesCostosMaternidadDTO) {
-			if (beneficioBTO.getSeleccion()) {
-				contMaternidad++;
-				LimitesCostosAsm limiteCosto = new LimitesCostosAsm();
-				limiteCosto.setLimiteCosto(beneficioBTO.getLimitesCostos());
-				limiteCosto.setTipoLimite(3);
-
-				limiteCosto.setEstado(EstadoEnum.A);
-				limiteCosto.setFechaCreacion(new Date());
-				limiteCosto.setIdUsuarioCreacion(usuario.getIdUsuario());
-
-				limites.add(limiteCosto);
-			}
-		}
-		if (contMaternidad == 0) {
+		if (selectedCostosMaternidad.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.maternidad"));
 		} else {
-			for (LimitesCostosAsm limite : limites) {
+			for (LimitesCostosAsm limite : selectedCostosMaternidad) {
 				asistenciaMedica.getLimitesCostosAsms().add(limite);
 			}
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.maternidad"));
@@ -1228,51 +1174,6 @@ public class AsistenciaMedicaBacking implements Serializable {
 	}
 
 	/**
-	 * @return the limitesCostosBeneficiosDTO
-	 */
-	public List<LimitesCostosDTO> getLimitesCostosBeneficiosDTO() {
-		return limitesCostosBeneficiosDTO;
-	}
-
-	/**
-	 * @param limitesCostosBeneficiosDTO
-	 *            the limitesCostosBeneficiosDTO to set
-	 */
-	public void setLimitesCostosBeneficiosDTO(List<LimitesCostosDTO> limitesCostosBeneficiosDTO) {
-		this.limitesCostosBeneficiosDTO = limitesCostosBeneficiosDTO;
-	}
-
-	/**
-	 * @return the limitesCostosBenAddDTO
-	 */
-	public List<LimitesCostosDTO> getLimitesCostosBenAddDTO() {
-		return limitesCostosBenAddDTO;
-	}
-
-	/**
-	 * @param limitesCostosBenAddDTO
-	 *            the limitesCostosBenAddDTO to set
-	 */
-	public void setLimitesCostosBenAddDTO(List<LimitesCostosDTO> limitesCostosBenAddDTO) {
-		this.limitesCostosBenAddDTO = limitesCostosBenAddDTO;
-	}
-
-	/**
-	 * @return the limitesCostosMaternidadDTO
-	 */
-	public List<LimitesCostosDTO> getLimitesCostosMaternidadDTO() {
-		return limitesCostosMaternidadDTO;
-	}
-
-	/**
-	 * @param limitesCostosMaternidadDTO
-	 *            the limitesCostosMaternidadDTO to set
-	 */
-	public void setLimitesCostosMaternidadDTO(List<LimitesCostosDTO> limitesCostosMaternidadDTO) {
-		this.limitesCostosMaternidadDTO = limitesCostosMaternidadDTO;
-	}
-
-	/**
 	 * @return the usuarioBean
 	 */
 	public UsuarioBean getUsuarioBean() {
@@ -1330,6 +1231,93 @@ public class AsistenciaMedicaBacking implements Serializable {
 	 */
 	public void setRamoAsistenciaMedicaBean(RamoAsistenciaMedicaBean ramoAsistenciaMedicaBean) {
 		this.ramoAsistenciaMedicaBean = ramoAsistenciaMedicaBean;
+	}
+
+	/**
+	 * @return the selectedBeneficios
+	 */
+	public List<LimitesCostosAsm> getSelectedBeneficios() {
+		return selectedBeneficios;
+	}
+
+	/**
+	 * @param selectedBeneficios
+	 *            the selectedBeneficios to set
+	 */
+	public void setSelectedBeneficios(List<LimitesCostosAsm> selectedBeneficios) {
+		this.selectedBeneficios = selectedBeneficios;
+	}
+
+	/**
+	 * @return the selectedBeneficiosAdd
+	 */
+	public List<LimitesCostosAsm> getSelectedBeneficiosAdd() {
+		return selectedBeneficiosAdd;
+	}
+
+	/**
+	 * @param selectedBeneficiosAdd
+	 *            the selectedBeneficiosAdd to set
+	 */
+	public void setSelectedBeneficiosAdd(List<LimitesCostosAsm> selectedBeneficiosAdd) {
+		this.selectedBeneficiosAdd = selectedBeneficiosAdd;
+	}
+
+	/**
+	 * @return the selectedCostosMaternidad
+	 */
+	public List<LimitesCostosAsm> getSelectedCostosMaternidad() {
+		return selectedCostosMaternidad;
+	}
+
+	/**
+	 * @param selectedCostosMaternidad
+	 *            the selectedCostosMaternidad to set
+	 */
+	public void setSelectedCostosMaternidad(List<LimitesCostosAsm> selectedCostosMaternidad) {
+		this.selectedCostosMaternidad = selectedCostosMaternidad;
+	}
+
+	/**
+	 * @return the limitesCostosBeneficios
+	 */
+	public List<LimitesCostosAsm> getLimitesCostosBeneficios() {
+		return limitesCostosBeneficios;
+	}
+
+	/**
+	 * @param limitesCostosBeneficios the limitesCostosBeneficios to set
+	 */
+	public void setLimitesCostosBeneficios(List<LimitesCostosAsm> limitesCostosBeneficios) {
+		this.limitesCostosBeneficios = limitesCostosBeneficios;
+	}
+
+	/**
+	 * @return the limitesCostosBenAdd
+	 */
+	public List<LimitesCostosAsm> getLimitesCostosBenAdd() {
+		return limitesCostosBenAdd;
+	}
+
+	/**
+	 * @param limitesCostosBenAdd the limitesCostosBenAdd to set
+	 */
+	public void setLimitesCostosBenAdd(List<LimitesCostosAsm> limitesCostosBenAdd) {
+		this.limitesCostosBenAdd = limitesCostosBenAdd;
+	}
+
+	/**
+	 * @return the limitesCostosMaternidad
+	 */
+	public List<LimitesCostosAsm> getLimitesCostosMaternidad() {
+		return limitesCostosMaternidad;
+	}
+
+	/**
+	 * @param limitesCostosMaternidad the limitesCostosMaternidad to set
+	 */
+	public void setLimitesCostosMaternidad(List<LimitesCostosAsm> limitesCostosMaternidad) {
+		this.limitesCostosMaternidad = limitesCostosMaternidad;
 	}
 
 }
