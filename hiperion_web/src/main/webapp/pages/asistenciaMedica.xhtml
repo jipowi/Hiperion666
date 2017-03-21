@@ -170,10 +170,10 @@
 													<h:outputLabel value="#{emision['anexo.titulo.beneficios']}" />
 												</f:facet>
 												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-												<p:column>
+												<p:column headerText="Número" width="10%">
 													<h:outputText value="#{beneficio.idLimiteCostoAsm}" />
 												</p:column>
-												<p:column>
+												<p:column headerText="#{emision['anexo.titulo.beneficios']}">
 													<h:outputText value="#{beneficio.limiteCosto}" />
 												</p:column>
 												<f:facet name="footer">
@@ -194,10 +194,10 @@
 													<h:outputLabel value="#{emision['anexo.titulo.beneficiosAdd']}" />
 												</f:facet>
 												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-												<p:column>
+												<p:column headerText="Número" width="10%">
 													<h:outputText value="#{beneficio.idLimiteCostoAsm}" />
 												</p:column>
-												<p:column>
+												<p:column headerText="#{emision['anexo.titulo.beneficiosAdd']}">
 													<h:outputText value="#{beneficio.limiteCosto}" />
 												</p:column>
 												<f:facet name="footer">
@@ -219,10 +219,10 @@
 													<h:outputLabel value="#{emision['anexo.titulo.maternidad']}" />
 												</f:facet>
 												<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-												<p:column>
+												<p:column headerText="Número" width="10%">
 													<h:outputText value="#{maternidad.idLimiteCostoAsm}" />
 												</p:column>
-												<p:column>
+												<p:column headerText="#{emision['anexo.titulo.maternidad']}">
 													<h:outputText value="#{maternidad.limiteCosto}" />
 												</p:column>
 												<f:facet name="footer">
