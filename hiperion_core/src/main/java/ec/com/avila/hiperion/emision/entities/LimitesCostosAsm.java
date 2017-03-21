@@ -26,7 +26,7 @@ public class LimitesCostosAsm extends Auditoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_limite_costo_asm")
-	private Integer idLimiteCostoAsm;
+	private Long idLimiteCostoAsm;
 
 	@Column(name = "limite_costo")
 	private String limiteCosto;
@@ -43,11 +43,11 @@ public class LimitesCostosAsm extends Auditoria implements Serializable {
 	}
 
 	
-	public Integer getIdLimiteCostoAsm() {
+	public Long getIdLimiteCostoAsm() {
 		return this.idLimiteCostoAsm;
 	}
 
-	public void setIdLimiteCostoAsm(Integer idLimiteCostoAsm) {
+	public void setIdLimiteCostoAsm(Long idLimiteCostoAsm) {
 		this.idLimiteCostoAsm = idLimiteCostoAsm;
 	}
 
