@@ -9,6 +9,10 @@ import java.util.List;
 import javax.ejb.Local;
 
 import ec.com.avila.hiperion.comun.HiperionException;
+import ec.com.avila.hiperion.emision.entities.ClausulasAddAccPer;
+import ec.com.avila.hiperion.emision.entities.CobertAccPer;
+import ec.com.avila.hiperion.emision.entities.CondEspAccPer;
+import ec.com.avila.hiperion.emision.entities.GrupoAccPersonale;
 import ec.com.avila.hiperion.emision.entities.Poliza;
 import ec.com.avila.hiperion.emision.entities.RamoAccidentesPersonale;
 
@@ -32,7 +36,8 @@ public interface RamoAccidentesPersonalesService {
 	 * @param ramoAccidentesPersonales
 	 * @throws HiperionException
 	 */
-	public void guardarRamoAccidentesPersonales(RamoAccidentesPersonale ramoAccidentesPersonales, Poliza poliza) throws HiperionException;
+	public void guardarRamoAccidentesPersonales(RamoAccidentesPersonale ramoAccidentesPersonales, Poliza poliza, List<GrupoAccPersonale> grupos, List<CobertAccPer> coberturas,
+			List<CondEspAccPer> condiciones, List<ClausulasAddAccPer> clausulas) throws HiperionException;
 
 	/**
 	 * 

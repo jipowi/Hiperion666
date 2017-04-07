@@ -66,9 +66,11 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 	 * ec.com.avila.hiperion.emision.entities.Poliza)
 	 */
 	@Override
-	public void guardarRamoAccidentesPersonales(RamoAccidentesPersonale ramoAccidentesPersonales, Poliza poliza) throws HiperionException {
+	public void guardarRamoAccidentesPersonales(RamoAccidentesPersonale ramoAccidentesPersonales, Poliza poliza, List<GrupoAccPersonale> grupos, List<CobertAccPer> coberturas,
+			List<CondEspAccPer> condiciones, List<ClausulasAddAccPer> clausulas) throws HiperionException {
 
 		PagoPoliza pagoPoliza = poliza.getPagoPoliza();
+		Boolean guardar = false;
 
 		if (pagoPoliza != null) {
 			pagoPolizaDao.persist(pagoPoliza);
@@ -81,34 +83,37 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 
 		polizaDao.persist(poliza);
 
-		ramoAccidentesPersonales.setPoliza(poliza);
+		if (ramoAccidentesPersonales.getIdAccidentes() != null) {
+			ramoAccidentesPersonalesDao.update(ramoAccidentesPersonales);
+		} else {
+			ramoAccidentesPersonalesDao.persist(ramoAccidentesPersonales);
+			guardar = true;
+		}
 
-		ramoAccidentesPersonalesDao.persist(ramoAccidentesPersonales);
-
-		//GRUPOS
-		if (ramoAccidentesPersonales.getGrupoAccPersonales() != null) {
-			for (GrupoAccPersonale grupo : ramoAccidentesPersonales.getGrupoAccPersonales()) {
+		// GRUPOS
+		if (grupos != null) {
+			for (GrupoAccPersonale grupo : grupos) {
 				grupo.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				grupoAPDao.persist(grupo);
 			}
 		}
-		//CLAUSULAS ADICIONALES
-		if (ramoAccidentesPersonales.getClausulasAddAccPers() != null) {
-			for (ClausulasAddAccPer clausula : ramoAccidentesPersonales.getClausulasAddAccPers()) {
+		// CLAUSULAS ADICIONALES
+		if (clausulaAddAccPerDao != null) {
+			for (ClausulasAddAccPer clausula : clausulas) {
 				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				clausulaAddAccPerDao.persist(clausula);
 			}
 		}
-		//COBERTURAS
-		if (ramoAccidentesPersonales.getCoberturasAcc() != null) {
-			for (CobertAccPer cobertura : ramoAccidentesPersonales.getCoberturasAcc()) {
+		// COBERTURAS
+		if (coberturas != null) {
+			for (CobertAccPer cobertura : coberturas) {
 				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				coberturaAccPerDao.persist(cobertura);
 			}
 		}
-		//CONDICIONES ESPECIALES
-		if (ramoAccidentesPersonales.getCondicionesEspAcc() != null) {
-			for (CondEspAccPer condicion : ramoAccidentesPersonales.getCondicionesEspAcc()) {
+		// CONDICIONES ESPECIALES
+		if (condiciones != null) {
+			for (CondEspAccPer condicion : condiciones) {
 				condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				conAccPerDao.persist(condicion);
 			}
