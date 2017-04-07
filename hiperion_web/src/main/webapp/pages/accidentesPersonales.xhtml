@@ -110,7 +110,7 @@
 										</div>
 										<p:spacer height="30px;" />
 										<p:dataTable id="tablaAseguradoras" value="#{accidentesPersonalesBacking.aseguradorasDTO}" var="obj" editable="true">
-											<p:ajax event="rowEditCancel" listener="#{accidentesPersonalesBacking.onCancel}" update="@this" />
+
 											<p:column>
 												<f:facet name="header">
 													<h:outputText value="#{emision['aseguradora.tabla.nombre']}" />
@@ -129,9 +129,7 @@
 												</f:facet>
 												<h:outputText value="#{obj.telefono}" />
 											</p:column>
-											<p:column headerText="Options" style="width:50px">
-												<p:rowEditor />
-											</p:column>
+
 										</p:dataTable>
 									</p:panel>
 								</h:panelGrid>
@@ -289,10 +287,6 @@
 												<p:column headerText="#{emision['anexo.titulo.cob']}">
 													<h:outputText value="#{cobertura.coberturaAccPersonales}" />
 												</p:column>
-												<f:facet name="footer">
-													<p:commandButton process="idCoberturas" icon="icon-save" value="#{emision['boton.guardar']}"
-														action="#{accidentesPersonalesBacking.setearCoberturas()}" />
-												</f:facet>
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
@@ -313,10 +307,6 @@
 												<p:column headerText="#{emision['anexo.titulo.cep']}">
 													<h:outputText value="#{condicion.condicionAcc}" />
 												</p:column>
-												<f:facet name="footer">
-													<p:commandButton process="idCondicionesEsp" icon="icon-save" value="#{emision['boton.guardar']}"
-														action="#{accidentesPersonalesBacking.setearCondiciones()}" />
-												</f:facet>
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
@@ -337,10 +327,6 @@
 												<p:column headerText="#{emision['anexo.titulo.cobad']}">
 													<h:outputText value="#{clausula.clausulaAccPersonales}" />
 												</p:column>
-												<f:facet name="footer">
-													<p:commandButton process="idClausulasAdd" icon="icon-save" value="#{emision['boton.guardar']}"
-														action="#{accidentesPersonalesBacking.setearClausulasAdd()}" />
-												</f:facet>
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>

@@ -599,9 +599,9 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 					grupos.add(grupoDB);
 				}
-				accidentesPersonales.setGrupoAccPersonales(grupos);
 
-				ramoAccidentesPersonalesService.guardarRamoAccidentesPersonales(accidentesPersonales, poliza);
+				ramoAccidentesPersonalesService.guardarRamoAccidentesPersonales(accidentesPersonales, poliza, grupos, selectedCoberturas,
+						selectedCondicionesEsp, selectedClausulasAdd);
 
 				MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
 			}
@@ -613,43 +613,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 			throw new HiperionException(e);
 		}
 
-	}
-
-	/**
-	 * 
-	 * <b> permite setear las clausualas adicionales seleccionadas. </b>
-	 * <p>
-	 * [Author: Paul Jimenez, Date: 14/07/2015]
-	 * </p>
-	 * 
-	 */
-	public void setearClausulasAdd() {
-
-		if (selectedClausulasAdd.isEmpty()) {
-			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
-		} else {
-			accidentesPersonales.setClausulasAddAccPers(selectedClausulasAdd);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
-		}
-
-	}
-
-	/**
-	 * 
-	 * <b> permite setear las coberturas seleccionadas en el Bean. </b>
-	 * <p>
-	 * [Author: Paul Jimenez, Date: 14/07/2015]
-	 * </p>
-	 * 
-	 */
-	public void setearCoberturas() {
-
-		if (selectedCoberturas.isEmpty()) {
-			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.coberturas"));
-		} else {
-			accidentesPersonales.setCoberturasAcc(selectedCoberturas);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.coberturas"));
-		}
 	}
 
 	/**
@@ -692,24 +655,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 	public void onEditCondicionesEsp(RowEditEvent event) {
 		FacesMessage msg = new FacesMessage("Item Edited", ((CondicionEspecialDTO) event.getObject()).getCondicionEspecial());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-	}
-
-	/**
-	 * 
-	 * <b> permite setear las condiciones especiales seleccionadas en el Bean. </b>
-	 * <p>
-	 * [Author: Paul Jimenez, Date: 14/07/2015]
-	 * </p>
-	 * 
-	 */
-	public void setearCondiciones() {
-		if (selectedCondicionesEsp.isEmpty()) {
-			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.condicionesEsp"));
-		} else {
-			accidentesPersonales.setCondicionesEspAcc(selectedCondicionesEsp);
-			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.condicionesEsp"));
-		}
-
 	}
 
 	/**
