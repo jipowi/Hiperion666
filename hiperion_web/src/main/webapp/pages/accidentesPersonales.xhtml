@@ -106,11 +106,10 @@
 
 										<div align="center">
 											<p:commandButton id="agregarAseguradora" icon="icon-add" value="#{emision['boton.agregar']}"
-												actionListener="#{accidentesPersonalesBacking.addAseguradora}" title="Agregar" update="tablaAseguradoras" />
+												actionListener="#{accidentesPersonalesBacking.addAseguradora}" title="Agregar" update="tablaAseguradoras, idDatosAseguradora" />
 										</div>
 										<p:spacer height="30px;" />
 										<p:dataTable id="tablaAseguradoras" value="#{accidentesPersonalesBacking.aseguradorasDTO}" var="obj" editable="true">
-
 											<p:column>
 												<f:facet name="header">
 													<h:outputText value="#{emision['aseguradora.tabla.nombre']}" />
@@ -163,7 +162,7 @@
 									</h:panelGrid>
 
 									<p:spacer height="30px;" />
-									<p:dataTable id="tablaGrupos" value="#{accidentesPersonalesBacking.gruposDTO}" var="obj" widgetVar="50" style="width: 60%;" editable="true">
+									<p:dataTable id="tablaGrupos" value="#{accidentesPersonalesBacking.gruposDTO}" var="obj" widgetVar="50"  editable="true">
 										<p:ajax event="rowEdit" listener="#{accidentesPersonalesBacking.editarGrupo}" />
 										<p:ajax event="rowEditCancel" listener="#{accidentesPersonalesBacking.eliminarGrupo}" />
 										<p:column>
