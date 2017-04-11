@@ -90,32 +90,50 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			guardar = true;
 		}
 
-		// GRUPOS
-		if (grupos != null) {
+		if (guardar) {
+			// GRUPOS
 			for (GrupoAccPersonale grupo : grupos) {
 				grupo.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				grupoAPDao.persist(grupo);
 			}
-		}
-		// CLAUSULAS ADICIONALES
-		if (clausulaAddAccPerDao != null) {
-			for (ClausulasAddAccPer clausula : clausulas) {
-				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-				clausulaAddAccPerDao.persist(clausula);
+			// CLAUSULAS ADICIONALES
+			if (clausulas != null) {
+				for (ClausulasAddAccPer clausula : clausulas) {
+					clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+					clausulaAddAccPerDao.persist(clausula);
+				}
 			}
-		}
-		// COBERTURAS
-		if (coberturas != null) {
+
+			// CONDICIONES ESPECIALES
+			if (condiciones != null) {
+				for (CondEspAccPer condicion : condiciones) {
+					condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+					conAccPerDao.persist(condicion);
+				}
+			}
+		} else {
+			List<GrupoAccPersonale> gruposDB = ramoAccidentesPersonalesDao.cosultarGruposByRamo(ramoAccidentesPersonales.getIdAccidentes());
+			// Eliminar Grupos
+			for (GrupoAccPersonale grupo : gruposDB) {
+				grupo.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				grupoAPDao.delete(grupo);
+			}
+			// Insertar Grupos
+			for (GrupoAccPersonale grupo : grupos) {
+				grupo.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				grupoAPDao.persist(grupo);
+			}
+
+			List<CobertAccPer> coberturasBD = ramoAccidentesPersonalesDao.consultarCoberturasByRamo(ramoAccidentesPersonales.getIdAccidentes());
+			// Eliminar Coberturas
+			for (CobertAccPer cobertura : coberturasBD) {
+				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				coberturaAccPerDao.delete(cobertura);
+			}
+			// Insertar Coberturas
 			for (CobertAccPer cobertura : coberturas) {
 				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				coberturaAccPerDao.persist(cobertura);
-			}
-		}
-		// CONDICIONES ESPECIALES
-		if (condiciones != null) {
-			for (CondEspAccPer condicion : condiciones) {
-				condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-				conAccPerDao.persist(condicion);
 			}
 		}
 
