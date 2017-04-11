@@ -4,9 +4,13 @@
  */
 package ec.com.avila.hiperion.dao;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import ec.com.avila.hiperion.comun.HiperionException;
+import ec.com.avila.hiperion.emision.entities.CobertAccPer;
+import ec.com.avila.hiperion.emision.entities.GrupoAccPersonale;
 import ec.com.avila.hiperion.emision.entities.RamoAccidentesPersonale;
 
 /**
@@ -31,4 +35,30 @@ public interface RamoAccidentesPersonalesDao extends GenericDAO<RamoAccidentesPe
 	 * @throws HiperionException
 	 */
 	public RamoAccidentesPersonale consultarRamo(Integer ipPoliza) throws HiperionException;
+
+	/**
+	 * 
+	 * <b> Permite consultar la lista de grupos que posee el ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 10/04/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<GrupoAccPersonale> cosultarGruposByRamo(Long idRamo) throws HiperionException;
+
+	/**
+	 * 
+	 * <b> Permite obtener la lista de coberturas pertenecientes a un ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 10/04/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<CobertAccPer> consultarCoberturasByRamo(Long idRamo) throws HiperionException;
 }

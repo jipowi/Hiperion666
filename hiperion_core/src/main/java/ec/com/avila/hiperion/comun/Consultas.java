@@ -9,6 +9,10 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
+		// COBERTURAS
+		@NamedQuery(name = "CoberturaAccP.findByRamo", query = "SELECT c FROM CobertAccPer c WHERE c.ramoAccidentesPersonale.idAccidentes =:idRamo"),
+		// GRUPOS
+		@NamedQuery(name = "GrupoAccP.findByRamo", query = "SELECT c FROM GrupoAccPersonale c WHERE c.ramoAccidentesPersonale.idAccidentes =:idRamo"),
 		// ASEGURADORA
 		@NamedQuery(name = "Aseguradora.findByRuc", query = "SELECT c FROM Aseguradora c WHERE c.ruc =:ruc"),
 		@NamedQuery(name = "Aseguradora.findByAseguradora", query = "SELECT c FROM Aseguradora c WHERE c.codigoAseguradora =:aseguradora"),

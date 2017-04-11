@@ -29,7 +29,7 @@ public class RamoAccidentesPersonale extends Auditoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_accidentes")
-	private Integer idAccidentes;
+	private Long idAccidentes;
 
 	@Column(name = "prima_neta_persona")
 	private BigDecimal primaNetaPersona;
@@ -67,11 +67,11 @@ public class RamoAccidentesPersonale extends Auditoria implements Serializable {
 	public RamoAccidentesPersonale() {
 	}
 
-	public Integer getIdAccidentes() {
+	public Long getIdAccidentes() {
 		return this.idAccidentes;
 	}
 
-	public void setIdAccidentes(Integer idAccidentes) {
+	public void setIdAccidentes(Long idAccidentes) {
 		this.idAccidentes = idAccidentes;
 	}
 
