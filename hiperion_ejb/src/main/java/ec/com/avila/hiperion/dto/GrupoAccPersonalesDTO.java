@@ -22,6 +22,13 @@ public class GrupoAccPersonalesDTO implements Serializable {
 	private Double valorGrupo;
 
 	/**
+	 * 
+	 */
+	public GrupoAccPersonalesDTO() {
+		super();
+	}
+
+	/**
 	 * @param numGrupo
 	 * @param nomGrupo
 	 * @param numPersonas
@@ -112,5 +119,4 @@ public class GrupoAccPersonalesDTO implements Serializable {
 		this.valorGrupo = valorGrupo;
 	}
 
-	
 }

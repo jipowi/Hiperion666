@@ -50,5 +50,57 @@ public interface RamoAccidentesPersonalesService {
 	 * @throws HiperionException
 	 */
 	public List<RamoAccidentesPersonale> consultarRamoAccidentesPersonales() throws HiperionException;
+	
+	/**
+	 * 
+	 * <b> Permite consultar la lista de grupos que posee el ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 10/04/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<GrupoAccPersonale> cosultarGruposByRamo(Long idRamo) throws HiperionException;
+
+	/**
+	 * 
+	 * <b> Permite obtener la lista de coberturas pertenecientes a un ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 10/04/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<CobertAccPer> consultarCoberturasByRamo(Long idRamo) throws HiperionException;
+	
+	/**
+	 * 
+	 * <b> Permite obtener la lista de coberturas pertenecientes a un ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 18/05/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<CondEspAccPer> consultarCondicionesByRamo(Long idRamo) throws HiperionException;
+
+	/**
+	 * 
+	 * <b> Permite obtener la lista de clausulas adicionales pertenecientes a un ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 18/05/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<ClausulasAddAccPer> consultarClausulasByRamo(Long idRamo) throws HiperionException;
 
 }

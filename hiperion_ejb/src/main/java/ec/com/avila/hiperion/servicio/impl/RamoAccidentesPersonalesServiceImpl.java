@@ -81,11 +81,11 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			}
 		}
 
-		polizaDao.persist(poliza);
-
 		if (ramoAccidentesPersonales.getIdAccidentes() != null) {
+			polizaDao.update(poliza);
 			ramoAccidentesPersonalesDao.update(ramoAccidentesPersonales);
 		} else {
+			polizaDao.persist(poliza);
 			ramoAccidentesPersonalesDao.persist(ramoAccidentesPersonales);
 			guardar = true;
 		}
@@ -113,7 +113,7 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			}
 		} else {
 			List<GrupoAccPersonale> gruposDB = ramoAccidentesPersonalesDao.cosultarGruposByRamo(ramoAccidentesPersonales.getIdAccidentes());
-			// Eliminar Grupos
+			// Eliminar Grupos BD
 			for (GrupoAccPersonale grupo : gruposDB) {
 				grupo.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				grupoAPDao.delete(grupo);
@@ -125,7 +125,7 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			}
 
 			List<CobertAccPer> coberturasBD = ramoAccidentesPersonalesDao.consultarCoberturasByRamo(ramoAccidentesPersonales.getIdAccidentes());
-			// Eliminar Coberturas
+			// Eliminar Coberturas BD
 			for (CobertAccPer cobertura : coberturasBD) {
 				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				coberturaAccPerDao.delete(cobertura);
@@ -135,7 +135,71 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				coberturaAccPerDao.persist(cobertura);
 			}
+			
+			List<CondEspAccPer> condicionesBD = ramoAccidentesPersonalesDao.consultarCondicionesByRamo(ramoAccidentesPersonales.getIdAccidentes());
+			// Eliminar Condiciones BD
+			for (CondEspAccPer condicion : condicionesBD) {
+				condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				conAccPerDao.delete(condicion);
+			}
+			// Insertar Condiciones
+			for (CondEspAccPer condicion : condiciones) {
+				condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				conAccPerDao.persist(condicion);
+			}
+			
+			List<ClausulasAddAccPer> clausulasBD = ramoAccidentesPersonalesDao.consultarClausulasByRamo(ramoAccidentesPersonales.getIdAccidentes());
+			// Eliminar Condiciones BD
+			for (ClausulasAddAccPer clausula : clausulasBD) {
+				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				clausulaAddAccPerDao.delete(clausula);
+			}
+			// Insertar Condiciones
+			for (ClausulasAddAccPer clausula : clausulas) {
+				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				clausulaAddAccPerDao.persist(clausula);
+			}
 		}
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.servicio.RamoAccidentesPersonalesService#cosultarGruposByRamo(java.lang.Long)
+	 */
+	@Override
+	public List<GrupoAccPersonale> cosultarGruposByRamo(Long idRamo) throws HiperionException {
+		return ramoAccidentesPersonalesDao.cosultarGruposByRamo(idRamo);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.servicio.RamoAccidentesPersonalesService#consultarCoberturasByRamo(java.lang.Long)
+	 */
+	@Override
+	public List<CobertAccPer> consultarCoberturasByRamo(Long idRamo) throws HiperionException {
+		return ramoAccidentesPersonalesDao.consultarCoberturasByRamo(idRamo);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.servicio.RamoAccidentesPersonalesService#consultarCondicionesByRamo(java.lang.Long)
+	 */
+	@Override
+	public List<CondEspAccPer> consultarCondicionesByRamo(Long idRamo) throws HiperionException {
+		return ramoAccidentesPersonalesDao.consultarCondicionesByRamo(idRamo);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.servicio.RamoAccidentesPersonalesService#consultarClausulasByRamo(java.lang.Long)
+	 */
+	@Override
+	public List<ClausulasAddAccPer> consultarClausulasByRamo(Long idRamo) throws HiperionException {
+		return ramoAccidentesPersonalesDao.consultarClausulasByRamo(idRamo);
 	}
 }
