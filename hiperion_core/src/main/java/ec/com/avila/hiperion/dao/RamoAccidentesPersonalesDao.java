@@ -9,7 +9,9 @@ import java.util.List;
 import javax.ejb.Local;
 
 import ec.com.avila.hiperion.comun.HiperionException;
+import ec.com.avila.hiperion.emision.entities.ClausulasAddAccPer;
 import ec.com.avila.hiperion.emision.entities.CobertAccPer;
+import ec.com.avila.hiperion.emision.entities.CondEspAccPer;
 import ec.com.avila.hiperion.emision.entities.GrupoAccPersonale;
 import ec.com.avila.hiperion.emision.entities.RamoAccidentesPersonale;
 
@@ -61,4 +63,30 @@ public interface RamoAccidentesPersonalesDao extends GenericDAO<RamoAccidentesPe
 	 * @throws HiperionException
 	 */
 	public List<CobertAccPer> consultarCoberturasByRamo(Long idRamo) throws HiperionException;
+
+	/**
+	 * 
+	 * <b> Permite obtener la lista de coberturas pertenecientes a un ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 18/05/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<CondEspAccPer> consultarCondicionesByRamo(Long idRamo) throws HiperionException;
+
+	/**
+	 * 
+	 * <b> Permite obtener la lista de clausulas adicionales pertenecientes a un ramo. </b>
+	 * <p>
+	 * [Author: kruger, Date: 18/05/2017]
+	 * </p>
+	 * 
+	 * @param idRamo
+	 * @return
+	 * @throws HiperionException
+	 */
+	public List<ClausulasAddAccPer> consultarClausulasByRamo(Long idRamo) throws HiperionException;
 }

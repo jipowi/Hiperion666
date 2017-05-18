@@ -44,7 +44,7 @@ public class GrupoAccPersonale extends Auditoria implements Serializable {
 	private Integer numeroPersonasAcc;
 
 	@Column(name = "valor_grupo_acc")
-	private BigDecimal valorGrupoAcc;
+	private Double valorGrupoAcc;
 
 	// bi-directional many-to-one association to RamoAccidentesPersonale
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -98,11 +98,11 @@ public class GrupoAccPersonale extends Auditoria implements Serializable {
 		this.numeroPersonasAcc = numeroPersonasAcc;
 	}
 
-	public BigDecimal getValorGrupoAcc() {
+	public Double getValorGrupoAcc() {
 		return this.valorGrupoAcc;
 	}
 
-	public void setValorGrupoAcc(BigDecimal valorGrupoAcc) {
+	public void setValorGrupoAcc(Double valorGrupoAcc) {
 		this.valorGrupoAcc = valorGrupoAcc;
 	}
 

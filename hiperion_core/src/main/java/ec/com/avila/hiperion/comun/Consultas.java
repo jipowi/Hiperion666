@@ -9,8 +9,11 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
-		// COBERTURAS
+		// ACCIDENTES PERSONALES		
 		@NamedQuery(name = "CoberturaAccP.findByRamo", query = "SELECT c FROM CobertAccPer c WHERE c.ramoAccidentesPersonale.idAccidentes =:idRamo"),
+		@NamedQuery(name = "CondicionesAccP.findByRamo", query = "SELECT c FROM CondEspAccPer c WHERE c.ramoAccidentesPersonale.idAccidentes =:idRamo"),
+		@NamedQuery(name = "ClausulasAccp.findByRamo", query = "SELECT c FROM ClausulasAddAccPer c WHERE c.ramoAccidentesPersonale.idAccidentes =:idRamo"),
+		
 		// GRUPOS
 		@NamedQuery(name = "GrupoAccP.findByRamo", query = "SELECT c FROM GrupoAccPersonale c WHERE c.ramoAccidentesPersonale.idAccidentes =:idRamo"),
 		// ASEGURADORA
@@ -43,7 +46,7 @@ import javax.persistence.NamedQuery;
 		@NamedQuery(name = "DetalleCatalogo.findByCodigoDetalle", query = "SELECT d FROM DetalleCatalogo d WHERE d.codDepDetalleCatalogo =:codDepDetalleCatalogo AND d.catalogo.idCatalogo=:idCatalogo"),
 		// RAMO
 		@NamedQuery(name = "Ramo.findByCodigoRamo", query = "SELECT r FROM Ramo r WHERE r.codigoRamo =:codigoRamo"),
-		@NamedQuery(name = "RamoAccByPoliza", query = "SELECT r FROM RamoAccidentesPersonale r WHERE r.poliza.idPoliza =:idPoliza"),
+		@NamedQuery(name = "Ramo.findAccByPoliza", query = "SELECT r FROM RamoAccidentesPersonale r WHERE r.poliza.idPoliza =:idPoliza"),
 		@NamedQuery(name = "Ramo.findByAseguradora", query = "SELECT r FROM RamoAseguradora r WHERE r.aseguradora.idAseguradora =:idAseguradora"),
 		// USUARIO
 		@NamedQuery(name = "Usuario.loginUser", query = "SELECT u FROM Usuario u WHERE u.usuario =:usuario AND u.clave =:clave"),

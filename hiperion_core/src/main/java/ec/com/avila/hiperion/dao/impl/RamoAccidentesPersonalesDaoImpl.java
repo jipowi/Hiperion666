@@ -15,7 +15,9 @@ import org.apache.log4j.Logger;
 
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.dao.RamoAccidentesPersonalesDao;
+import ec.com.avila.hiperion.emision.entities.ClausulasAddAccPer;
 import ec.com.avila.hiperion.emision.entities.CobertAccPer;
+import ec.com.avila.hiperion.emision.entities.CondEspAccPer;
 import ec.com.avila.hiperion.emision.entities.GrupoAccPersonale;
 import ec.com.avila.hiperion.emision.entities.RamoAccidentesPersonale;
 
@@ -42,11 +44,17 @@ public class RamoAccidentesPersonalesDaoImpl extends GenericDAOImpl<RamoAccident
 	 */
 	@Override
 	public RamoAccidentesPersonale consultarRamo(Integer ipPoliza) throws HiperionException {
-		Query query = em.createNamedQuery("RamoAccByPoliza");
-		query.setParameter("idPoliza", ipPoliza);
-		RamoAccidentesPersonale ramo = (RamoAccidentesPersonale) query.getSingleResult();
+		try {
+			Query query = em.createNamedQuery("Ramo.findAccByPoliza");
+			query.setParameter("idPoliza", ipPoliza);
+			RamoAccidentesPersonale ramo = (RamoAccidentesPersonale) query.getSingleResult();
 
-		return ramo;
+			return ramo;
+
+		} catch (Exception e) {
+			log.error("Error no se pudo consultar el Ramo ", e);
+			throw new HiperionException(e);
+		}
 	}
 
 	/*
@@ -57,12 +65,17 @@ public class RamoAccidentesPersonalesDaoImpl extends GenericDAOImpl<RamoAccident
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<GrupoAccPersonale> cosultarGruposByRamo(Long idRamo) throws HiperionException {
-		Query query = em.createNamedQuery("GrupoAccP.findByRamo");
-		query.setParameter("idRamo", idRamo);
+		try {
+			Query query = em.createNamedQuery("GrupoAccP.findByRamo");
+			query.setParameter("idRamo", idRamo);
 
-		List<GrupoAccPersonale> grupos = query.getResultList();
+			List<GrupoAccPersonale> grupos = query.getResultList();
 
-		return grupos;
+			return grupos;
+		} catch (Exception e) {
+			log.error("Error no se pudo consultar los grupos ", e);
+			throw new HiperionException(e);
+		}
 	}
 
 	/*
@@ -73,12 +86,59 @@ public class RamoAccidentesPersonalesDaoImpl extends GenericDAOImpl<RamoAccident
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CobertAccPer> consultarCoberturasByRamo(Long idRamo) throws HiperionException {
-		Query query = em.createNamedQuery("CoberturaAccP.findByRamo");
-		query.setParameter("idRamo", idRamo);
+		try {
+			Query query = em.createNamedQuery("CoberturaAccP.findByRamo");
+			query.setParameter("idRamo", idRamo);
 
-		List<CobertAccPer> coberturas = query.getResultList();
+			List<CobertAccPer> coberturas = query.getResultList();
 
-		return coberturas;
+			return coberturas;
+		} catch (Exception e) {
+			log.error("Error no se pudo consultar las coberturas ", e);
+			throw new HiperionException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.dao.RamoAccidentesPersonalesDao#consultarCondicionesByRamo(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CondEspAccPer> consultarCondicionesByRamo(Long idRamo) throws HiperionException {
+		try {
+			Query query = em.createNamedQuery("CondicionesAccP.findByRamo");
+			query.setParameter("idRamo", idRamo);
+
+			List<CondEspAccPer> condiciones = query.getResultList();
+
+			return condiciones;
+		} catch (Exception e) {
+			log.error("Error no se pudo consultar las condiciones ", e);
+			throw new HiperionException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.dao.RamoAccidentesPersonalesDao#consultarClausulasByRamo(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClausulasAddAccPer> consultarClausulasByRamo(Long idRamo) throws HiperionException {
+		try {
+			Query query = em.createNamedQuery("ClausulasAccp.findByRamo");
+			query.setParameter("idRamo", idRamo);
+
+			List<ClausulasAddAccPer> clausulas = query.getResultList();
+
+			return clausulas;
+		} catch (Exception e) {
+			log.error("Error no se pudo consultar las clausulas ", e);
+			throw new HiperionException(e);
+		}
 	}
 
 }
