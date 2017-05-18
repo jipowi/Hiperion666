@@ -206,9 +206,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 					if (polizas != null) {
 						for (Poliza poliza : polizas) {
 							if (poliza.getRamo().equals("ACCIDENTES PERSONALES")) {
-								polizaBean.setEstadoPoliza("COTIZADO");
-
+								polizaActiva = true;
 								accidentesPersonales = ramoService.consultarRamo(poliza.getIdPoliza());
+								editarRamo();
+							} else {
+								polizaBean.setEstadoPoliza("COTIZADO");
 							}
 						}
 					}
@@ -226,6 +228,36 @@ public class AccidentesPersonalesBacking implements Serializable {
 			log.error("Error al momento de buscar clientes", e);
 			throw new HiperionException(e);
 		}
+	}
+
+	/**
+	 * 
+	 * <b> Permite obtner la informacion del ramo que fue registrado en la BD. </b>
+	 * <p>
+	 * [Author: kruger, Date: 18/05/2017]
+	 * </p>
+	 * 
+	 * @throws HiperionException
+	 */
+	public void editarRamo() throws HiperionException {
+		ramoAccidentesPersonalesBean.setPrimaNetaPersona(accidentesPersonales.getPrimaNetaPersona());
+		ramoAccidentesPersonalesBean.setPrimaTotalPersona(accidentesPersonales.getPrimaTotalPersona());
+		ramoAccidentesPersonalesBean.setFacturacion(accidentesPersonales.getFacturacion());
+
+		List<GrupoAccPersonale> gruposDB = ramoAccidentesPersonalesService.cosultarGruposByRamo(accidentesPersonales.getIdAccidentes());
+		for (GrupoAccPersonale grupo : gruposDB) {
+			GrupoAccPersonalesDTO grupoDTO = new GrupoAccPersonalesDTO();
+			grupoDTO.setActividad(grupo.getActividadAcc());
+			grupoDTO.setNomGrupo(grupo.getNombreGrupoAcc());
+			grupoDTO.setNumGrupo(grupo.getNumeroPersonasAcc());
+			grupoDTO.setValorGrupo(grupo.getValorGrupoAcc());
+			gruposDTO.add(grupoDTO);
+		}
+		
+		selectedCoberturas = ramoAccidentesPersonalesService.consultarCoberturasByRamo(accidentesPersonales.getIdAccidentes());
+		 
+		selectedCondicionesEsp = ramoAccidentesPersonalesService.consultarCondicionesByRamo(accidentesPersonales.getIdAccidentes());
+		selectedClausulasAdd = ramoAccidentesPersonalesService.consultarClausulasByRamo(accidentesPersonales.getIdAccidentes());		
 	}
 
 	/**

@@ -59,7 +59,7 @@
 												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
 												<p:inputText value="#{ramoAccidentesPersonalesBean.identificacion}" />
 											</h:panelGrid>
-											<p:commandLink title="Buscar clientes" action="#{accidentesPersonalesBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora">
+											<p:commandLink title="Buscar clientes" action="#{accidentesPersonalesBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora, idInfoGrupo, idInformacionRamo">
 												<h:graphicImage name="search.png" library="img/icon" />
 											</p:commandLink>
 										</h:panelGrid>
@@ -237,7 +237,7 @@
 								</p:panel>
 								<p:spacer height="30px;" />
 								<!-- INFORMACION POLIZA - ACCIDENTES PERSONALES -->
-								<p:panel>
+								<p:panel id="idInformacionRamo">
 									<f:facet name="header">
 										<h:outputText value="#{emision['titulo.infoRamo']}" />
 									</f:facet>
