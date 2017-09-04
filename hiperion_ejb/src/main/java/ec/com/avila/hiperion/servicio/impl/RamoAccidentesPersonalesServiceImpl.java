@@ -133,9 +133,13 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			// Insertar Coberturas
 			for (CobertAccPer cobertura : coberturas) {
 				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-				coberturaAccPerDao.persist(cobertura);
+				if (cobertura.getIdCobertura() != null) {
+					coberturaAccPerDao.update(cobertura);
+				} else {
+					coberturaAccPerDao.persist(cobertura);
+				}
 			}
-			
+
 			List<CondEspAccPer> condicionesBD = ramoAccidentesPersonalesDao.consultarCondicionesByRamo(ramoAccidentesPersonales.getIdAccidentes());
 			// Eliminar Condiciones BD
 			for (CondEspAccPer condicion : condicionesBD) {
@@ -145,19 +149,27 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			// Insertar Condiciones
 			for (CondEspAccPer condicion : condiciones) {
 				condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-				conAccPerDao.persist(condicion);
+				if (condicion.getIdCondicionEspAcc() != null) {
+					conAccPerDao.update(condicion);
+				} else {
+					conAccPerDao.persist(condicion);
+				}
 			}
-			
+
 			List<ClausulasAddAccPer> clausulasBD = ramoAccidentesPersonalesDao.consultarClausulasByRamo(ramoAccidentesPersonales.getIdAccidentes());
-			// Eliminar Condiciones BD
+			// Eliminar Clausulas BD
 			for (ClausulasAddAccPer clausula : clausulasBD) {
 				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				clausulaAddAccPerDao.delete(clausula);
 			}
-			// Insertar Condiciones
+			// Insertar Clausulas
 			for (ClausulasAddAccPer clausula : clausulas) {
-				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-				clausulaAddAccPerDao.persist(clausula);
+				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);				
+				if (clausula.getIdClausulaAdAcidente() != null) {
+					clausulaAddAccPerDao.update(clausula);
+				} else {
+					clausulaAddAccPerDao.persist(clausula);
+				}
 			}
 		}
 
