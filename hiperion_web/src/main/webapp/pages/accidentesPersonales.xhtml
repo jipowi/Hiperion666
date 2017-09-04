@@ -37,15 +37,13 @@
 										<td align="center"><h:graphicImage name="Circle_Red.png" library="img" /></td>
 									</tr>
 									<tr>
-										<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.addGrupo}"
-												disabled="#{accidentesPersonalesBacking.activarCotizar}" /></td>
-										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente"
-												disabled="#{!accidentesPersonalesBacking.activarPresentar}" /></td>
+										<td><p:commandButton id="idUno" value="Cotizar" title="Cotizar" action="#{accidentesPersonalesBacking.cambiarEstado('COTIZADO')}" disabled="#{!accidentesPersonalesBacking.activarCotizar}" /></td>
+										<td><p:commandButton id="idDos" value="Presentar" title="Presentado Cliente" action="#{accidentesPersonalesBacking.cambiarEstado('PRESENTADO')}" disabled="#{!accidentesPersonalesBacking.activarPresentar}" /></td>
 										<td><p:commandButton id="idTres" value="Aceptar" title="Aceptado Oferta" disabled="#{!accidentesPersonalesBacking.activarAceptar}" /></td>
 										<td><p:commandButton id="idCuatro" value="Emitir" title="Solicitar Emisión" disabled="#{!accidentesPersonalesBacking.activarEmitir}" /></td>
 										<td><p:commandButton id="idCinco" value="Entregar" title="Entregar Emisión" disabled="#{!accidentesPersonalesBacking.activarEntregar}" /></td>
 										<td><p:commandButton id="idSeis" value="Documentar" title="Recibir Documentos"
-												disabled="#{accidentesPersonalesBacking.activarDocumentar}" /></td>
+												disabled="#{!accidentesPersonalesBacking.activarDocumentar}" /></td>
 									</tr>
 								</table>
 								<p:spacer height="30px;" />
@@ -59,7 +57,8 @@
 												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
 												<p:inputText value="#{ramoAccidentesPersonalesBean.identificacion}" />
 											</h:panelGrid>
-											<p:commandLink title="Buscar clientes" action="#{accidentesPersonalesBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora, idInfoGrupo, idInformacionRamo">
+											<p:commandLink title="Buscar clientes" action="#{accidentesPersonalesBacking.buscarCliente}"
+												update="idDatosCliente, idDatosAseguradora, idInfoGrupo, idInformacionRamo, :panelCliente">
 												<h:graphicImage name="search.png" library="img/icon" />
 											</p:commandLink>
 										</h:panelGrid>
@@ -162,7 +161,7 @@
 									</h:panelGrid>
 
 									<p:spacer height="30px;" />
-									<p:dataTable id="tablaGrupos" value="#{accidentesPersonalesBacking.gruposDTO}" var="obj" widgetVar="50"  editable="true">
+									<p:dataTable id="tablaGrupos" value="#{accidentesPersonalesBacking.gruposDTO}" var="obj" widgetVar="50" editable="true">
 										<p:ajax event="rowEdit" listener="#{accidentesPersonalesBacking.editarGrupo}" />
 										<p:ajax event="rowEditCancel" listener="#{accidentesPersonalesBacking.eliminarGrupo}" />
 										<p:column>

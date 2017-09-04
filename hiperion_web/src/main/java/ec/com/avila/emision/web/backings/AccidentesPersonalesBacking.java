@@ -140,6 +140,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 	private Usuario usuario;
 
+	private Poliza poliza = new Poliza();
+
 	RamoAccidentesPersonale accidentesPersonales = new RamoAccidentesPersonale();
 
 	Logger log = Logger.getLogger(AccidentesPersonalesBacking.class);
@@ -204,10 +206,15 @@ public class AccidentesPersonalesBacking implements Serializable {
 					List<Poliza> polizas = polizaService.consultarPolizasByCliente(cliente.getIdCliente());
 
 					if (polizas != null) {
-						for (Poliza poliza : polizas) {
-							if (poliza.getRamo().equals("ACCIDENTES PERSONALES")) {
+						for (Poliza polizaDB : polizas) {
+							if (polizaDB.getRamo().equals("ACCIDENTES PERSONALES")) {
+
 								polizaActiva = true;
-								accidentesPersonales = ramoService.consultarRamo(poliza.getIdPoliza());
+
+								verificarEstado(polizaDB);
+
+								accidentesPersonales = ramoService.consultarRamo(polizaDB.getIdPoliza());
+								poliza = polizaDB;
 								editarRamo();
 							} else {
 								polizaBean.setEstadoPoliza("COTIZADO");
@@ -227,6 +234,66 @@ public class AccidentesPersonalesBacking implements Serializable {
 		} catch (HiperionException e) {
 			log.error("Error al momento de buscar clientes", e);
 			throw new HiperionException(e);
+		}
+	}
+
+	public void cambiarEstado(String estado) {
+		poliza.setEstadoPoliza(estado);
+		polizaActiva = false;
+	}
+
+	/**
+	 * <b> Permite verificar el estado de la poliza. </b>
+	 * <p>
+	 * [Author: kruger, Date: 11/07/2017]
+	 * </p>
+	 * 
+	 * @param poliza
+	 */
+	private void verificarEstado(Poliza poliza) {
+		String estado = poliza.getEstadoPoliza();
+		switch (estado) {
+		case "COTIZADO":
+			activarCotizar = false;
+			activarPresentar = true;
+			activarAceptar = false;
+			activarEmitir = false;
+			activarEntregar = false;
+			activarDocumentar = false;
+			break;
+		case "PRESENTADO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = true;
+			activarEmitir = false;
+			activarEntregar = false;
+			activarDocumentar = false;
+			break;
+		case "ACEPTADO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = false;
+			activarEmitir = true;
+			activarEntregar = false;
+			activarDocumentar = false;
+			break;
+		case "EMITIDO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = false;
+			activarEmitir = false;
+			activarEntregar = true;
+			activarDocumentar = false;
+			break;
+
+		case "ENTREGADO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = false;
+			activarEmitir = false;
+			activarEntregar = false;
+			activarDocumentar = true;
+			break;
 		}
 	}
 
@@ -253,11 +320,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 			grupoDTO.setValorGrupo(grupo.getValorGrupoAcc());
 			gruposDTO.add(grupoDTO);
 		}
-		
+
 		selectedCoberturas = ramoAccidentesPersonalesService.consultarCoberturasByRamo(accidentesPersonales.getIdAccidentes());
-		 
+
 		selectedCondicionesEsp = ramoAccidentesPersonalesService.consultarCondicionesByRamo(accidentesPersonales.getIdAccidentes());
-		selectedClausulasAdd = ramoAccidentesPersonalesService.consultarClausulasByRamo(accidentesPersonales.getIdAccidentes());		
+		selectedClausulasAdd = ramoAccidentesPersonalesService.consultarClausulasByRamo(accidentesPersonales.getIdAccidentes());
 	}
 
 	/**
@@ -462,8 +529,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 */
 	public Poliza setearDatosPoliza() {
 
-		Poliza poliza = new Poliza();
-
 		if (activarEmitir) {
 			poliza.setNumeroPoliza(polizaBean.getNumeroPoliza());
 			poliza.setNumeroAnexo(polizaBean.getNumeroAnexo());
@@ -501,7 +566,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 			poliza.setPagoPoliza(pagoPoliza);
 		}
-		poliza.setEstadoPoliza(polizaBean.getEstadoPoliza());
 		poliza.setCliente(polizaBean.getCliente());
 		poliza.setFechaRegistro(new Date());
 		poliza.setRamo(RamoEnum.R1.getLabel());
@@ -604,10 +668,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 		try {
 			if (polizaActiva) {
-				MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("Usted tiene una Poliza Activa para este ramo"));
+				MessagesController.addWarn(null,
+						HiperionMensajes.getInstancia().getString("Poliza existente con este esta, cambie de estado para guardar."));
 			} else {
 
-				Poliza poliza = setearDatosPoliza();
+				poliza = setearDatosPoliza();
 
 				accidentesPersonales.setPrimaNetaPersona(ramoAccidentesPersonalesBean.getPrimaNetaPersona());
 				accidentesPersonales.setPrimaTotalPersona(ramoAccidentesPersonalesBean.getPrimaTotalPersona());
@@ -631,7 +696,17 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 					grupos.add(grupoDB);
 				}
+								
+				//Informacion clausulas Add
+				for(ClausulasAddAccPer clausulasAddAcc: selectedClausulasAdd){
+					clausulasAddAcc.setIdUsuarioCreacion(usuario.getIdUsuario());
+					clausulasAddAcc.setIdUsuarioActualizacion(usuario.getIdUsuario());
+					clausulasAddAcc.setFechaCreacion(new Date());
+					clausulasAddAcc.setFechaActualizacion(new Date());
+					clausulasAddAcc.setEstado(EstadoEnum.A);
+				}
 
+				
 				ramoAccidentesPersonalesService.guardarRamoAccidentesPersonales(accidentesPersonales, poliza, grupos, selectedCoberturas,
 						selectedCondicionesEsp, selectedClausulasAdd);
 
