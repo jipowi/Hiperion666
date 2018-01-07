@@ -90,7 +90,7 @@
 									<h:outputLabel value="#{emision['aseguradora.contacto.telefono']}: " styleClass="negrita" />
 									<p:inputText value="#{aseguradoraBacking.telefonoContacto}" />
 								</h:panelGrid>
-								<f:facet name="footer">
+								<f:facet name="footer">					
 									<div align="center">
 										<p:commandButton id="agregarContacto" icon="icon-add" value="#{emision['boton.agregar']}" actionListener="#{aseguradoraBacking.addContacto}"
 											title="Agregar contactos" update="idInfoContacto, tabla" />

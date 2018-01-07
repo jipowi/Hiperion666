@@ -141,6 +141,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 	private Usuario usuario;
 
 	private Poliza poliza = new Poliza();
+	private boolean ramoNuevo = false;
 
 	RamoAccidentesPersonale accidentesPersonales = new RamoAccidentesPersonale();
 
@@ -220,6 +221,9 @@ public class AccidentesPersonalesBacking implements Serializable {
 								polizaBean.setEstadoPoliza("COTIZADO");
 							}
 						}
+					} else {
+						ramoNuevo = true;
+						polizaBean.setEstadoPoliza("COTIZADO");
 					}
 					ramoAccidentesPersonalesBean.setNombreCliente(cliente.getNombrePersona() + " " + cliente.getApellidoPaterno() + " "
 							+ cliente.getApellidoMaterno());
@@ -689,16 +693,18 @@ public class AccidentesPersonalesBacking implements Serializable {
 					grupoDB.setNombreGrupoAcc(grupo.getNomGrupo());
 					grupoDB.setNumeroPersonasAcc(grupo.getNumPersonas());
 					grupoDB.setActividadAcc(grupo.getActividad());
-					grupoDB.setDeducGrupoAcc(new BigDecimal(grupo.getValorGrupo()));
+					if (grupo.getValorGrupo() != null) {
+						grupoDB.setDeducGrupoAcc(new BigDecimal(grupo.getValorGrupo()));
+					}
 					grupoDB.setIdUsuarioCreacion(usuario.getIdUsuario());
 					grupoDB.setFechaCreacion(new Date());
 					grupoDB.setEstado(EstadoEnum.A);
 
 					grupos.add(grupoDB);
 				}
-								
-				//Informacion clausulas Add
-				for(ClausulasAddAccPer clausulasAddAcc: selectedClausulasAdd){
+
+				// Informacion clausulas Add
+				for (ClausulasAddAccPer clausulasAddAcc : selectedClausulasAdd) {
 					clausulasAddAcc.setIdUsuarioCreacion(usuario.getIdUsuario());
 					clausulasAddAcc.setIdUsuarioActualizacion(usuario.getIdUsuario());
 					clausulasAddAcc.setFechaCreacion(new Date());
@@ -706,9 +712,8 @@ public class AccidentesPersonalesBacking implements Serializable {
 					clausulasAddAcc.setEstado(EstadoEnum.A);
 				}
 
-				
 				ramoAccidentesPersonalesService.guardarRamoAccidentesPersonales(accidentesPersonales, poliza, grupos, selectedCoberturas,
-						selectedCondicionesEsp, selectedClausulasAdd);
+						selectedCondicionesEsp, selectedClausulasAdd, ramoNuevo);
 
 				MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.save"));
 			}
