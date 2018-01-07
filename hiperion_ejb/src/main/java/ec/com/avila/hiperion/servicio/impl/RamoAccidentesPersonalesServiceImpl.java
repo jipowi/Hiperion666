@@ -67,7 +67,7 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 	 */
 	@Override
 	public void guardarRamoAccidentesPersonales(RamoAccidentesPersonale ramoAccidentesPersonales, Poliza poliza, List<GrupoAccPersonale> grupos, List<CobertAccPer> coberturas,
-			List<CondEspAccPer> condiciones, List<ClausulasAddAccPer> clausulas) throws HiperionException {
+			List<CondEspAccPer> condiciones, List<ClausulasAddAccPer> clausulas, Boolean ramoNuevo) throws HiperionException {
 
 		PagoPoliza pagoPoliza = poliza.getPagoPoliza();
 		Boolean guardar = false;
@@ -81,7 +81,7 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			}
 		}
 
-		if (ramoAccidentesPersonales.getIdAccidentes() != null) {
+		if (!ramoNuevo) {
 			polizaDao.update(poliza);
 			ramoAccidentesPersonalesDao.update(ramoAccidentesPersonales);
 		} else {
@@ -96,20 +96,21 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 				grupo.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				grupoAPDao.persist(grupo);
 			}
+			// COBERTURAS
+			for (CobertAccPer cobertura : coberturas) {
+				cobertura.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				coberturaAccPerDao.persist(cobertura);
+			}
 			// CLAUSULAS ADICIONALES
-			if (clausulas != null) {
-				for (ClausulasAddAccPer clausula : clausulas) {
-					clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-					clausulaAddAccPerDao.persist(clausula);
-				}
+			for (ClausulasAddAccPer clausula : clausulas) {
+				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				clausulaAddAccPerDao.persist(clausula);
 			}
 
 			// CONDICIONES ESPECIALES
-			if (condiciones != null) {
-				for (CondEspAccPer condicion : condiciones) {
-					condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
-					conAccPerDao.persist(condicion);
-				}
+			for (CondEspAccPer condicion : condiciones) {
+				condicion.setRamoAccidentesPersonale(ramoAccidentesPersonales);
+				conAccPerDao.persist(condicion);
 			}
 		} else {
 			List<GrupoAccPersonale> gruposDB = ramoAccidentesPersonalesDao.cosultarGruposByRamo(ramoAccidentesPersonales.getIdAccidentes());
@@ -164,7 +165,7 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			}
 			// Insertar Clausulas
 			for (ClausulasAddAccPer clausula : clausulas) {
-				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);				
+				clausula.setRamoAccidentesPersonale(ramoAccidentesPersonales);
 				if (clausula.getIdClausulaAdAcidente() != null) {
 					clausulaAddAccPerDao.update(clausula);
 				} else {

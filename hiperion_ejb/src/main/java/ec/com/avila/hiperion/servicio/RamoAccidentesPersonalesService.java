@@ -37,7 +37,7 @@ public interface RamoAccidentesPersonalesService {
 	 * @throws HiperionException
 	 */
 	public void guardarRamoAccidentesPersonales(RamoAccidentesPersonale ramoAccidentesPersonales, Poliza poliza, List<GrupoAccPersonale> grupos, List<CobertAccPer> coberturas,
-			List<CondEspAccPer> condiciones, List<ClausulasAddAccPer> clausulas) throws HiperionException;
+			List<CondEspAccPer> condiciones, List<ClausulasAddAccPer> clausulas, Boolean ramoNuevo) throws HiperionException;
 
 	/**
 	 * 
