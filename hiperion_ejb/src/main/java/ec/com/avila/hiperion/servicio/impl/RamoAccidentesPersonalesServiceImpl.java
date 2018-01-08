@@ -86,6 +86,7 @@ public class RamoAccidentesPersonalesServiceImpl implements RamoAccidentesPerson
 			ramoAccidentesPersonalesDao.update(ramoAccidentesPersonales);
 		} else {
 			polizaDao.persist(poliza);
+			ramoAccidentesPersonales.setPoliza(poliza);
 			ramoAccidentesPersonalesDao.persist(ramoAccidentesPersonales);
 			guardar = true;
 		}
