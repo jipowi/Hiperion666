@@ -326,7 +326,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 		}
 
 		selectedCoberturas = ramoAccidentesPersonalesService.consultarCoberturasByRamo(accidentesPersonales.getIdAccidentes());
-
 		selectedCondicionesEsp = ramoAccidentesPersonalesService.consultarCondicionesByRamo(accidentesPersonales.getIdAccidentes());
 		selectedClausulasAdd = ramoAccidentesPersonalesService.consultarClausulasByRamo(accidentesPersonales.getIdAccidentes());
 	}
@@ -574,6 +573,9 @@ public class AccidentesPersonalesBacking implements Serializable {
 		poliza.setFechaRegistro(new Date());
 		poliza.setRamo(RamoEnum.R1.getLabel());
 		poliza.setEjecutivo(usuario.getIdentificacionUsuario());
+		if (poliza.getEstadoPoliza() == null) {
+			polizaBean.setEstadoPoliza("COTIZADO");
+		}
 
 		return poliza;
 	}
