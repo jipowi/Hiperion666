@@ -311,6 +311,11 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void editarRamo() throws HiperionException {
+
+		selectedCoberturas = new ArrayList<>();
+		selectedCondicionesEsp = new ArrayList<>();
+		selectedClausulasAdd = new ArrayList<>();
+
 		ramoAccidentesPersonalesBean.setPrimaNetaPersona(accidentesPersonales.getPrimaNetaPersona());
 		ramoAccidentesPersonalesBean.setPrimaTotalPersona(accidentesPersonales.getPrimaTotalPersona());
 		ramoAccidentesPersonalesBean.setFacturacion(accidentesPersonales.getFacturacion());
@@ -1412,6 +1417,21 @@ public class AccidentesPersonalesBacking implements Serializable {
 	}
 
 	/**
+	 * @return the selectedClausulasAdd
+	 */
+	public List<ClausulasAddAccPer> getSelectedClausulasAdd() {
+		return selectedClausulasAdd;
+	}
+
+	/**
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
+	 */
+	public void setSelectedClausulasAdd(List<ClausulasAddAccPer> selectedClausulasAdd) {
+		this.selectedClausulasAdd = selectedClausulasAdd;
+	}
+
+	/**
 	 * @return the selectedCoberturas
 	 */
 	public List<CobertAccPer> getSelectedCoberturas() {
@@ -1439,21 +1459,6 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 */
 	public void setSelectedCondicionesEsp(List<CondEspAccPer> selectedCondicionesEsp) {
 		this.selectedCondicionesEsp = selectedCondicionesEsp;
-	}
-
-	/**
-	 * @return the selectedClausulasAdd
-	 */
-	public List<ClausulasAddAccPer> getSelectedClausulasAdd() {
-		return selectedClausulasAdd;
-	}
-
-	/**
-	 * @param selectedClausulasAdd
-	 *            the selectedClausulasAdd to set
-	 */
-	public void setSelectedClausulasAdd(List<ClausulasAddAccPer> selectedClausulasAdd) {
-		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
 
 }
