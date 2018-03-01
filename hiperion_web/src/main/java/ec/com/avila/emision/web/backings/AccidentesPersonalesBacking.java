@@ -175,8 +175,12 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoAccidentesPersonalesBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoAccidentesPersonalesBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoAccidentesPersonalesBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoAccidentesPersonalesBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
@@ -199,14 +203,13 @@ public class AccidentesPersonalesBacking implements Serializable {
 		try {
 			Boolean validacionIndentificacion = false;
 			Cliente cliente = new Cliente();
-			
-			
-			if(ramoAccidentesPersonalesBean.isActivarCedula()){
-				if (!identificacion.equals("") && ValidatorCedula.getInstancia().validateCedula(identificacion)){
+
+			if (ramoAccidentesPersonalesBean.isActivarCedula()) {
+				if (!identificacion.equals("") && ValidatorCedula.getInstancia().validateCedula(identificacion)) {
 					validacionIndentificacion = true;
 				}
-			}else{
-				if (!identificacion.equals("") && ValidatorRuc.getInstancia().validateRUC(identificacion)){
+			} else {
+				if (!identificacion.equals("") && ValidatorRuc.getInstancia().validateRUC(identificacion)) {
 					validacionIndentificacion = true;
 				}
 			}
