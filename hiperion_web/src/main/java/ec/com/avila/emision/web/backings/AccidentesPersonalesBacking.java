@@ -22,6 +22,7 @@ import org.primefaces.event.RowEditEvent;
 import ec.com.avila.emision.web.beans.PolizaBean;
 import ec.com.avila.emision.web.beans.RamoAccidentesPersonalesBean;
 import ec.com.avila.emision.web.validator.ValidatorCedula;
+import ec.com.avila.emision.web.validator.ValidatorRuc;
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.dto.AseguradoraDTO;
 import ec.com.avila.hiperion.dto.ClausulaAdicionalDTO;
@@ -196,9 +197,21 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 */
 	public Cliente buscarCliente(String identificacion) throws HiperionException {
 		try {
+			Boolean validacionIndentificacion = false;
 			Cliente cliente = new Cliente();
+			
+			
+			if(ramoAccidentesPersonalesBean.isActivarCedula()){
+				if (!identificacion.equals("") && ValidatorCedula.getInstancia().validateCedula(identificacion)){
+					validacionIndentificacion = true;
+				}
+			}else{
+				if (!identificacion.equals("") && ValidatorRuc.getInstancia().validateRUC(identificacion)){
+					validacionIndentificacion = true;
+				}
+			}
 
-			if (!identificacion.equals("") && ValidatorCedula.getInstancia().validateCedula(identificacion)) {
+			if (validacionIndentificacion) {
 				cliente = clienteService.consultarClienteByIdentificacion(identificacion);
 
 				if (cliente == null) {

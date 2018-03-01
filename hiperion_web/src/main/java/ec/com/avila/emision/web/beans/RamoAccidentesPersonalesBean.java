@@ -48,9 +48,13 @@ public class RamoAccidentesPersonalesBean implements Serializable {
 
 	// Cliente - Aseguradora
 	private String identificacion;
+	private String ruc;
 	private String aseguradora;
 	private String nombreCliente;
 	private String contactoAseguradora;
+
+	private boolean activarCedula;
+	private boolean activarRuc;
 
 	// Getters and Setters
 	/**
@@ -302,10 +306,56 @@ public class RamoAccidentesPersonalesBean implements Serializable {
 	}
 
 	/**
-	 * @param grupo the grupo to set
+	 * @param grupo
+	 *            the grupo to set
 	 */
 	public void setGrupo(String grupo) {
 		this.grupo = grupo;
+	}
+
+	/**
+	 * @return the activarCedula
+	 */
+	public boolean isActivarCedula() {
+		return activarCedula;
+	}
+
+	/**
+	 * @param activarCedula
+	 *            the activarCedula to set
+	 */
+	public void setActivarCedula(boolean activarCedula) {
+		this.activarCedula = activarCedula;
+	}
+
+	/**
+	 * @return the activarRuc
+	 */
+	public boolean isActivarRuc() {
+		return activarRuc;
+	}
+
+	/**
+	 * @param activarRuc
+	 *            the activarRuc to set
+	 */
+	public void setActivarRuc(boolean activarRuc) {
+		this.activarRuc = activarRuc;
+	}
+
+	/**
+	 * @return the ruc
+	 */
+	public String getRuc() {
+		return ruc;
+	}
+
+	/**
+	 * @param ruc
+	 *            the ruc to set
+	 */
+	public void setRuc(String ruc) {
+		this.ruc = ruc;
 	}
 
 }
