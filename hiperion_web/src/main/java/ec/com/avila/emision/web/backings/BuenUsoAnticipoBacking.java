@@ -576,7 +576,12 @@ public class BuenUsoAnticipoBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoBuenUsoAnticipoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoBuenUsoAnticipoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoBuenUsoAnticipoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoBuenUsoAnticipoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

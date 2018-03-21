@@ -158,8 +158,12 @@ public class RiesgosEspecialesBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoRiesgosEspecialesBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoRiesgosEspecialesBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoRiesgosEspecialesBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoRiesgosEspecialesBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

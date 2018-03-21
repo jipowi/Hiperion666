@@ -437,7 +437,12 @@ public class BuenaCalidadMaterialesBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoBuenaCalMatBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoBuenaCalMatBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoBuenaCalMatBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoBuenaCalMatBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

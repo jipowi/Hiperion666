@@ -163,8 +163,12 @@ public class CascoAereoBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoCascoAereoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoCascoAereoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoCascoAereoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoCascoAereoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

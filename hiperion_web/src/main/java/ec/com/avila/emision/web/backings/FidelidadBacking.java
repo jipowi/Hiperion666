@@ -166,7 +166,12 @@ public class FidelidadBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoFidelidadBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoFidelidadBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoFidelidadBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoFidelidadBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

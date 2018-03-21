@@ -153,8 +153,12 @@ public class TodoRiesgoMontajeBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoTodoRiesgoMontajeBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoTodoRiesgoMontajeBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoTodoRiesgoMontajeBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoTodoRiesgoMontajeBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

@@ -171,8 +171,12 @@ public class EquipoElectronicoBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoEquipoElectronicoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoEquipoElectronicoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoEquipoElectronicoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoEquipoElectronicoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

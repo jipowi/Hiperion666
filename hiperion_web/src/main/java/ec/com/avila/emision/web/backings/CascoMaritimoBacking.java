@@ -177,8 +177,12 @@ public class CascoMaritimoBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoCascoMaritimoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoCascoMaritimoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoCascoMaritimoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoCascoMaritimoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

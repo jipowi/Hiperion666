@@ -105,8 +105,12 @@ public class VidaBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoVidaBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoVidaBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoVidaBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoVidaBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

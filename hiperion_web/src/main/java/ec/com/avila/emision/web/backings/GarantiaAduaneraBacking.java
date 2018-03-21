@@ -154,8 +154,12 @@ public class GarantiaAduaneraBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoGarantiaAduaneraBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoGarantiaAduaneraBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoGarantiaAduaneraBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoGarantiaAduaneraBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
@@ -996,12 +1000,11 @@ public class GarantiaAduaneraBacking implements Serializable {
 	}
 
 	/**
-	 * @param coberturas the coberturas to set
+	 * @param coberturas
+	 *            the coberturas to set
 	 */
 	public void setCoberturas(List<CobertAduanera> coberturas) {
 		this.coberturas = coberturas;
 	}
-	
-	
 
 }

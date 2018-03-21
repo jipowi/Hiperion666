@@ -757,7 +757,12 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoAgropecuarioBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoAgropecuarioBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoAgropecuarioBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoAgropecuarioBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

@@ -109,11 +109,11 @@ public class RoboAsaltoBacking implements Serializable {
 	private List<CoberturaRobo> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<CobertAddRobo> coberturasAdd;
-	private List<CobertAddRobo>selectedCoberturasAdd;
+	private List<CobertAddRobo> selectedCoberturasAdd;
 	private List<CoberturaAdicionalDTO> coberturasAddDTO = new ArrayList<>();
 	private List<ClausulasAddRobo> clausulasAdicionales;
-	private List<ClausulasAddRobo>selectedClausulasAdd;
-	private List<CondEspRobo>selectedCondicionesEsp;
+	private List<ClausulasAddRobo> selectedClausulasAdd;
+	private List<CondEspRobo> selectedCondicionesEsp;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private List<CondEspRobo> condicionesEspeciales;
 	private List<CondicionEspecialDTO> condicionesEspecialesDTO = new ArrayList<>();
@@ -164,8 +164,12 @@ public class RoboAsaltoBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoRoboAsaltoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoRoboAsaltoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoRoboAsaltoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoRoboAsaltoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
@@ -571,7 +575,6 @@ public class RoboAsaltoBacking implements Serializable {
 
 		}
 
-
 	}
 
 	/**
@@ -597,7 +600,6 @@ public class RoboAsaltoBacking implements Serializable {
 			}
 
 		}
-
 
 	}
 
@@ -712,7 +714,6 @@ public class RoboAsaltoBacking implements Serializable {
 	 * 
 	 */
 	public void setearClausulasAdd() {
-		
 
 		if (selectedClausulasAdd.isEmpty()) {
 			MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.clausulasAdd"));
@@ -720,7 +721,6 @@ public class RoboAsaltoBacking implements Serializable {
 			ramoRoboAsalto.setClausulasAddRobos(selectedClausulasAdd);
 			MessagesController.addInfo(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.exito.clausulasAdd"));
 		}
-
 
 	}
 
@@ -1302,7 +1302,8 @@ public class RoboAsaltoBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCoberturasAdd the selectedCoberturasAdd to set
+	 * @param selectedCoberturasAdd
+	 *            the selectedCoberturasAdd to set
 	 */
 	public void setSelectedCoberturasAdd(List<CobertAddRobo> selectedCoberturasAdd) {
 		this.selectedCoberturasAdd = selectedCoberturasAdd;
@@ -1316,7 +1317,8 @@ public class RoboAsaltoBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
 	 */
 	public void setSelectedClausulasAdd(List<ClausulasAddRobo> selectedClausulasAdd) {
 		this.selectedClausulasAdd = selectedClausulasAdd;
@@ -1330,13 +1332,11 @@ public class RoboAsaltoBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCondicionesEsp the selectedCondicionesEsp to set
+	 * @param selectedCondicionesEsp
+	 *            the selectedCondicionesEsp to set
 	 */
 	public void setSelectedCondicionesEsp(List<CondEspRobo> selectedCondicionesEsp) {
 		this.selectedCondicionesEsp = selectedCondicionesEsp;
 	}
-	
-	
-	
 
 }

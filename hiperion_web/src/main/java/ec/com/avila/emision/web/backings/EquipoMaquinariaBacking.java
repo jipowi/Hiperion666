@@ -175,7 +175,12 @@ public class EquipoMaquinariaBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoEquipoMaquinaraBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoEquipoMaquinaraBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoEquipoMaquinaraBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoEquipoMaquinaraBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

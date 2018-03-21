@@ -168,8 +168,12 @@ public class LucroCesanteRoturaMaquinariaBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoCesanteRoturaMaqBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoCesanteRoturaMaqBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoCesanteRoturaMaqBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoCesanteRoturaMaqBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

@@ -108,10 +108,10 @@ public class DineroValoresBacking implements Serializable {
 	private List<DetalleAnexo> anexos;
 
 	private List<CobertDineroVal> coberturas;
-	private List<CobertDineroVal>selectedCoberturas;
+	private List<CobertDineroVal> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<ClausulasAddDinero> clausulasAdicionales;
-	private List<ClausulasAddDinero>selectedClausulasAdd;
+	private List<ClausulasAddDinero> selectedClausulasAdd;
 	private List<SelectItem> aseguradorasItems;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
@@ -159,8 +159,12 @@ public class DineroValoresBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoDineroValoresBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoDineroValoresBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoDineroValoresBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoDineroValoresBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
@@ -1071,7 +1075,8 @@ public class DineroValoresBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCoberturas the selectedCoberturas to set
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
 	 */
 	public void setSelectedCoberturas(List<CobertDineroVal> selectedCoberturas) {
 		this.selectedCoberturas = selectedCoberturas;
@@ -1085,7 +1090,8 @@ public class DineroValoresBacking implements Serializable {
 	}
 
 	/**
-	 * @param coberturas the coberturas to set
+	 * @param coberturas
+	 *            the coberturas to set
 	 */
 	public void setCoberturas(List<CobertDineroVal> coberturas) {
 		this.coberturas = coberturas;
@@ -1099,7 +1105,8 @@ public class DineroValoresBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
 	 */
 	public void setSelectedClausulasAdd(List<ClausulasAddDinero> selectedClausulasAdd) {
 		this.selectedClausulasAdd = selectedClausulasAdd;
@@ -1113,13 +1120,11 @@ public class DineroValoresBacking implements Serializable {
 	}
 
 	/**
-	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 * @param clausulasAdicionales
+	 *            the clausulasAdicionales to set
 	 */
 	public void setClausulasAdicionales(List<ClausulasAddDinero> clausulasAdicionales) {
 		this.clausulasAdicionales = clausulasAdicionales;
 	}
-	
-	
-
 
 }

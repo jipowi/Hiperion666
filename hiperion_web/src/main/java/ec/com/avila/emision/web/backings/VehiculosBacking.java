@@ -320,8 +320,12 @@ public class VehiculosBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoVehiculoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoVehiculoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoVehiculoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoVehiculoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

@@ -112,7 +112,7 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	Logger log = Logger.getLogger(ResponsabilidadCivilBacking.class);
 
 	private List<ClausulasAddResp> clausulasAdicionales;
-	private List<ClausulasAddResp>selectedClausulasAdd;
+	private List<ClausulasAddResp> selectedClausulasAdd;
 	private List<CobertResp> coberturas;
 	private List<CobertResp> selectedCoberturas;
 	private List<ClausulaAdicionalDTO> clausulasAdicionalesDTO = new ArrayList<>();
@@ -156,7 +156,12 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoResponsabilidadCivilBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoResponsabilidadCivilBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoResponsabilidadCivilBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoResponsabilidadCivilBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
@@ -1042,7 +1047,8 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	}
 
 	/**
-	 * @param clausulasAdicionales the clausulasAdicionales to set
+	 * @param clausulasAdicionales
+	 *            the clausulasAdicionales to set
 	 */
 	public void setClausulasAdicionales(List<ClausulasAddResp> clausulasAdicionales) {
 		this.clausulasAdicionales = clausulasAdicionales;
@@ -1056,12 +1062,11 @@ public class ResponsabilidadCivilBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedClausulasAdd the selectedClausulasAdd to set
+	 * @param selectedClausulasAdd
+	 *            the selectedClausulasAdd to set
 	 */
 	public void setSelectedClausulasAdd(List<ClausulasAddResp> selectedClausulasAdd) {
 		this.selectedClausulasAdd = selectedClausulasAdd;
 	}
-	
-	
 
 }

@@ -85,7 +85,7 @@ public class SoatBacking implements Serializable {
 	private List<SelectItem> tipoSoatItems;
 	private List<SelectItem> modeloItems;
 	private List<CobertSoat> coberturas;
-	private List<CobertSoat>selectedCoberturas;
+	private List<CobertSoat> selectedCoberturas;
 	private List<CoberturaDTO> coberturasDTO = new ArrayList<>();
 	private List<DetalleAnexo> anexos;
 	private List<SelectItem> contactosItems = new ArrayList<>();
@@ -159,8 +159,12 @@ public class SoatBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoSoatBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoSoatBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoSoatBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoSoatBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
@@ -451,7 +455,6 @@ public class SoatBacking implements Serializable {
 
 			}
 		}
-
 
 	}
 
@@ -1173,12 +1176,11 @@ public class SoatBacking implements Serializable {
 	}
 
 	/**
-	 * @param selectedCoberturas the selectedCoberturas to set
+	 * @param selectedCoberturas
+	 *            the selectedCoberturas to set
 	 */
 	public void setSelectedCoberturas(List<CobertSoat> selectedCoberturas) {
 		this.selectedCoberturas = selectedCoberturas;
 	}
-	
-	
 
 }

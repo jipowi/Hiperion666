@@ -161,8 +161,12 @@ public class LucroCesanteIncendioBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoLucroCesanteIncendioBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoLucroCesanteIncendioBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoLucroCesanteIncendioBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoLucroCesanteIncendioBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

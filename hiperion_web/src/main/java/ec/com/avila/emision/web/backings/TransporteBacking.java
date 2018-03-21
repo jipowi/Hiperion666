@@ -166,8 +166,12 @@ public class TransporteBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoTransporteBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoTransporteBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoTransporteBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoTransporteBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

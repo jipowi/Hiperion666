@@ -187,8 +187,12 @@ public class IncendioLineasAliadasBacking implements Serializable {
 	 * @throws HiperionException
 	 */
 	public void buscarCliente() throws HiperionException {
-
-		Cliente cliente = buscarCliente(ramoIncendioLineasAliadaBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoIncendioLineasAliadaBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoIncendioLineasAliadaBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoIncendioLineasAliadaBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

@@ -154,7 +154,12 @@ public class CumplimientoContratoBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoCumplimientoContratoBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoCumplimientoContratoBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoCumplimientoContratoBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoCumplimientoContratoBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;

@@ -163,7 +163,12 @@ public class RoturaMaquinariaBacking implements Serializable {
 	 */
 	public void buscarCliente() throws HiperionException {
 
-		Cliente cliente = buscarCliente(ramoRoturaMaquinariaBean.getIdentificacion());
+		Cliente cliente = new Cliente();
+		if (ramoRoturaMaquinariaBean.isActivarCedula()) {
+			cliente = buscarCliente(ramoRoturaMaquinariaBean.getIdentificacion());
+		} else {
+			cliente = buscarCliente(ramoRoturaMaquinariaBean.getRuc());
+		}
 
 		if (cliente != null) {
 			activarDatosCliente = true;
