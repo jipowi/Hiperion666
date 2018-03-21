@@ -78,9 +78,13 @@ public class RamoRoboAsaltoBean implements Serializable {
 	
 	// Cliente - Aseguradora
 		private String identificacion;
+		private String ruc;
 		private String aseguradora;
 		private String nombreCliente;
 		private String contactoAseguradora;
+		
+		private boolean activarCedula;
+		private boolean activarRuc;
 
 	// Getters and Setters
 		
@@ -710,4 +714,48 @@ public class RamoRoboAsaltoBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		deducibleList.remove((DeducibleRoboBean) event.getObject());
 	}
+
+	/**
+	 * @return the ruc
+	 */
+	public String getRuc() {
+		return ruc;
+	}
+
+	/**
+	 * @param ruc the ruc to set
+	 */
+	public void setRuc(String ruc) {
+		this.ruc = ruc;
+	}
+
+	/**
+	 * @return the activarCedula
+	 */
+	public boolean isActivarCedula() {
+		return activarCedula;
+	}
+
+	/**
+	 * @param activarCedula the activarCedula to set
+	 */
+	public void setActivarCedula(boolean activarCedula) {
+		this.activarCedula = activarCedula;
+	}
+
+	/**
+	 * @return the activarRuc
+	 */
+	public boolean isActivarRuc() {
+		return activarRuc;
+	}
+
+	/**
+	 * @param activarRuc the activarRuc to set
+	 */
+	public void setActivarRuc(boolean activarRuc) {
+		this.activarRuc = activarRuc;
+	}
+	
+	
 }
