@@ -54,11 +54,29 @@
 											<h:outputText value="#{emision['cliente.buscar']}" />
 										</f:facet>
 										<h:panelGrid columns="2">
-											<h:panelGrid columns="2">
-												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoAsistenciaMedicaBean.identificacion}" />
+											<h:panelGrid columns="3">
+												<h:outputLabel value="#{emision['cliente.identificacion']}: " styleClass="negrita" />
+												<p:selectBooleanCheckbox value="#{ramoAsistenciaMedicaBean.activarCedula}">
+													<p:ajax update="pnlCedula" />
+												</p:selectBooleanCheckbox>
+												<p:panel id="pnlCedula" visible="#{ramoAsistenciaMedicaBean.activarCedula}">
+													<p:inputText value="#{ramoAsistenciaMedicaBean.identificacion}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="10">
+														<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!ramoAsistenciaMedicaBean.activarCedula}" />
+													</p:inputText>
+												</p:panel>
+
+												<h:outputLabel value="#{emision['lbl.ruc']}: " styleClass="negrita" />
+												<p:selectBooleanCheckbox value="#{ramoAsistenciaMedicaBean.activarRuc}">
+													<p:ajax update="pnlRuc" />
+												</p:selectBooleanCheckbox>
+												<p:panel id="pnlRuc" visible="#{ramoAccidentesPersonalesBean.activarRuc}">
+													<p:inputText value="#{ramoAsistenciaMedicaBean.ruc}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="13">
+														<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!ramoAsistenciaMedicaBean.activarRuc}" />
+													</p:inputText>
+												</p:panel>
 											</h:panelGrid>
-											<p:commandLink title="Buscar clientes" action="#{asistenciaMedicaBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora">
+											<p:commandLink title="Buscar clientes" action="#{asistenciaMedicaBacking.buscarCliente}"
+												update="idDatosCliente, idDatosAseguradora, :panelCliente">
 												<h:graphicImage name="search.png" library="img/icon" />
 											</p:commandLink>
 										</h:panelGrid>

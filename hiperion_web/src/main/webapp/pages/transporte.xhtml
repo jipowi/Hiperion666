@@ -18,7 +18,8 @@
 						</div>
 					</ui:define>
 					<ui:define name="ramoContent">
-						<h:form id="formCliente">
+					<p:panel id="panelCliente">
+						<h:form >
 							<p:outputPanel id="messageTransporte">
 								<p:messages id="messagesTransporte" showDetail="true" autoUpdate="true" closable="true" />
 							</p:outputPanel>
@@ -38,11 +39,29 @@
 											<h:outputText value="#{emision['cliente.buscar']}" />
 										</f:facet>
 										<h:panelGrid columns="2">
-											<h:panelGrid columns="2">
-												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoTransporteBean.identificacion}" />
+											<h:panelGrid columns="3">
+												<h:outputLabel value="#{emision['cliente.identificacion']}: " styleClass="negrita" />
+												<p:selectBooleanCheckbox value="#{ramoTransporteBean.activarCedula}">
+													<p:ajax update="pnlCedula" />
+												</p:selectBooleanCheckbox>
+												<p:panel id="pnlCedula" visible="#{ramoTransporteBean.activarCedula}">
+													<p:inputText value="#{ramoTransporteBean.identificacion}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="10">
+														<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!ramoTransporteBean.activarCedula}" />
+													</p:inputText>
+												</p:panel>
+
+												<h:outputLabel value="#{emision['lbl.ruc']}: " styleClass="negrita" />
+												<p:selectBooleanCheckbox value="#{ramoTransporteBean.activarRuc}">
+													<p:ajax update="pnlRuc" />
+												</p:selectBooleanCheckbox>
+												<p:panel id="pnlRuc" visible="#{ramoAccidentesPersonalesBean.activarRuc}">
+													<p:inputText value="#{ramoTransporteBean.ruc}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="13">
+														<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!ramoTransporteBean.activarRuc}" />
+													</p:inputText>
+												</p:panel>
 											</h:panelGrid>
-											<p:commandLink title="Buscar clientes" action="#{transporteBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora">
+											<p:commandLink title="Buscar clientes" action="#{transporteBacking.buscarCliente}"
+												update="idDatosCliente, idDatosAseguradora, :panelCliente">
 												<h:graphicImage name="search.png" library="img/icon" />
 											</p:commandLink>
 										</h:panelGrid>
@@ -200,6 +219,7 @@
 								</p:accordionPanel>
 							</p:panel>
 						</h:form>
+						</p:panel>
 						<!-- RAMO TRANSPORTE -->
 						<p:tabView effect="blind" effectDuration="normal">
 							<p:tab title="#{emision['emision.ramo.transporte']}">

@@ -22,9 +22,10 @@
 						<p:outputPanel id="messageAgropecuario">
 							<p:messages id="messagesAgropecuario" showDetail="true" autoUpdate="true" closable="true" />
 						</p:outputPanel>
+						<!-- CLIENTE -->
+						<p:panel id="panelCliente">
+							<h:form id="forCliente">
 
-						<h:form id="forCliente">
-							<p:panel id="panelCliente">
 								<!-- ESTADO POLIZA -->
 								<table align="center">
 									<tr>
@@ -56,13 +57,31 @@
 											<h:outputText value="#{emision['cliente.buscar']}" />
 										</f:facet>
 										<h:panelGrid columns="2">
-											<h:panelGrid columns="2">
-												<p:outputLabel value="#{emision['cliente.identificacion']}:" styleClass="negrita" />
-												<p:inputText value="#{ramoAgropecuarioBean.identificacion}" />
+											<h:panelGrid columns="3">
+												<h:outputLabel value="#{emision['cliente.identificacion']}: " styleClass="negrita" />
+												<p:selectBooleanCheckbox value="#{ramoAgropecuarioBean.activarCedula}">
+													<p:ajax update="pnlCedula" />
+												</p:selectBooleanCheckbox>
+												<p:panel id="pnlCedula" visible="#{ramoAgropecuarioBean.activarCedula}">
+													<p:inputText value="#{ramoAgropecuarioBean.identificacion}" validatorMessage="#{'msg.cedula.error'}" maxlength="10">
+														<f:validateRegex pattern="#{emision['msg.formato.cedula']}" disabled="#{!ramoAgropecuarioBean.activarCedula}" />
+													</p:inputText>
+												</p:panel>
+
+												<h:outputLabel value="#{emision['lbl.ruc']}:" styleClass="negrita" />
+												<p:selectBooleanCheckbox value="#{ramoAgropecuarioBean.activarRuc}">
+													<p:ajax update="pnlRuc" />
+												</p:selectBooleanCheckbox>
+												<p:panel id="pnlRuc" visible="#{ramoAgropecuarioBean.activarRuc}">
+													<p:inputText value="#{ramoAgropecuarioBean.ruc}" validatorMessage="#{emision['msg.cedula.error']}" maxlength="13">
+													</p:inputText>
+												</p:panel>
 											</h:panelGrid>
-											<p:commandLink title="Buscar clientes" action="#{agropecuarioBacking.buscarCliente}" update="idDatosCliente, idDatosAseguradora">
+											<p:commandLink title="Buscar clientes" action="#{accidentesPersonalesBacking.buscarCliente}"
+												update="idDatosCliente, idDatosAseguradora :panelCliente">
 												<h:graphicImage name="search.png" library="img/icon" />
 											</p:commandLink>
+
 										</h:panelGrid>
 									</p:panel>
 									<!-- DATOS DEL CLIENTE -->
@@ -485,8 +504,9 @@
 										</p:commandLink>
 									</div>
 								</p:panel>
-							</p:panel>
-						</h:form>
+							</h:form>
+						</p:panel>
+
 
 						<!-- PAGO POLIZA -->
 						<p:dialog id="idPagoPoliza" header="Pago Poliza" widgetVar="pagoPoliza" modal="true" position="center" showEffect="fade" hideEffect="explode"
