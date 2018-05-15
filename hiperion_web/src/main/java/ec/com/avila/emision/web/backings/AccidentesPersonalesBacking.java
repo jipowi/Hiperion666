@@ -190,7 +190,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 	/**
 	 * 
-	 * <b> Permite buscar un cliente por medio de la cedula de identidad. </b>
+	 * <b> Permite buscar un cliente por medio del numero de indentificacion </b>
 	 * <p>
 	 * [Author: HIPERION, Date: 08/02/2016]
 	 * </p>
@@ -230,7 +230,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 
 								verificarEstado(polizaDB);
 
-								accidentesPersonales = ramoService.consultarRamo(polizaDB.getIdPoliza());
+								accidentesPersonales = ramoService.consultarRamoAcc(polizaDB.getIdPoliza());
 								poliza = polizaDB;
 								editarRamo();
 							} else {
@@ -243,6 +243,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 					}
 					ramoAccidentesPersonalesBean.setNombreCliente(cliente.getNombrePersona() + " " + cliente.getApellidoPaterno() + " "
 							+ cliente.getApellidoMaterno());
+					ramoAccidentesPersonalesBean.setIdentificacion(identificacion);
 				}
 			} else {
 				MessagesController.addError(null, HiperionMensajes.getInstancia().getString("hiperion.mensage.error.identificacionNoValido"));

@@ -31,6 +31,7 @@ import org.primefaces.model.UploadedFile;
 import ec.com.avila.emision.web.beans.PolizaBean;
 import ec.com.avila.emision.web.beans.RamoAgropecuarioBean;
 import ec.com.avila.emision.web.validator.ValidatorCedula;
+import ec.com.avila.emision.web.validator.ValidatorRuc;
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.dto.AseguradoraDTO;
 import ec.com.avila.hiperion.dto.ClausulaAdicionalDTO;
@@ -59,6 +60,7 @@ import ec.com.avila.hiperion.servicio.AseguradoraService;
 import ec.com.avila.hiperion.servicio.CatalogoService;
 import ec.com.avila.hiperion.servicio.ClienteService;
 import ec.com.avila.hiperion.servicio.DetalleCatalogoService;
+import ec.com.avila.hiperion.servicio.PolizaService;
 import ec.com.avila.hiperion.servicio.RamoAgropecuarioService;
 import ec.com.avila.hiperion.servicio.RamoService;
 import ec.com.avila.hiperion.web.beans.RamoBean;
@@ -96,6 +98,8 @@ public class AgropecuarioBacking implements Serializable {
 	private AseguradoraService aseguradoraService;
 	@EJB
 	private DetalleCatalogoService detalleCatalogoService;
+	@EJB
+	private PolizaService polizaService;
 
 	@ManagedProperty(value = "#{ramoBean}")
 	private RamoBean ramoBean;
@@ -133,9 +137,18 @@ public class AgropecuarioBacking implements Serializable {
 	private Boolean activarPanelPagoFinanciado = false;
 	private Boolean activarPanelPagoDebitoBancario = false;
 	private Boolean activarPanelPagoTarjetaCredito = false;
+	private Boolean polizaActiva = false;
+	private Boolean activarCotizar = true;
+	private Boolean activarPresentar = false;
+	private Boolean activarAceptar = false;
+	private Boolean activarEmitir = false;
+	private Boolean activarEntregar = false;
+	private Boolean activarDocumentar = false;
 	private static List<AseguradoraDTO> aseguradorasDTO = new ArrayList<AseguradoraDTO>();
 
 	private Usuario usuario;
+	private Poliza poliza = new Poliza();
+	private boolean ramoNuevo = false;
 
 	private boolean activarDatosCliente = false;
 	private boolean activarDatosAseguradora = false;
@@ -721,16 +734,49 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public Cliente buscarCliente(String identificacion) throws HiperionException {
 		try {
+			Boolean validacionIndentificacion = false;
 			Cliente cliente = new Cliente();
 
-			if (!identificacion.equals("") && ValidatorCedula.getInstancia().validateCedula(identificacion)) {
+			if (ramoAgropecuarioBean.isActivarCedula()) {
+				if (!identificacion.equals("") && ValidatorCedula.getInstancia().validateCedula(identificacion)) {
+					validacionIndentificacion = true;
+				}
+			} else {
+				if (!identificacion.equals("") && ValidatorRuc.getInstancia().validateRUC(identificacion)) {
+					validacionIndentificacion = true;
+				}
+			}
+
+			if (validacionIndentificacion) {
 				cliente = clienteService.consultarClienteByIdentificacion(identificacion);
+
 				if (cliente == null) {
 					MessagesController.addWarn(null, HiperionMensajes.getInstancia().getString("hiperion.mensaje.warn.buscar"));
 				} else {
+					List<Poliza> polizas = polizaService.consultarPolizasByCliente(cliente.getIdCliente());
 
+					if (polizas != null) {
+						for (Poliza polizaDB : polizas) {
+							if (polizaDB.getRamo().equals("ACCIDENTES PERSONALES")) {
+
+								polizaActiva = true;
+
+								verificarEstado(polizaDB);
+
+								agropecuario = ramoService.consultarRamoAgro(polizaDB.getIdPoliza());
+								poliza = polizaDB;
+								editarRamo();
+							} else {
+								polizaBean.setEstadoPoliza("COTIZADO");
+							}
+						}
+					} else {
+						ramoNuevo = true;
+						polizaBean.setEstadoPoliza("COTIZADO");
+					}
 					ramoAgropecuarioBean.setNombreCliente(cliente.getNombrePersona() + " " + cliente.getApellidoPaterno() + " "
 							+ cliente.getApellidoMaterno());
+					ramoAgropecuarioBean.setIdentificacion(identificacion);
 				}
 			} else {
 				MessagesController.addError(null, HiperionMensajes.getInstancia().getString("hiperion.mensage.error.identificacionNoValido"));
@@ -744,6 +790,73 @@ public class AgropecuarioBacking implements Serializable {
 			throw new HiperionException(e);
 		}
 
+	}
+
+	/**
+	 * 
+	 * <b> Permite obetener la informacion almacenada en la base de datos. </b>
+	 * <p>
+	 * [Author: kruger, Date: 15/05/2018]
+	 * </p>
+	 * 
+	 * @throws HiperionException
+	 */
+	public void editarRamo() throws HiperionException {
+	}
+
+	/**
+	 * <b> Permite verificar el estado de la poliza. </b>
+	 * <p>
+	 * [Author: kruger, Date: 11/07/2017]
+	 * </p>
+	 * 
+	 * @param poliza
+	 */
+	private void verificarEstado(Poliza poliza) {
+		String estado = poliza.getEstadoPoliza();
+		switch (estado) {
+		case "COTIZADO":
+			activarCotizar = false;
+			activarPresentar = true;
+			activarAceptar = false;
+			activarEmitir = false;
+			activarEntregar = false;
+			activarDocumentar = false;
+			break;
+		case "PRESENTADO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = true;
+			activarEmitir = false;
+			activarEntregar = false;
+			activarDocumentar = false;
+			break;
+		case "ACEPTADO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = false;
+			activarEmitir = true;
+			activarEntregar = false;
+			activarDocumentar = false;
+			break;
+		case "EMITIDO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = false;
+			activarEmitir = false;
+			activarEntregar = true;
+			activarDocumentar = false;
+			break;
+
+		case "ENTREGADO":
+			activarCotizar = false;
+			activarPresentar = false;
+			activarAceptar = false;
+			activarEmitir = false;
+			activarEntregar = false;
+			activarDocumentar = true;
+			break;
+		}
 	}
 
 	/**
@@ -1349,6 +1462,126 @@ public class AgropecuarioBacking implements Serializable {
 	 */
 	public void setSelectedCoberturasVida(List<CobertAgro> selectedCoberturasVida) {
 		this.selectedCoberturasVida = selectedCoberturasVida;
+	}
+
+	/**
+	 * @return the activarCotizar
+	 */
+	public Boolean getActivarCotizar() {
+		return activarCotizar;
+	}
+
+	/**
+	 * @param activarCotizar
+	 *            the activarCotizar to set
+	 */
+	public void setActivarCotizar(Boolean activarCotizar) {
+		this.activarCotizar = activarCotizar;
+	}
+
+	/**
+	 * @return the activarPresentar
+	 */
+	public Boolean getActivarPresentar() {
+		return activarPresentar;
+	}
+
+	/**
+	 * @param activarPresentar
+	 *            the activarPresentar to set
+	 */
+	public void setActivarPresentar(Boolean activarPresentar) {
+		this.activarPresentar = activarPresentar;
+	}
+
+	/**
+	 * @return the activarAceptar
+	 */
+	public Boolean getActivarAceptar() {
+		return activarAceptar;
+	}
+
+	/**
+	 * @param activarAceptar
+	 *            the activarAceptar to set
+	 */
+	public void setActivarAceptar(Boolean activarAceptar) {
+		this.activarAceptar = activarAceptar;
+	}
+
+	/**
+	 * @return the activarEmitir
+	 */
+	public Boolean getActivarEmitir() {
+		return activarEmitir;
+	}
+
+	/**
+	 * @param activarEmitir
+	 *            the activarEmitir to set
+	 */
+	public void setActivarEmitir(Boolean activarEmitir) {
+		this.activarEmitir = activarEmitir;
+	}
+
+	/**
+	 * @return the activarEntregar
+	 */
+	public Boolean getActivarEntregar() {
+		return activarEntregar;
+	}
+
+	/**
+	 * @param activarEntregar
+	 *            the activarEntregar to set
+	 */
+	public void setActivarEntregar(Boolean activarEntregar) {
+		this.activarEntregar = activarEntregar;
+	}
+
+	/**
+	 * @return the activarDocumentar
+	 */
+	public Boolean getActivarDocumentar() {
+		return activarDocumentar;
+	}
+
+	/**
+	 * @param activarDocumentar
+	 *            the activarDocumentar to set
+	 */
+	public void setActivarDocumentar(Boolean activarDocumentar) {
+		this.activarDocumentar = activarDocumentar;
+	}
+
+	/**
+	 * @return the poliza
+	 */
+	public Poliza getPoliza() {
+		return poliza;
+	}
+
+	/**
+	 * @param poliza
+	 *            the poliza to set
+	 */
+	public void setPoliza(Poliza poliza) {
+		this.poliza = poliza;
+	}
+
+	/**
+	 * @return the agropecuario
+	 */
+	public RamoAgropecuario getAgropecuario() {
+		return agropecuario;
+	}
+
+	/**
+	 * @param agropecuario
+	 *            the agropecuario to set
+	 */
+	public void setAgropecuario(RamoAgropecuario agropecuario) {
+		this.agropecuario = agropecuario;
 	}
 
 }
