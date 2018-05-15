@@ -9,6 +9,7 @@ import javax.ejb.Local;
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.emision.entities.Ramo;
 import ec.com.avila.hiperion.emision.entities.RamoAccidentesPersonale;
+import ec.com.avila.hiperion.emision.entities.RamoAgropecuario;
 
 /**
  * <b> Servicio de interface local para realizar las operaciones sobre la tabla Ramo</b>
@@ -46,6 +47,20 @@ public interface RamoService {
 	 * @return
 	 * @throws HiperionException
 	 */
-	public RamoAccidentesPersonale consultarRamo(Integer ipPoliza) throws HiperionException;
+	public RamoAccidentesPersonale consultarRamoAcc(Integer ipPoliza) throws HiperionException;
+	
+	/**
+	 * 
+	 * <b> Permite consultar el ramoAgropecuario mediante el idPoliza. </b>
+	 * <p>
+	 * [Author: kruger, Date: 15/05/2018]
+	 * </p>
+	 * 
+	 * @param ipPoliza
+	 * @return
+	 * @throws HiperionException
+	 */
+	public RamoAgropecuario consultarRamoAgro(Integer ipPoliza) throws HiperionException;
+
 
 }

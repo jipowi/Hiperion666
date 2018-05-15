@@ -11,9 +11,11 @@ import javax.ejb.Stateless;
 
 import ec.com.avila.hiperion.comun.HiperionException;
 import ec.com.avila.hiperion.dao.RamoAccidentesPersonalesDao;
+import ec.com.avila.hiperion.dao.RamoAgropecuarioDao;
 import ec.com.avila.hiperion.dao.RamoDao;
 import ec.com.avila.hiperion.emision.entities.Ramo;
 import ec.com.avila.hiperion.emision.entities.RamoAccidentesPersonale;
+import ec.com.avila.hiperion.emision.entities.RamoAgropecuario;
 import ec.com.avila.hiperion.servicio.RamoService;
 
 /**
@@ -30,6 +32,8 @@ public class RamoServiceImpl implements RamoService {
 	private RamoDao ramoDao;
 	@EJB
 	private RamoAccidentesPersonalesDao ramoAccDao;
+	@EJB
+	private RamoAgropecuarioDao ramoAgroDao;
 
 	public void guardarRamo(Ramo ramo) throws HiperionException {
 		ramoDao.persist(ramo);
@@ -49,8 +53,16 @@ public class RamoServiceImpl implements RamoService {
 	 * @see ec.com.avila.hiperion.servicio.RamoService#consultarRamo(java.lang.Integer)
 	 */
 	@Override
-	public RamoAccidentesPersonale consultarRamo(Integer ipPoliza) throws HiperionException {
-		return ramoAccDao.consultarRamo(ipPoliza);
+	public RamoAccidentesPersonale consultarRamoAcc(Integer ipPoliza) throws HiperionException {
+		return ramoAccDao.consultarRamoAcc(ipPoliza);
+	}
+
+	/* (non-Javadoc)
+	 * @see ec.com.avila.hiperion.servicio.RamoService#consultarRamoAgro(java.lang.Integer)
+	 */
+	@Override
+	public RamoAgropecuario consultarRamoAgro(Integer ipPoliza) throws HiperionException {
+		return ramoAgroDao.consultarRamoAcc(ipPoliza);
 	}
 
 }
