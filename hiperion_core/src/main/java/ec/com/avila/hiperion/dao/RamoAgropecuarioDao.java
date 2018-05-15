@@ -33,4 +33,17 @@ public interface RamoAgropecuarioDao extends GenericDAO<RamoAgropecuario, Long> 
 	 */
 	public void guardarArchivoPoliza(ArchivoBase file) throws HiperionException;
 
+	/**
+	 * 
+	 * <b> Permite consultar la informacion del ramo mediante el idPoliza. </b>
+	 * <p>
+	 * [Author: kruger, Date: 15/05/2018]
+	 * </p>
+	 * 
+	 * @param ipPoliza
+	 * @return
+	 * @throws HiperionException
+	 */
+	public RamoAgropecuario consultarRamoAcc(Integer ipPoliza) throws HiperionException;
+
 }

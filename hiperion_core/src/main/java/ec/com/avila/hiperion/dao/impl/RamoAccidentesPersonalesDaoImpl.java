@@ -43,7 +43,7 @@ public class RamoAccidentesPersonalesDaoImpl extends GenericDAOImpl<RamoAccident
 	 * @see ec.com.avila.hiperion.dao.RamoAccidentesPersonalesDao#consultarRamo(java.lang.Integer)
 	 */
 	@Override
-	public RamoAccidentesPersonale consultarRamo(Integer ipPoliza) throws HiperionException {
+	public RamoAccidentesPersonale consultarRamoAcc(Integer ipPoliza) throws HiperionException {
 		try {
 			Query query = em.createNamedQuery("Ramo.findAccByPoliza");
 			query.setParameter("idPoliza", ipPoliza);

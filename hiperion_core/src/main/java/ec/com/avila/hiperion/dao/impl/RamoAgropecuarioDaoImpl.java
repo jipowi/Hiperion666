@@ -7,6 +7,7 @@ package ec.com.avila.hiperion.dao.impl;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 
@@ -47,6 +48,26 @@ public class RamoAgropecuarioDaoImpl extends GenericDAOImpl<RamoAgropecuario, Lo
 			throw new HiperionException(e);
 		}
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ec.com.avila.hiperion.dao.RamoAgropecuarioDao#consultarRamoAcc(java.lang.Integer)
+	 */
+	@Override
+	public RamoAgropecuario consultarRamoAcc(Integer ipPoliza) throws HiperionException {
+		try {
+			Query query = em.createNamedQuery("Ramo.findAgroByPoliza");
+			query.setParameter("idPoliza", ipPoliza);
+			RamoAgropecuario ramo = (RamoAgropecuario) query.getSingleResult();
+
+			return ramo;
+
+		} catch (Exception e) {
+			log.error("Error no se pudo consultar el Ramo ", e);
+			throw new HiperionException(e);
+		}
 	}
 
 }

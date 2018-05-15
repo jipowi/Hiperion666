@@ -36,8 +36,9 @@ public interface RamoAccidentesPersonalesDao extends GenericDAO<RamoAccidentesPe
 	 * @return
 	 * @throws HiperionException
 	 */
-	public RamoAccidentesPersonale consultarRamo(Integer ipPoliza) throws HiperionException;
+	public RamoAccidentesPersonale consultarRamoAcc(Integer ipPoliza) throws HiperionException;
 
+	
 	/**
 	 * 
 	 * <b> Permite consultar la lista de grupos que posee el ramo. </b>

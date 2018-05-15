@@ -47,6 +47,7 @@ import javax.persistence.NamedQuery;
 		// RAMO
 		@NamedQuery(name = "Ramo.findByCodigoRamo", query = "SELECT r FROM Ramo r WHERE r.codigoRamo =:codigoRamo"),
 		@NamedQuery(name = "Ramo.findAccByPoliza", query = "SELECT r FROM RamoAccidentesPersonale r WHERE r.poliza.idPoliza =:idPoliza"),
+		@NamedQuery(name = "Ramo.findAgroByPoliza", query = "SELECT r FROM RamoAgropecuario r WHERE r.poliza.idPoliza =:idPoliza"),
 		@NamedQuery(name = "Ramo.findByAseguradora", query = "SELECT r FROM RamoAseguradora r WHERE r.aseguradora.idAseguradora =:idAseguradora"),
 		// USUARIO
 		@NamedQuery(name = "Usuario.loginUser", query = "SELECT u FROM Usuario u WHERE u.usuario =:usuario AND u.clave =:clave"),
