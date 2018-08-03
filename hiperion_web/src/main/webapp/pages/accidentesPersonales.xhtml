@@ -25,7 +25,7 @@
 
 						<!-- CLIENTE -->
 						<p:panel id="panelCliente">
-							<h:form>
+							<h:form id="formPoliza">
 								<!-- ESTADO POLIZA -->
 								<table align="center">
 									<tr>
@@ -290,7 +290,7 @@
 									</h:panelGrid>
 									<p:spacer height="15px;" />
 									<!-- COBERTURAS-->
-									<p:accordionPanel multiple="true" activeIndex="">
+									<p:accordionPanel multiple="true" activeIndex="" collapsible="true"> 
 										<p:tab title="#{emision['anexo.titulo.cob']}">
 											<p:dataTable id="idCoberturas" var="cobertura" value="#{accidentesPersonalesBacking.coberturas}"
 												selection="#{accidentesPersonalesBacking.selectedCoberturas}" rowKey="#{cobertura.idCobertura}" style="margin-bottom:0" paginator="true"
@@ -305,12 +305,16 @@
 												<p:column headerText="#{emision['anexo.titulo.cob']}">
 													<h:outputText value="#{cobertura.coberturaAccPersonales}" />
 												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCoberturas" update=":formPoliza" icon="ui-icon-search" value="View"
+														oncomplete="PF('multiCarDialog').show()" />
+												</f:facet>
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
 									<p:spacer height="15px;" />
 									<!-- CONDICIONES ESPECIALES -->
-									<p:accordionPanel multiple="true" activeIndex="">
+									<p:accordionPanel multiple="true" activeIndex="" collapsible="true">
 										<p:tab title="#{emision['anexo.titulo.cep']}">
 											<p:dataTable id="idCondicionesEsp" var="condicion" value="#{accidentesPersonalesBacking.condicionesEspeciales}"
 												selection="#{accidentesPersonalesBacking.selectedCondicionesEsp}" rowKey="#{condicion.idCondicionEspAcc}" style="margin-bottom:0"
@@ -330,7 +334,7 @@
 									</p:accordionPanel>
 									<p:spacer height="15px;" />
 									<!-- CLAUSULAS ADICIONALES -->
-									<p:accordionPanel multiple="true" activeIndex="">
+									<p:accordionPanel multiple="true" activeIndex="" collapsible="true">
 										<p:tab title="#{emision['anexo.titulo.cad']}">
 											<p:dataTable id="idClausulasAdd" var="clausula" value="#{accidentesPersonalesBacking.clausulasAdicionales}"
 												selection="#{accidentesPersonalesBacking.selectedClausulasAdd}" rowKey="#{clausula.idClausulaAdAcidente}" style="margin-bottom:0"
@@ -357,6 +361,14 @@
 										<h:graphicImage name="pago.jpg" library="img" />
 									</p:commandLink>
 								</div>
+
+								<p:dialog header="Selected Cars" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+									<p:outputPanel id="multiCarDetail" style="text-align:center;">
+										<ui:repeat value="#{accidentesPersonalesBacking.selectedCoberturas}" var="car">
+											<h:outputText value="#{car.idCobertura} - #{car.coberturaAccPersonales}" style="display:block" />
+										</ui:repeat>
+									</p:outputPanel>
+								</p:dialog>
 							</h:form>
 						</p:panel>
 

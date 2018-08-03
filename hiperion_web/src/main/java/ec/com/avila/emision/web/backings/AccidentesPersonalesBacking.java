@@ -234,12 +234,14 @@ public class AccidentesPersonalesBacking implements Serializable {
 								poliza = polizaDB;
 								editarRamo();
 							} else {
-								polizaBean.setEstadoPoliza("COTIZADO");
+								polizaBean.setEstadoPoliza("COTIZADO");								
 							}
 						}
 					} else {
 						ramoNuevo = true;
 						polizaBean.setEstadoPoliza("COTIZADO");
+						gruposDTO = new ArrayList<>();
+						
 					}
 					ramoAccidentesPersonalesBean.setNombreCliente(cliente.getNombrePersona() + " " + cliente.getApellidoPaterno() + " "
 							+ cliente.getApellidoMaterno());
@@ -327,11 +329,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 	 * 
 	 * @throws HiperionException
 	 */
-	public void editarRamo() throws HiperionException {
-
-		selectedCoberturas = new ArrayList<>();
-		selectedCondicionesEsp = new ArrayList<>();
-		selectedClausulasAdd = new ArrayList<>();
+	public void editarRamo() throws HiperionException {		
 
 		ramoAccidentesPersonalesBean.setPrimaNetaPersona(accidentesPersonales.getPrimaNetaPersona());
 		ramoAccidentesPersonalesBean.setPrimaTotalPersona(accidentesPersonales.getPrimaTotalPersona());
@@ -596,7 +594,7 @@ public class AccidentesPersonalesBacking implements Serializable {
 		poliza.setRamo(RamoEnum.R1.getLabel());
 		poliza.setEjecutivo(usuario.getIdentificacionUsuario());
 		if (poliza.getEstadoPoliza() == null) {
-			polizaBean.setEstadoPoliza("COTIZADO");
+			poliza.setEstadoPoliza("COTIZADO");
 		}
 
 		return poliza;
