@@ -23,7 +23,7 @@ public class CobertAccPer implements Serializable {
 	private String coberturaAccPersonales;
 
 	// bi-directional many-to-one association to RamoAccidentesPersonale
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_accidentes")
 	private RamoAccidentesPersonale ramoAccidentesPersonale;
 

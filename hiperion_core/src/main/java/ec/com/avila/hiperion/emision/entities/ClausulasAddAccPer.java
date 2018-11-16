@@ -32,7 +32,7 @@ public class ClausulasAddAccPer extends Auditoria implements Serializable {
 	private String clausulaAccPersonales;
 
 	// bi-directional many-to-one association to RamoAccidentesPersonale
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_accidentes")
 	private RamoAccidentesPersonale ramoAccidentesPersonale;
 

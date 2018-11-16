@@ -95,7 +95,11 @@ public class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T,
 	@Override
 	public void persist(T entity) throws HiperionException {
 		try {
-			getEntityManager().persist(entity);
+			entity = getEntityManager().merge(entity);
+			getEntityManager().detach(entity);
+			
+			//getEntityManager().persist(entity);
+			
 		} catch (Throwable ex) {
 			throw new HiperionException(ex);
 		}

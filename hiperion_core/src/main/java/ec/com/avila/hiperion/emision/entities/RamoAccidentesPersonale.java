@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 
 /**
  * The persistent class for the ramo_accidentes_personales database table.
@@ -44,15 +46,16 @@ public class RamoAccidentesPersonale extends Auditoria implements Serializable {
 	private Integer facturacion;
 
 	// bi-directional many-to-one association to ClausulasAddAccPer
-	@OneToMany(mappedBy = "ramoAccidentesPersonale")
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy = "ramoAccidentesPersonale", fetch=FetchType.EAGER)
 	private List<ClausulasAddAccPer> clausulasAddAccPers;
 
 	// bi-directional many-to-one association to ClausulasAddAccPer
-	@OneToMany(mappedBy = "ramoAccidentesPersonale")
+	@OneToMany(cascade={CascadeType.ALL},mappedBy = "ramoAccidentesPersonale", fetch=FetchType.LAZY)
+	
 	private List<CobertAccPer> coberturasAcc;
 
 	// bi-directional many-to-one association to ClausulasAddAccPer
-	@OneToMany(mappedBy = "ramoAccidentesPersonale")
+	@OneToMany(cascade={CascadeType.ALL},mappedBy = "ramoAccidentesPersonale", fetch=FetchType.LAZY)
 	private List<CondEspAccPer> condicionesEspAcc;
 
 	// bi-directional many-to-one association to GrupoAccPersonale
