@@ -307,7 +307,7 @@
 												</p:column>
 												<f:facet name="footer">
 													<p:commandButton process="idCoberturas" update=":formPoliza" icon="ui-icon-search" value="View"
-														oncomplete="PF('multiCarDialog').show()" />
+														oncomplete="PF('coberturasDialog').show()" />
 												</f:facet>
 											</p:dataTable>
 										</p:tab>
@@ -329,6 +329,10 @@
 												<p:column headerText="#{emision['anexo.titulo.cep']}">
 													<h:outputText value="#{condicion.condicionAcc}" />
 												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idCondicionesEsp" update=":formPoliza" icon="ui-icon-search" value="View"
+														oncomplete="PF('condicionesDialog').show()" />
+												</f:facet>
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
@@ -349,6 +353,10 @@
 												<p:column headerText="#{emision['anexo.titulo.cobad']}">
 													<h:outputText value="#{clausula.clausulaAccPersonales}" />
 												</p:column>
+												<f:facet name="footer">
+													<p:commandButton process="idClausulasAdd" update=":formPoliza" icon="ui-icon-search" value="View"
+														oncomplete="PF('clausulasDialog').show()" />
+												</f:facet>
 											</p:dataTable>
 										</p:tab>
 									</p:accordionPanel>
@@ -362,10 +370,24 @@
 									</p:commandLink>
 								</div>
 
-								<p:dialog header="Selected Cars" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
-									<p:outputPanel id="multiCarDetail" style="text-align:center;">
+								<p:dialog header="Selected Coberturas" widgetVar="coberturasDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+									<p:outputPanel id="multiCoberturasDetail" style="text-align:center;">
 										<ui:repeat value="#{accidentesPersonalesBacking.selectedCoberturas}" var="car">
 											<h:outputText value="#{car.idCobertura} - #{car.coberturaAccPersonales}" style="display:block" />
+										</ui:repeat>
+									</p:outputPanel>
+								</p:dialog>
+								<p:dialog header="Selected Condiciones" widgetVar="condicionesDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+									<p:outputPanel id="multiCondicionesDetail" style="text-align:center;">
+										<ui:repeat value="#{accidentesPersonalesBacking.selectedCondicionesEsp}" var="condicion">
+											<h:outputText value="#{condicion.idCondicionEspAcc} - #{condicion.condicionAcc}" style="display:block" />
+										</ui:repeat>
+									</p:outputPanel>
+								</p:dialog>
+								<p:dialog header="Selected Clausulas" widgetVar="clausulasDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+									<p:outputPanel id="multiClausulasDetail" style="text-align:center;">
+										<ui:repeat value="#{accidentesPersonalesBacking.selectedClausulasAdd}" var="clausula">
+											<h:outputText value="#{clausula.idClausulaAdAcidente} - #{clausula.clausulaAccPersonales}" style="display:block" />
 										</ui:repeat>
 									</p:outputPanel>
 								</p:dialog>
